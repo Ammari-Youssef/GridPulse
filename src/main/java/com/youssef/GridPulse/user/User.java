@@ -28,10 +28,10 @@ public class User implements UserDetails {
     private UUID id;
 
     @Column(nullable = false)
-    private String firstName;
+    private String firstname;
 
     @Column(nullable = false)
-    private String lastName;
+    private String lastname;
 
     @Column(unique = true, nullable = false)
     private String email;
