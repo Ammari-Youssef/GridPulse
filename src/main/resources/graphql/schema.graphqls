@@ -1,0 +1,63 @@
+type Query {
+    me: String!
+    getAllUsers: [User!]!
+
+    getInverterById(id: ID!): Inverter
+    getAllInverters: [Inverter!]!
+}
+
+type Mutation {
+    register(registerInput: RegisterInput!): AuthenticationResponse!
+    login(loginInput: LoginInput!): AuthenticationResponse!
+
+    createInverter(input: InverterInput!): Inverter
+    updateInverter(id: ID!, input: InverterInput!): Inverter
+    deleteInverter(id: ID!): Boolean
+}
+# -----------------AUTHENTICATION-----------------
+input RegisterInput {
+    email: String!
+    password: String!
+    firstname: String!
+    lastname: String!
+}
+
+input LoginInput {
+    email: String!
+    password: String!
+}
+
+type AuthenticationResponse {
+    accessToken: String!
+    refreshToken: String!
+}
+
+# ----------------- Input Types-----------------
+type User {
+    id: ID!
+    email: String!
+    firstname: String!
+    lastname: String!
+    password: String!
+    role: String!
+    createdAt: String!
+    updatedAt: String!
+}
+
+type Inverter {
+    id: ID!
+    name: String!
+    model: String!
+    version: String!
+    manufacturer: String!
+    createdAt: String!
+    updatedAt: String!
+}
+
+# ---------------- Input DTOs-----------------
+input InverterInput {
+    name: String!
+    model: String!
+    version: String!
+    manufacturer: String!
+}
