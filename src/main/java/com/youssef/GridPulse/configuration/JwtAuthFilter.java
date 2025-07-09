@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  *
@@ -35,36 +36,56 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
 
-        final String authHeader = request.getHeader("Authorization");
-        final String jwt;
-        final String userEmail;
-        // Extract the JWT token from the Authorization header
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response); // If no token is present, continue the filter chain to next filter
-            return; // Exit the method
+        // Wrap request to allow body re-reading
+        CachedBodyHttpServletRequest cachedRequest = new CachedBodyHttpServletRequest(request);
+
+        // Read body only once
+        String body = new String(cachedRequest.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+
+        // Skip JWT for login and register mutations
+        if (request.getRequestURI().equals("/graphql") &&
+                body.contains("mutation") &&
+                (body.contains("login") || body.contains("register"))) {
+            filterChain.doFilter(cachedRequest, response);
+            return;
         }
 
-        jwt = authHeader.substring(7); // Extract the token by removing "Bearer " prefix
+        // Check Authorization header
+        final String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("""
+            {
+              "errors": [
+                {
+                  "message": "Unauthorized",
+                  "extensions": { "classification": "UNAUTHORIZED" }
+                }
+              ]
+            }
+        """);
+            return; // don't continue filter chain
+        }
 
-        userEmail = jwtService.extractUsername(jwt);
+        final String jwt = authHeader.substring(7);
+        final String userEmail = jwtService.extractUsername(jwt);
 
-        // when username is there but not authenticated.
-        if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-            // if token is valid, set the authentication in the security context and update it
-            if(jwtService.isTokenValid(jwt, userDetails)) {
+            if (jwtService.isTokenValid(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
-                        null, // we don't have credentials.
+                        null,
                         userDetails.getAuthorities()
-                ); // Create a new authentication token with the user details and authorities
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request)); //
-
-                // set/update the authentication in the security context
+                );
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
-        filterChain.doFilter(request, response); // Continue the filter chain to the next filter. Never forget this line.
+
+        filterChain.doFilter(cachedRequest, response);
     }
+
 
 }
