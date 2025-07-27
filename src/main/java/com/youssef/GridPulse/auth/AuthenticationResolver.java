@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -28,7 +30,24 @@ public class AuthenticationResolver {
     }
 
     @QueryMapping(name = "getAllUsers")
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers(Authentication authentication) {
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        if (!isAdmin) {
+            throw new AccessDeniedException("Forbidden");
+        }
         return userRepository.findAll();
+    }
+
+    @MutationMapping(name = "createUserWithRole")
+    public AuthenticationResponse createUserWithRole(
+            @Argument("registerInput") RegisterInput registerInput,
+            @Argument("role") String role) {
+        return authenticationService.createUserWithRole(registerInput, role);
+    }
+
+    @QueryMapping(name = "getCurrentUser")
+    public User getCurrentUser() {
+        return authenticationService.getCurrentUser();
     }
 }

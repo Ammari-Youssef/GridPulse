@@ -1,6 +1,7 @@
 type Query {
     me: String!
     getAllUsers: [User!]!
+    getCurrentUser:  User!
 
     getInverterById(id: ID!): Inverter
     getAllInverters: [Inverter!]!
@@ -9,6 +10,7 @@ type Query {
 type Mutation {
     register(registerInput: RegisterInput!): AuthenticationResponse!
     login(loginInput: LoginInput!): AuthenticationResponse!
+    createUserWithRole(registerInput: RegisterInput!, role: String): AuthenticationResponse!
 
     createInverter(input: InverterInput!): Inverter
     updateInverter(id: ID!, input: InverterInput!): Inverter
