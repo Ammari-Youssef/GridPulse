@@ -1,6 +1,9 @@
 package com.youssef.GridPulse.auth;
 
 import com.youssef.GridPulse.configuration.JwtService;
+import com.youssef.GridPulse.token.Token;
+import com.youssef.GridPulse.token.TokenRepository;
+import com.youssef.GridPulse.token.TokenType;
 import com.youssef.GridPulse.user.Role;
 import com.youssef.GridPulse.user.User;
 import com.youssef.GridPulse.user.UserRepository;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final UserRepository repository;
+    private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -29,9 +33,10 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
-        repository.save(user);
+        var savedUser = repository.save(user);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user); // Generate a refresh token for the authenticated user
+        saveUserToken(savedUser, jwtToken);
 
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
@@ -50,11 +55,34 @@ public class AuthenticationService {
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user); // Generate a refresh token for the authenticated user
-
+        revokeAllUserTokens(user); // Revoke all previous tokens for the user
+        saveUserToken(user, jwtToken); // Save the new token for the user
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    private void saveUserToken(User user, String jwtToken) {
+        var token = Token.builder()
+                .user(user)
+                .token(jwtToken)
+                .tokenType(TokenType.BEARER)
+                .expired(false)
+                .revoked(false)
+                .build();
+        tokenRepository.save(token);
+    }
+
+    private void revokeAllUserTokens(User user) {
+        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
+        if (validUserTokens.isEmpty())
+            return;
+        validUserTokens.forEach(token -> {
+            token.setExpired(true);
+            token.setRevoked(true);
+        });
+        tokenRepository.saveAll(validUserTokens);
     }
 
     public AuthenticationResponse createUserWithRole(RegisterInput request, String role) {
@@ -77,6 +105,9 @@ public class AuthenticationService {
 
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
+
+        revokeAllUserTokens(user); // Revoke all previous tokens for the user
+        saveUserToken(user, jwtToken);
 
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)

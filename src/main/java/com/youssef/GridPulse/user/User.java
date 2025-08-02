@@ -1,5 +1,6 @@
 package com.youssef.GridPulse.user;
 
+import com.youssef.GridPulse.token.Token;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,7 +16,6 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -42,6 +42,8 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
 
     @CreationTimestamp
     @Column(updatable = false)
