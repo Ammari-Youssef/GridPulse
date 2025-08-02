@@ -10,6 +10,7 @@ type Query {
 type Mutation {
     register(registerInput: RegisterInput!): AuthenticationResponse!
     login(loginInput: LoginInput!): AuthenticationResponse!
+    logout: Boolean!
     createUserWithRole(registerInput: RegisterInput!, role: String): AuthenticationResponse!
 
     createInverter(input: InverterInput!): Inverter

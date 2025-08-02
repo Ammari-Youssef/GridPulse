@@ -7,6 +7,7 @@ import com.youssef.GridPulse.token.TokenType;
 import com.youssef.GridPulse.user.Role;
 import com.youssef.GridPulse.user.User;
 import com.youssef.GridPulse.user.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,6 +25,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final HttpServletRequest request;
 
     public AuthenticationResponse register(RegisterInput request) {
         var user = User.builder()
@@ -61,6 +63,26 @@ public class AuthenticationService {
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    public boolean logout() {
+
+        final String authHeader = this.request.getHeader("Authorization");
+        final String jwt;
+        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+            return false;
+        }
+        jwt = authHeader.substring(7);
+        var storedToken = tokenRepository.findByToken(jwt)
+                .orElse(null);
+        if (storedToken != null) {
+            storedToken.setExpired(true);
+            storedToken.setRevoked(true);
+            tokenRepository.save(storedToken);
+            SecurityContextHolder.clearContext();
+            return true;
+        }
+        return false;
     }
 
     private void saveUserToken(User user, String jwtToken) {

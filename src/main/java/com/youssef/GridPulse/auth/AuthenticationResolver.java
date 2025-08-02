@@ -28,6 +28,12 @@ public class AuthenticationResolver {
         return authenticationService.authenticate(loginInput);
     }
 
+    @MutationMapping
+    @PreAuthorize("isAuthenticated()")
+    public boolean logout() {
+        return authenticationService.logout();
+    }
+
     @QueryMapping(name = "getAllUsers")
     @PreAuthorize("hasRole('ADMIN')")
     public List<User> getAllUsers() {
