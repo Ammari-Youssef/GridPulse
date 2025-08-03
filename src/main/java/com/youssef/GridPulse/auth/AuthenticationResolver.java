@@ -34,6 +34,11 @@ public class AuthenticationResolver {
         return authenticationService.logout();
     }
 
+    @MutationMapping(name = "refreshToken")
+    public AuthenticationResponse refreshToken(@Argument("refreshToken") String refreshToken) {
+        return authenticationService.refreshToken(refreshToken);
+    }
+
     @QueryMapping(name = "getAllUsers")
     @PreAuthorize("hasRole('ADMIN')")
     public List<User> getAllUsers() {
@@ -53,4 +58,5 @@ public class AuthenticationResolver {
     public User getCurrentUser() {
         return authenticationService.getCurrentUser();
     }
+
 }

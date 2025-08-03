@@ -38,7 +38,8 @@ public class AuthenticationService {
         var savedUser = repository.save(user);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user); // Generate a refresh token for the authenticated user
-        saveUserToken(savedUser, jwtToken);
+        saveUserToken(savedUser, jwtToken, TokenType.BEARER);
+        saveUserToken(savedUser, refreshToken, TokenType.REFRESH);
 
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
@@ -58,9 +59,32 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user); // Generate a refresh token for the authenticated user
         revokeAllUserTokens(user); // Revoke all previous tokens for the user
-        saveUserToken(user, jwtToken); // Save the new token for the user
+        // Save the new tokens for the user
+        saveUserToken(user, jwtToken, TokenType.BEARER);
+        saveUserToken(user, refreshToken, TokenType.REFRESH);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    public AuthenticationResponse refreshToken(String refreshToken) {
+
+        var isTokenValid = tokenRepository.findByToken(refreshToken)
+                .map(t -> !t.isExpired() && !t.isRevoked())
+                .orElse(false);
+        if (!isTokenValid) {
+            throw new RuntimeException("Invalid refresh token");
+        }
+        var email = jwtService.extractUsername(refreshToken);
+        var user = repository.findByEmail(email).orElseThrow();
+        var newJwtToken = jwtService.generateToken(user);
+
+        revokeAllUserTokens(user);
+        saveUserToken(user, newJwtToken, TokenType.BEARER);
+
+        return AuthenticationResponse.builder()
+                .accessToken(newJwtToken)
                 .refreshToken(refreshToken)
                 .build();
     }
@@ -85,11 +109,11 @@ public class AuthenticationService {
         return false;
     }
 
-    private void saveUserToken(User user, String jwtToken) {
+    private void saveUserToken(User user, String jwtToken, TokenType tokenType) {
         var token = Token.builder()
                 .user(user)
                 .token(jwtToken)
-                .tokenType(TokenType.BEARER)
+                .tokenType(tokenType)
                 .expired(false)
                 .revoked(false)
                 .build();
@@ -97,7 +121,7 @@ public class AuthenticationService {
     }
 
     private void revokeAllUserTokens(User user) {
-        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
+        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId(), TokenType.BEARER);
         if (validUserTokens.isEmpty())
             return;
         validUserTokens.forEach(token -> {
@@ -128,8 +152,9 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
 
-        revokeAllUserTokens(user); // Revoke all previous tokens for the user
-        saveUserToken(user, jwtToken);
+        revokeAllUserTokens(user); // Revoke all previous access tokens for the user
+        saveUserToken(user, jwtToken, TokenType.BEARER);
+        saveUserToken(user, refreshToken, TokenType.REFRESH);
 
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
@@ -149,5 +174,4 @@ public class AuthenticationService {
         return repository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
     }
-
 }

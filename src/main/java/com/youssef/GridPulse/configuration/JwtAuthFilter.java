@@ -47,7 +47,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         // Skip JWT for login and register mutations
         if (request.getRequestURI().equals("/graphql") &&
                 body.contains("mutation") &&
-                (body.contains("login") || body.contains("register"))) {
+                (body.contains("login") || body.contains("register")) || body.contains("refreshToken")) {
             filterChain.doFilter(cachedRequest, response);
             return;
         }
