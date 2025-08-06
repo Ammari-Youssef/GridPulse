@@ -1,12 +1,8 @@
 package com.youssef.GridPulse.domain.entity;
 
+import com.youssef.GridPulse.domain.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,10 +10,7 @@ import java.util.UUID;
 @Setter
 @Builder
 @Entity
-public class Inverter {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+public class Inverter extends BaseEntity {
 
     @Column(nullable = false)
     private String name;
@@ -27,13 +20,5 @@ public class Inverter {
     private String version;
     @Column(nullable = false)
     private String manufacturer;
-
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
-
 
 }

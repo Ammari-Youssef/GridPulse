@@ -1,5 +1,6 @@
 package com.youssef.GridPulse.token;
 
+import com.youssef.GridPulse.domain.base.BaseEntity;
 import com.youssef.GridPulse.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,11 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Token {
-
-  @Id
-  @GeneratedValue
-  public Integer id;
+public class Token extends BaseEntity {
 
   @Column(unique = true)
   public String token;
