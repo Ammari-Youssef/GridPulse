@@ -4,7 +4,9 @@ import com.youssef.GridPulse.configuration.JwtService;
 import com.youssef.GridPulse.token.Token;
 import com.youssef.GridPulse.token.TokenRepository;
 import com.youssef.GridPulse.token.TokenType;
-import com.youssef.GridPulse.user.*;
+import com.youssef.GridPulse.user.Role;
+import com.youssef.GridPulse.user.User;
+import com.youssef.GridPulse.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,10 +20,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private final UserRepository userRepository;
-    private final UserHistoryRepository userHistoryRepository;
-    private final UserMapper userMapper;
-
+    private final UserRepository repository;
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -29,16 +28,14 @@ public class AuthenticationService {
     private final HttpServletRequest request;
 
     public AuthenticationResponse register(RegisterInput request) {
-        User user = userMapper.toEntity(request);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        var savedUser = userRepository.save(user);
-
-        // Save audit history
-        UserHistory history = userMapper.toHistory(savedUser);
-        history.setOriginalId(savedUser.getId());
-        history.setCreatedRecord(true);
-        userHistoryRepository.save(history);
-
+        var user = User.builder()
+                .firstname(request.getFirstname())
+                .lastname(request.getLastname())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(Role.USER)
+                .build();
+        var savedUser = repository.save(user);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user); // Generate a refresh token for the authenticated user
         saveUserToken(savedUser, jwtToken, TokenType.BEARER);
@@ -57,7 +54,7 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        var user = userRepository.findByEmail(request.getEmail())
+        var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user); // Generate a refresh token for the authenticated user
@@ -80,7 +77,7 @@ public class AuthenticationService {
             throw new RuntimeException("Invalid refresh token");
         }
         var email = jwtService.extractUsername(refreshToken);
-        var user = userRepository.findByEmail(email).orElseThrow();
+        var user = repository.findByEmail(email).orElseThrow();
         var newJwtToken = jwtService.generateToken(user);
 
         revokeAllUserTokens(user);
@@ -142,18 +139,15 @@ public class AuthenticationService {
             throw new IllegalArgumentException("Invalid role: " + role);
         }
 
-        var user = userMapper.toEntity(request);
-        user.setRole(roleEnum);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        var savedUser = userRepository.save(user);
+        var user = User.builder()
+                .firstname(request.getFirstname())
+                .lastname(request.getLastname())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(roleEnum)
+                .build();
 
-        // Save audit history
-        UserHistory history = userMapper.toHistory(savedUser);
-        history.setOriginalId(savedUser.getId());
-        history.setCreatedRecord(true);
-        userHistoryRepository.save(history);
-
-        userRepository.save(user);
+        repository.save(user);
 
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
@@ -177,7 +171,7 @@ public class AuthenticationService {
 
         String email = authentication.getName(); // or username
 
-        return userRepository.findByEmail(email)
+        return repository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
     }
 }
