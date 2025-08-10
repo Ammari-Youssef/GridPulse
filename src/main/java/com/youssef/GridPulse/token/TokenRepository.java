@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface TokenRepository extends JpaRepository<Token, UUID> {
+public interface TokenRepository extends JpaRepository<Token, Integer> {
 
   @Query(value = """
     select t from Token t inner join User u
