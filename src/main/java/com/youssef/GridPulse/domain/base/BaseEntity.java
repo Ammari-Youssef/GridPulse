@@ -3,13 +3,17 @@ package com.youssef.GridPulse.domain.base;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,13 +25,24 @@ public abstract class BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @CreationTimestamp
-    @Column(updatable = false)
-    private OffsetDateTime createdAt;
+    @CreatedDate
+    @Column(updatable = false, nullable = false)
+    private Instant createdAt;
 
-    @UpdateTimestamp
-    private OffsetDateTime updatedAt;
+    @LastModifiedDate
+    @Column(insertable = false)
+    private Instant updatedAt;
 
+    @CreatedBy
+    @Builder.Default
+    @Column(updatable = false, nullable = false)
+    private String createdBy = "system" ; // default value can be either 'system' or 'app'
+
+    @LastModifiedBy
+    @Column(insertable = false)
+    private String updatedBy;
+
+    @Builder.Default
     @Column(nullable = false)
     private String source = "app"; // default value can be either 'app' or 'sync'
 }
