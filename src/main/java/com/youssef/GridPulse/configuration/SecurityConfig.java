@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity // Enable Spring Security @configuration & @EnableWebSecurity are mandatory in spring boot 3.0
-@EnableMethodSecurity // Enable method security annotations like @PreAuthorize, @PostAuthorize, etc.
+@EnableMethodSecurity(prePostEnabled = true) // Enable method security annotations like @PreAuthorize, @PostAuthorize, etc.
 @RequiredArgsConstructor
 public class SecurityConfig {
 
