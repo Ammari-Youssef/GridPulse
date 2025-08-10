@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
@@ -57,6 +58,12 @@ public class AuthenticationResolver {
     @PreAuthorize("isAuthenticated()")
     public User getCurrentUser() {
         return authenticationService.getCurrentUser();
+    }
+
+    @MutationMapping(name = "markUserHistorySynced")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Boolean markUserHistorySynced(@Argument UUID id) {
+        return authenticationService.markHistoryRecordAsSynced(id);
     }
 
 }

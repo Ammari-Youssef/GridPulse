@@ -13,6 +13,7 @@ type Mutation {
     logout: Boolean!
     refreshToken(refreshToken: String!): AuthenticationResponse!
     createUserWithRole(registerInput: RegisterInput!, role: String): AuthenticationResponse!
+    markUserHistorySynced(id: ID!): Boolean!
 
     createInverter(input: InverterInput!): Inverter
     updateInverter(id: ID!, input: InverterInput!): Inverter
@@ -37,6 +38,18 @@ type AuthenticationResponse {
 }
 
 # ----------------- Input Types-----------------
+type Admin {
+    id: ID!
+    operatorName: String!
+    contactDetailsName: String!
+    contactDetailsEmail: String!
+    technicalDetailsName: String!
+    technicalDetailsEmail: String!
+
+    createdAt: String!
+    updatedAt: String!
+}
+
 type User {
     id: ID!
     email: String!
@@ -47,6 +60,7 @@ type User {
     createdAt: String!
     updatedAt: String!
 }
+
 
 type Inverter {
     id: ID!
@@ -64,4 +78,12 @@ input InverterInput {
     model: String!
     version: String!
     manufacturer: String!
+}
+
+input AdminInput {
+    operatorName: String!
+    contactDetailsName: String!
+    contactDetailsEmail: String!
+    technicalDetailsName: String!
+    technicalDetailsEmail: String!
 }

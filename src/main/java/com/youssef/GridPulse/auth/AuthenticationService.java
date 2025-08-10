@@ -5,6 +5,7 @@ import com.youssef.GridPulse.token.Token;
 import com.youssef.GridPulse.token.TokenRepository;
 import com.youssef.GridPulse.token.TokenType;
 import com.youssef.GridPulse.user.*;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +15,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -180,4 +184,14 @@ public class AuthenticationService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
     }
+
+    @Transactional
+    public boolean markHistoryRecordAsSynced(UUID historyRecordId) {
+        int updatedRows = userHistoryRepository.markAsSynced(historyRecordId);
+        if (updatedRows == 0) {
+            throw new EntityNotFoundException("History record not found: " + historyRecordId);
+        }
+        return true;
+    }
+
 }
