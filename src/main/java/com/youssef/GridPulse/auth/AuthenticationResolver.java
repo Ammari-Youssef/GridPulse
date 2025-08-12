@@ -1,7 +1,6 @@
 package com.youssef.GridPulse.auth;
 
 import com.youssef.GridPulse.user.User;
-import com.youssef.GridPulse.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -9,15 +8,12 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
-import java.util.List;
-import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
 public class AuthenticationResolver {
 
     private final AuthenticationService authenticationService;
-    private final UserRepository userRepository;
 
     @MutationMapping
     public AuthenticationResponse register(@Argument("registerInput") RegisterInput registerInput) {
@@ -40,12 +36,6 @@ public class AuthenticationResolver {
         return authenticationService.refreshToken(refreshToken);
     }
 
-    @QueryMapping(name = "getAllUsers")
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
     @MutationMapping(name = "createUserWithRole")
     @PreAuthorize("hasRole('ADMIN')")
     public AuthenticationResponse createUserWithRole(
@@ -58,12 +48,6 @@ public class AuthenticationResolver {
     @PreAuthorize("isAuthenticated()")
     public User getCurrentUser() {
         return authenticationService.getCurrentUser();
-    }
-
-    @MutationMapping(name = "markUserHistorySynced")
-    @PreAuthorize("hasRole('ADMIN')")
-    public Boolean markUserHistorySynced(@Argument UUID id) {
-        return authenticationService.markHistoryRecordAsSynced(id);
     }
 
 }

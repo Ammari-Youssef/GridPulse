@@ -2,6 +2,7 @@ type Query {
     me: String!
     getAllUsers: [User!]!
     getCurrentUser:  User!
+    getUsersActivityHistory: [UserHistory!]!
 
     getInverterById(id: ID!): Inverter
     getAllInverters: [Inverter!]!
@@ -18,6 +19,7 @@ type Mutation {
     createInverter(input: InverterInput!): Inverter
     updateInverter(id: ID!, input: InverterInput!): Inverter
     deleteInverter(id: ID!): Boolean
+    markInverterHistorySynced(id: ID!): Boolean!
 }
 # -----------------AUTHENTICATION-----------------
 input RegisterInput {
@@ -58,7 +60,7 @@ type User {
     password: String!
     role: String!
     createdAt: String!
-    updatedAt: String!
+    updatedAt: String
 }
 
 
@@ -70,6 +72,25 @@ type Inverter {
     manufacturer: String!
     createdAt: String!
     updatedAt: String!
+}
+
+# ---------------- History Types -----------------
+type UserHistory {
+    id: ID!
+    originalId: ID!
+    firstname: String
+    lastname: String
+    email: String
+    role: String
+    createdBy: String
+    updatedBy: String
+    createdAt: String
+    updatedAt: String
+    createdRecord: Boolean
+    updatedRecord: Boolean
+    deletedRecord: Boolean
+    synced: Boolean
+    source: String
 }
 
 # ---------------- Input DTOs-----------------
