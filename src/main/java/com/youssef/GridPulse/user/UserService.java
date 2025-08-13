@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -25,6 +26,44 @@ public class UserService {
         return userHistoryRepository.findAll();
     }
 
+    public Optional<User> getUserById(UUID userId) {
+        return userRepository.findById(userId);
+    }
+
+    @Transactional
+    public User updateUser(UUID id, UpdateUserInput input) {
+        User existingUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Save history before updating
+        UserHistory history = userMapper.toHistory(existingUser);
+        history.setUpdatedRecord(true);
+        userHistoryRepository.save(history);
+
+        // Apply other updates
+        if (input.firstname() != null) {
+            existingUser.setFirstname(input.firstname());
+        }
+        if (input.lastname() != null) {
+            existingUser.setLastname(input.lastname());
+        }
+
+        return userRepository.save(existingUser);
+    }
+
+    public boolean deleteUserById(UUID id) {
+        return userRepository.findById(id).map(user -> {
+            // Save history before deletion
+            UserHistory historyBeforeDelete = userMapper.toHistory(user);
+            historyBeforeDelete.setDeletedRecord(true);
+            userHistoryRepository.save(historyBeforeDelete);
+
+            userRepository.deleteById(id);
+
+            return true;
+        }).orElse(false); // If user not found
+    }
+
+    // History methods
     @Transactional
     public boolean markHistoryRecordAsSynced(UUID historyRecordId) {
         int updatedRows = userHistoryRepository.markAsSynced(historyRecordId);

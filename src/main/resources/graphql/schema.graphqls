@@ -2,6 +2,7 @@ type Query {
     me: String!
     getAllUsers: [User!]!
     getCurrentUser:  User!
+    getUserById(id: ID!): User!
     getUsersActivityHistory: [UserHistory!]!
 
     getInverterById(id: ID!): Inverter
@@ -14,6 +15,10 @@ type Mutation {
     logout: Boolean!
     refreshToken(refreshToken: String!): AuthenticationResponse!
     createUserWithRole(registerInput: RegisterInput!, role: String): AuthenticationResponse!
+
+    updateUser(id: ID!, input: UpdateUserInput): User
+    deleteUser(id: ID!): Boolean
+    toggleUserEnableStatus(id: ID!): Boolean
     markUserHistorySynced(id: ID!): Boolean!
 
     createInverter(input: InverterInput!): Inverter
@@ -59,6 +64,10 @@ type User {
     lastname: String!
     password: String!
     role: String!
+    enabled: Boolean!
+    createdBy: String!
+    updatedBy: String
+    source: String
     createdAt: String!
     updatedAt: String
 }
@@ -89,11 +98,17 @@ type UserHistory {
     createdRecord: Boolean
     updatedRecord: Boolean
     deletedRecord: Boolean
+    disabledRecord: Boolean
+    enabled: Boolean
     synced: Boolean
     source: String
 }
 
 # ---------------- Input DTOs-----------------
+input UpdateUserInput {
+    firstname: String
+    lastname: String
+}
 input InverterInput {
     name: String!
     model: String!

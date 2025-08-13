@@ -8,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller
@@ -30,8 +31,25 @@ public class UserResolver {
 
     @QueryMapping
     @PreAuthorize("hasRole('ADMIN')")
+    public Optional<User> getUserById(@Argument UUID id) {
+        return userService.getUserById(id);
+    }
+
+    @QueryMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public List<UserHistory> getUsersActivityHistory() {
         return userService.getUsersActivityHistory();
     }
 
+    @MutationMapping
+    @PreAuthorize("hasRole('ADMIN') or authentication.principal.id == #id")
+    public User updateUser(@Argument UUID id, @Argument UpdateUserInput input) {
+        return userService.updateUser(id, input);
+    }
+
+    @MutationMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public boolean deleteUser(@Argument UUID id) {
+       return userService.deleteUserById(id);
+    }
 }
