@@ -18,7 +18,7 @@ public class UserService {
 
     private final UserMapper userMapper;
 
-        public List<User> getAllUsers() {
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
@@ -61,6 +61,22 @@ public class UserService {
 
             return true;
         }).orElse(false); // If user not found
+    }
+
+    @Transactional
+    public boolean toggleUserEnableStatus(UUID userId) {
+        return userRepository.findById(userId).map(user -> {
+            // Save history before changing status
+            UserHistory history = userMapper.toHistory(user);
+            history.setDisabledRecord(!user.isEnabled()); // log what’s happening
+            userHistoryRepository.save(history);
+
+            // Toggle status
+            user.setEnabled(!user.isEnabled());
+            userRepository.save(user);
+
+            return true;
+        }).orElse(false);
     }
 
     // History methods

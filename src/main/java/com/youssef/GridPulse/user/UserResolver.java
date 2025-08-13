@@ -52,4 +52,11 @@ public class UserResolver {
     public boolean deleteUser(@Argument UUID id) {
        return userService.deleteUserById(id);
     }
+
+    @MutationMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public boolean toggleUserEnableStatus(@Argument UUID id) {
+       return userService.toggleUserEnableStatus(id);
+    }
+
 }

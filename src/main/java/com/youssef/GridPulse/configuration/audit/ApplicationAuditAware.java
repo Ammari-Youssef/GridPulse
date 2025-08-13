@@ -11,7 +11,7 @@ import java.util.Optional;
 
 /**
  * This class implements AuditorAware to provide the current auditor's information.
- * We put String as the type parameter to indicate that the auditor's identifier is the email which is a String.
+ * We use String as the type parameter to indicate that the auditor's identifier is either "system" or a UUID converted to a String.
  */
 public class ApplicationAuditAware implements AuditorAware<String> {
     @Override
@@ -24,6 +24,6 @@ public class ApplicationAuditAware implements AuditorAware<String> {
 
         User userPrincipal = (User) auth.getPrincipal();
 
-        return Optional.ofNullable(userPrincipal.getUsername());
+        return Optional.ofNullable(userPrincipal.getId().toString());
     }
 }

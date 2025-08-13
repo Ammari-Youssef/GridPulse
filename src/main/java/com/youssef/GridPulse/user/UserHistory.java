@@ -18,5 +18,7 @@ public class UserHistory extends BaseHistoryEntity {
     private String email;
     private String password;
     private String role;
+    private boolean enabled;
+    private boolean disabledRecord = false;
 
 }
