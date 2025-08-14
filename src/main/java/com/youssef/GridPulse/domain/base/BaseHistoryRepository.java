@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.UUID;
 
 @NoRepositoryBean
@@ -14,4 +15,6 @@ public interface BaseHistoryRepository<T extends BaseHistoryEntity, ID extends U
     @Modifying
     @Query("UPDATE #{#entityName} h SET h.synced = true WHERE h.id = :id")
     int markAsSynced(@Param("id") ID id);
+
+    List<T> findByOriginalId(UUID originalId);
 }
