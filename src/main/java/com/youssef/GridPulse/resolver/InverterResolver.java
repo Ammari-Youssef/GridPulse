@@ -2,6 +2,7 @@ package com.youssef.GridPulse.resolver;
 
 import com.youssef.GridPulse.domain.dto.InverterInput;
 import com.youssef.GridPulse.domain.entity.Inverter;
+import com.youssef.GridPulse.domain.entity.InverterHistory;
 import com.youssef.GridPulse.service.InverterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -22,6 +23,7 @@ public class InverterResolver {
 
 
     @QueryMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public List<Inverter> getAllInverters() {
         return inverterService.getAllInverters();
     }
@@ -30,6 +32,7 @@ public class InverterResolver {
     public Inverter getInverterById(@Argument UUID id) {
         return inverterService.getInverterById(id);
     }
+
     // TODO: Create inverters should add along with inverters fields data the data of other entities
     @MutationMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -45,8 +48,35 @@ public class InverterResolver {
 
     @MutationMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteInverter(@Argument UUID id) {
-        inverterService.deleteInverter(id);
+    public boolean deleteInverter(@Argument UUID id) {
+        return inverterService.deleteInverter(id);
     }
+
+    // History methods
+    @QueryMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<InverterHistory> getInverterHistory(@Argument UUID originalId) {
+        return inverterService.getInverterHistory(originalId);
+    }
+
+    @QueryMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<InverterHistory> getAllInverterHistory() {
+        return inverterService.getAllInverterHistory();
+    }
+
+    @QueryMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public InverterHistory getInverterHistoryById(@Argument UUID historyId) {
+        return inverterService.getInverterHistoryById(historyId);
+    }
+
+    @MutationMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public Boolean markInverterHistorySynced(@Argument UUID id) {
+        return inverterService.markHistoryRecordAsSynced(id);
+    }
+
+
 
 }
