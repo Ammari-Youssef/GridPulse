@@ -7,6 +7,9 @@ type Query {
 
     getInverterById(id: ID!): Inverter
     getAllInverters: [Inverter!]!
+    getAllInverterHistory: [InverterHistory!]!
+    getInverterHistoryById(historyId :ID!): InverterHistory!
+    getInverterHistory(originalId :ID!): [InverterHistory!]!
 }
 
 type Mutation {
@@ -24,6 +27,8 @@ type Mutation {
     createInverter(input: InverterInput!): Inverter
     updateInverter(id: ID!, input: InverterInput!): Inverter
     deleteInverter(id: ID!): Boolean
+
+    markInverterHistorySynced(id: ID!): Boolean!
 }
 # -----------------AUTHENTICATION-----------------
 input RegisterInput {
@@ -105,6 +110,25 @@ type UserHistory {
     synced: Boolean
     source: String
 }
+
+type InverterHistory {
+    id: ID!
+    name: String!
+    model: String!
+    version: String!
+    manufacturer: String!
+    source: String!
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+
+    createdRecord: Boolean
+    updatedRecord: Boolean
+    deletedRecord: Boolean
+    synced: Boolean
+}
+
 
 # ---------------- Input DTOs-----------------
 input UpdateUserInput {

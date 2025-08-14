@@ -6,6 +6,7 @@ import com.youssef.GridPulse.domain.entity.InverterHistory;
 import com.youssef.GridPulse.domain.mapper.InverterMapper;
 import com.youssef.GridPulse.repository.InverterHistoryRepository;
 import com.youssef.GridPulse.repository.InverterRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,6 +77,30 @@ public class InverterService {
         historyRepository.save(historyBeforeDelete);
 
         repository.delete(inverter);
+        return true;
+    }
+
+    // History methods
+
+    public List<InverterHistory> getAllInverterHistory() {
+        return historyRepository.findAll();
+    }
+
+    public List<InverterHistory> getInverterHistory(UUID id) {
+        return historyRepository.findByOriginalId(id);
+    }
+
+    public InverterHistory getInverterHistoryById(UUID historyId) {
+        return historyRepository.findById(historyId)
+                .orElseThrow(() -> new RuntimeException("Inverter history not found"));
+    }
+
+    @Transactional
+    public boolean markHistoryRecordAsSynced(UUID historyRecordId) {
+        int updatedRows = historyRepository.markAsSynced(historyRecordId);
+        if (updatedRows == 0) {
+            throw new EntityNotFoundException("History record not found: " + historyRecordId);
+        }
         return true;
     }
 
