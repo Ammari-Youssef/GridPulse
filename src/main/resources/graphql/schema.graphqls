@@ -24,7 +24,6 @@ type Mutation {
     createInverter(input: InverterInput!): Inverter
     updateInverter(id: ID!, input: InverterInput!): Inverter
     deleteInverter(id: ID!): Boolean
-    markInverterHistorySynced(id: ID!): Boolean!
 }
 # -----------------AUTHENTICATION-----------------
 input RegisterInput {
@@ -79,8 +78,11 @@ type Inverter {
     model: String!
     version: String!
     manufacturer: String!
+    source: String!
+    createdBy: String!
+    updatedBy: String
     createdAt: String!
-    updatedAt: String!
+    updatedAt: String
 }
 
 # ---------------- History Types -----------------

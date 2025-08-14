@@ -30,6 +30,7 @@ public class InverterResolver {
     public Inverter getInverterById(@Argument UUID id) {
         return inverterService.getInverterById(id);
     }
+
     // TODO: Create inverters should add along with inverters fields data the data of other entities
     @MutationMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -45,8 +46,8 @@ public class InverterResolver {
 
     @MutationMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteInverter(@Argument UUID id) {
-        inverterService.deleteInverter(id);
+    public boolean deleteInverter(@Argument UUID id) {
+        return inverterService.deleteInverter(id);
     }
 
 }
