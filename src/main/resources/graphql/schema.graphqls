@@ -1,3 +1,4 @@
+# ----------------- Query and Mutation Types -----------------
 type Query {
     me: String!
     getAllUsers: [User!]!
@@ -8,8 +9,8 @@ type Query {
     getInverterById(id: ID!): Inverter
     getAllInverters: [Inverter!]!
     getAllInverterHistory: [InverterHistory!]!
-    getInverterHistoryById(historyId :ID!): InverterHistory!
-    getInverterHistory(originalId :ID!): [InverterHistory!]!
+    getInverterHistoryById(historyId: ID!): InverterHistory!
+    getInverterHistory(originalId: ID!): [InverterHistory!]!
 }
 
 type Mutation {
@@ -30,7 +31,36 @@ type Mutation {
 
     markInverterHistorySynced(id: ID!): Boolean!
 }
-# -----------------AUTHENTICATION-----------------
+
+# ----------------- Common Interfaces -----------------
+interface Auditable {
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: String!
+}
+
+interface AuditableHistory {
+    id: ID!
+    originalId: ID!
+
+    # Auditable fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: String!
+
+    # History flags
+    createdRecord: Boolean!
+    updatedRecord: Boolean!
+    deletedRecord: Boolean!
+    synced: Boolean!
+}
+
+
+# ----------------- AUTHENTICATION -----------------
 input RegisterInput {
     email: String!
     password: String!
@@ -48,20 +78,8 @@ type AuthenticationResponse {
     refreshToken: String!
 }
 
-# ----------------- Input Types-----------------
-type Admin {
-    id: ID!
-    operatorName: String!
-    contactDetailsName: String!
-    contactDetailsEmail: String!
-    technicalDetailsName: String!
-    technicalDetailsEmail: String!
-
-    createdAt: String!
-    updatedAt: String!
-}
-
-type User {
+# ----------------- Entity Types -----------------
+type User implements Auditable {
     id: ID!
     email: String!
     firstname: String!
@@ -69,83 +87,79 @@ type User {
     password: String!
     role: String!
     enabled: Boolean!
+
     createdBy: String!
     updatedBy: String
-    source: String
     createdAt: String!
     updatedAt: String
+    source: String!
 }
 
-
-type Inverter {
+type Inverter implements Auditable {
     id: ID!
     name: String!
     model: String!
     version: String!
     manufacturer: String!
-    source: String!
+
     createdBy: String!
     updatedBy: String
     createdAt: String!
     updatedAt: String
+    source: String!
 }
 
-# ---------------- History Types -----------------
-type UserHistory {
+# ----------------- History Types -----------------
+type UserHistory implements AuditableHistory {
     id: ID!
     originalId: ID!
     firstname: String
     lastname: String
     email: String
     role: String
-    createdBy: String
-    updatedBy: String
-    createdAt: String
-    updatedAt: String
-    createdRecord: Boolean
-    updatedRecord: Boolean
-    deletedRecord: Boolean
-    disabledRecord: Boolean
     enabled: Boolean
-    synced: Boolean
-    source: String
-}
+    disabledRecord: Boolean
 
-type InverterHistory {
-    id: ID!
-    name: String!
-    model: String!
-    version: String!
-    manufacturer: String!
-    source: String!
     createdBy: String!
     updatedBy: String
     createdAt: String!
     updatedAt: String
+    source: String!
 
-    createdRecord: Boolean
-    updatedRecord: Boolean
-    deletedRecord: Boolean
-    synced: Boolean
+    createdRecord: Boolean!
+    updatedRecord: Boolean!
+    deletedRecord: Boolean!
+    synced: Boolean!
 }
 
+type InverterHistory implements AuditableHistory {
+    id: ID!
+    originalId: ID!
+    name: String!
+    model: String!
+    version: String!
+    manufacturer: String!
 
-# ---------------- Input DTOs-----------------
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: String!
+    createdRecord: Boolean!
+    updatedRecord: Boolean!
+    deletedRecord: Boolean!
+    synced: Boolean!
+}
+
+# ----------------- Input DTOs -----------------
 input UpdateUserInput {
     firstname: String
     lastname: String
 }
+
 input InverterInput {
     name: String!
     model: String!
     version: String!
     manufacturer: String!
-}
-
-input AdminInput {
-    operatorName: String!
-    contactDetailsName: String!
-    contactDetailsEmail: String!
-    technicalDetailsName: String!
-    technicalDetailsEmail: String!
 }
