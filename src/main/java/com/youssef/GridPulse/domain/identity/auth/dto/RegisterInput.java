@@ -1,4 +1,4 @@
-package com.youssef.GridPulse.auth;
+package com.youssef.GridPulse.domain.identity.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

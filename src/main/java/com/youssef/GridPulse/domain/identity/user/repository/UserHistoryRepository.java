@@ -1,14 +1,11 @@
-package com.youssef.GridPulse.user;
+package com.youssef.GridPulse.domain.identity.user.repository;
 
 import com.youssef.GridPulse.domain.base.BaseHistoryRepository;
+import com.youssef.GridPulse.domain.identity.user.entity.UserHistory;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface UserHistoryRepository extends BaseHistoryRepository<UserHistory, UUID> {
-    Optional<UserHistory> findByEmail(String email);
-    Optional<UserHistory> findByOriginalId(UUID originalId);
-
 }

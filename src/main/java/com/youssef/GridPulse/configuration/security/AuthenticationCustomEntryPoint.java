@@ -1,4 +1,4 @@
-package com.youssef.GridPulse.auth;
+package com.youssef.GridPulse.configuration.security;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

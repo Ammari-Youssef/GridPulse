@@ -1,6 +1,6 @@
 package com.youssef.GridPulse.configuration;
 
-import com.youssef.GridPulse.user.UserRepository;
+import com.youssef.GridPulse.domain.identity.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @RequiredArgsConstructor
-@EnableJpaRepositories(basePackages = {"com.youssef.GridPulse.user", "com.youssef.GridPulse.token", })
+@EnableJpaRepositories(basePackages = {"com.youssef.GridPulse.domain"})
 public class ApplicationConfig {
 
     private final UserRepository userRepository;

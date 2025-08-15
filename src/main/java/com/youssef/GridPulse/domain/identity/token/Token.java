@@ -1,7 +1,7 @@
-package com.youssef.GridPulse.token;
+package com.youssef.GridPulse.domain.identity.token;
 
 import com.youssef.GridPulse.domain.base.BaseEntity;
-import com.youssef.GridPulse.user.User;
+import com.youssef.GridPulse.domain.identity.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 

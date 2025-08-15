@@ -1,4 +1,4 @@
-package com.youssef.GridPulse.configuration;
+package com.youssef.GridPulse.configuration.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

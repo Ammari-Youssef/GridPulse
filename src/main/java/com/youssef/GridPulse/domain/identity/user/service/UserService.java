@@ -1,5 +1,11 @@
-package com.youssef.GridPulse.user;
+package com.youssef.GridPulse.domain.identity.user.service;
 
+import com.youssef.GridPulse.domain.identity.user.dto.UpdateUserInput;
+import com.youssef.GridPulse.domain.identity.user.entity.User;
+import com.youssef.GridPulse.domain.identity.user.entity.UserHistory;
+import com.youssef.GridPulse.domain.identity.user.mapper.UserMapper;
+import com.youssef.GridPulse.domain.identity.user.repository.UserHistoryRepository;
+import com.youssef.GridPulse.domain.identity.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

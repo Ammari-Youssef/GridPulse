@@ -1,5 +1,9 @@
-package com.youssef.GridPulse.user;
+package com.youssef.GridPulse.domain.identity.user.resolver;
 
+import com.youssef.GridPulse.domain.identity.user.dto.UpdateUserInput;
+import com.youssef.GridPulse.domain.identity.user.entity.User;
+import com.youssef.GridPulse.domain.identity.user.entity.UserHistory;
+import com.youssef.GridPulse.domain.identity.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;

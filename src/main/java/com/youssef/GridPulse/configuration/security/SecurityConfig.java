@@ -1,6 +1,5 @@
-package com.youssef.GridPulse.configuration;
+package com.youssef.GridPulse.configuration.security;
 
-import com.youssef.GridPulse.auth.AuthenticationCustomEntryPoint;
 import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package com.youssef.GridPulse.configuration;
+package com.youssef.GridPulse.configuration.security;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

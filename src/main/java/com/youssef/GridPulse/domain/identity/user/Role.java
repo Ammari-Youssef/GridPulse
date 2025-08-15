@@ -1,4 +1,4 @@
-package com.youssef.GridPulse.user;
+package com.youssef.GridPulse.domain.identity.user;
 
 
 public enum Role {

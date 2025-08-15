@@ -1,6 +1,8 @@
-package com.youssef.GridPulse.user;
+package com.youssef.GridPulse.domain.identity.user.mapper;
 
-import com.youssef.GridPulse.auth.RegisterInput;
+import com.youssef.GridPulse.domain.identity.auth.dto.RegisterInput;
+import com.youssef.GridPulse.domain.identity.user.entity.User;
+import com.youssef.GridPulse.domain.identity.user.entity.UserHistory;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

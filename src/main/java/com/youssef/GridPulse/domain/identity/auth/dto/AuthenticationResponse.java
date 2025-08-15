@@ -1,4 +1,4 @@
-package com.youssef.GridPulse.auth;
+package com.youssef.GridPulse.domain.identity.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

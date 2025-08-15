@@ -1,10 +1,18 @@
-package com.youssef.GridPulse.auth;
+package com.youssef.GridPulse.domain.identity.auth.service;
 
-import com.youssef.GridPulse.configuration.JwtService;
-import com.youssef.GridPulse.token.Token;
-import com.youssef.GridPulse.token.TokenRepository;
-import com.youssef.GridPulse.token.TokenType;
-import com.youssef.GridPulse.user.*;
+import com.youssef.GridPulse.configuration.security.JwtService;
+import com.youssef.GridPulse.domain.identity.auth.dto.AuthenticationResponse;
+import com.youssef.GridPulse.domain.identity.auth.dto.LoginInput;
+import com.youssef.GridPulse.domain.identity.auth.dto.RegisterInput;
+import com.youssef.GridPulse.domain.identity.user.*;
+import com.youssef.GridPulse.domain.identity.user.entity.User;
+import com.youssef.GridPulse.domain.identity.user.entity.UserHistory;
+import com.youssef.GridPulse.domain.identity.user.mapper.UserMapper;
+import com.youssef.GridPulse.domain.identity.user.repository.UserHistoryRepository;
+import com.youssef.GridPulse.domain.identity.user.repository.UserRepository;
+import com.youssef.GridPulse.domain.identity.token.Token;
+import com.youssef.GridPulse.domain.identity.token.TokenRepository;
+import com.youssef.GridPulse.domain.identity.token.TokenType;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

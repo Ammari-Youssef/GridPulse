@@ -1,4 +1,4 @@
-package com.youssef.GridPulse.configuration;
+package com.youssef.GridPulse.configuration.security;
 
 import jakarta.servlet.ReadListener;
 import jakarta.servlet.ServletInputStream;

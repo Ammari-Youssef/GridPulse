@@ -1,6 +1,6 @@
-package com.youssef.GridPulse.configuration;
+package com.youssef.GridPulse.configuration.security;
 
-import com.youssef.GridPulse.token.TokenRepository;
+import com.youssef.GridPulse.domain.identity.token.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
