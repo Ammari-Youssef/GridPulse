@@ -1,9 +1,9 @@
-package com.youssef.GridPulse.resolver;
+package com.youssef.GridPulse.domain.inverter.resolver;
 
-import com.youssef.GridPulse.domain.dto.InverterInput;
-import com.youssef.GridPulse.domain.entity.Inverter;
-import com.youssef.GridPulse.domain.entity.InverterHistory;
-import com.youssef.GridPulse.service.InverterService;
+import com.youssef.GridPulse.domain.inverter.dto.InverterInput;
+import com.youssef.GridPulse.domain.inverter.entity.Inverter;
+import com.youssef.GridPulse.domain.inverter.entity.InverterHistory;
+import com.youssef.GridPulse.domain.inverter.service.InverterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;

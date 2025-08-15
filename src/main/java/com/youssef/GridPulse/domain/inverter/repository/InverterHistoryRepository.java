@@ -1,7 +1,7 @@
-package com.youssef.GridPulse.repository;
+package com.youssef.GridPulse.domain.inverter.repository;
 
 import com.youssef.GridPulse.domain.base.BaseHistoryRepository;
-import com.youssef.GridPulse.domain.entity.InverterHistory;
+import com.youssef.GridPulse.domain.inverter.entity.InverterHistory;
 
 import java.util.UUID;
 

@@ -1,11 +1,11 @@
-package com.youssef.GridPulse.service;
+package com.youssef.GridPulse.domain.inverter.service;
 
-import com.youssef.GridPulse.domain.dto.InverterInput;
-import com.youssef.GridPulse.domain.entity.Inverter;
-import com.youssef.GridPulse.domain.entity.InverterHistory;
-import com.youssef.GridPulse.domain.mapper.InverterMapper;
-import com.youssef.GridPulse.repository.InverterHistoryRepository;
-import com.youssef.GridPulse.repository.InverterRepository;
+import com.youssef.GridPulse.domain.inverter.dto.InverterInput;
+import com.youssef.GridPulse.domain.inverter.entity.Inverter;
+import com.youssef.GridPulse.domain.inverter.entity.InverterHistory;
+import com.youssef.GridPulse.domain.inverter.mapper.InverterMapper;
+import com.youssef.GridPulse.domain.inverter.repository.InverterHistoryRepository;
+import com.youssef.GridPulse.domain.inverter.repository.InverterRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
