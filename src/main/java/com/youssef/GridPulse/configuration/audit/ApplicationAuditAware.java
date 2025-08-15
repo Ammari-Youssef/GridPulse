@@ -1,6 +1,6 @@
 package com.youssef.GridPulse.configuration.audit;
 
-import com.youssef.GridPulse.user.User;
+import com.youssef.GridPulse.domain.identity.user.entity.User;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
