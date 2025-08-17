@@ -25,50 +25,50 @@ public class InverterResolver {
     @QueryMapping
     @PreAuthorize("hasRole('ADMIN')")
     public List<Inverter> getAllInverters() {
-        return inverterService.getAllInverters();
+        return inverterService.getAll();
     }
 
     @QueryMapping
     public Inverter getInverterById(@Argument UUID id) {
-        return inverterService.getInverterById(id);
+        return inverterService.getEntityById(id);
     }
 
     // TODO: Create inverters should add along with inverters fields data the data of other entities
     @MutationMapping
     @PreAuthorize("hasRole('ADMIN')")
     public Inverter createInverter(@Argument InverterInput input) {
-        return inverterService.createInverter(input);
+        return inverterService.create(input);
     }
 
     @MutationMapping
     @PreAuthorize("hasRole('ADMIN')")
     public Inverter updateInverter(@Argument UUID id, @Argument InverterInput input) {
-        return inverterService.updateInverter(id, input);
+        return inverterService.update(id, input);
     }
 
     @MutationMapping
     @PreAuthorize("hasRole('ADMIN')")
     public boolean deleteInverter(@Argument UUID id) {
-        return inverterService.deleteInverter(id);
+        return inverterService.delete(id);
     }
 
     // History methods
     @QueryMapping
     @PreAuthorize("hasRole('ADMIN')")
     public List<InverterHistory> getInverterHistory(@Argument UUID originalId) {
-        return inverterService.getInverterHistory(originalId);
+        return inverterService.findHistoryByOriginalId(originalId);
     }
 
     @QueryMapping
     @PreAuthorize("hasRole('ADMIN')")
     public List<InverterHistory> getAllInverterHistory() {
-        return inverterService.getAllInverterHistory();
+        return inverterService.findAllHistory();
     }
 
     @QueryMapping
     @PreAuthorize("hasRole('ADMIN')")
     public InverterHistory getInverterHistoryById(@Argument UUID historyId) {
-        return inverterService.getInverterHistoryById(historyId);
+        return inverterService.findHistoryById(historyId);
     }
 
     @MutationMapping
