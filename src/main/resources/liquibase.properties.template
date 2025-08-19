@@ -1,0 +1,7 @@
+# liquibase.properties.template (template for Liquibase configuration)
+# Here you find how your liquibase.properties file should look like
+driver=YOUR_LIQUIBASE_DB_DRIVER
+url=YOUR_LIQUIBASE_DB_URL
+username=YOUR_LIQUIBASE_DB_USER
+password=YOUR_LIQUIBASE_DB_PASS
+changeLogFile=classpath:db/changelog/db.changelog-master.xml

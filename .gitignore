@@ -3,7 +3,10 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+
 .env
+!**/src/main/resources/liquibase.properties  # Liquibase configuration file
+
 ### STS ###
 .apt_generated
 .classpath

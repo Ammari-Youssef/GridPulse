@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+
+    <include file="/db/changelog/user/v1.0__create-user-17-08-changelog.xml"/>
+    <include file="/db/changelog/token/v1.0__create-token-17-08-changelog.xml"/>
+    <include file="/db/changelog/user/v1.0__create-user-history-17-08-changelog.xml"/>
+    <include file="/db/changelog/inverter/v1.0__create-inverter-17-08-changelog.xml"/>
+    <include file="/db/changelog/inverter/v1.0__create-inverter-history-17-08-changelog.xml"/>
+</databaseChangeLog>
