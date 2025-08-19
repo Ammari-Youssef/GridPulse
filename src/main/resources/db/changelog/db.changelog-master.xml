@@ -7,6 +7,9 @@
         objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
 
-    <include file="/db/changelog/user/17-08-changelog.xml"/>
-    <include file="db/changelog/inverter/17-08-changelog.xml"/>
+    <include file="/db/changelog/user/create-user-17-08-changelog.xml"/>
+    <include file="/db/changelog/token/create-token-17-08-changelog.xml"/>
+    <include file="/db/changelog/user/create-user-history-17-08-changelog.xml"/>
+    <include file="/db/changelog/inverter/create-inverter-17-08-changelog.xml"/>
+    <include file="/db/changelog/inverter/create-inverter-history-17-08-changelog.xml"/>
 </databaseChangeLog>

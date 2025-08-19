@@ -5,36 +5,8 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
         objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
-    <changeSet id="1755466294913-1" author="youssef">
-        <createTable tableName="inverter">
-            <column name="id" type="UUID">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_inverter"/>
-            </column>
-            <column name="created_at" type="DATETIME">
-                <constraints nullable="false"/>
-            </column>
-            <column name="updated_at" type="DATETIME"/>
-            <column name="created_by" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="updated_by" type="VARCHAR(255)"/>
-            <column name="source" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="name" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="model" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="version" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="manufacturer" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
 
+    <changeSet id="create_inverter_history_table" author="youssef">
         <createTable tableName="inverter_history">
             <column name="id" type="UUID">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_inverterhistory"/>
@@ -78,6 +50,10 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
+        <rollback>
+            <dropTable tableName="inverter_history"/>
+        </rollback>
     </changeSet>
 
 </databaseChangeLog>
