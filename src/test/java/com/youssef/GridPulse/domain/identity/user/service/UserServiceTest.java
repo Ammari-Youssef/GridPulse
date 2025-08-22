@@ -7,16 +7,19 @@ import com.youssef.GridPulse.domain.identity.user.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
     @Mock  private UserRepository userRepository;
@@ -26,22 +29,14 @@ class UserServiceTest {
 
     private UserService userService;
 
-    AutoCloseable autoCloseable;
-
     @BeforeEach
     void setUp() {
-        // 1. Initialize the mocks and get the cleanup resource
-        autoCloseable = MockitoAnnotations.openMocks(this);
-        // 2. Since @InjectMocks doesn't work as well with JUnit 4,
-        // we often create the service manually and inject the mock ourselves.
         userService = new UserService(userRepository, userHistoryRepository, userMapper);
     }
 
     @AfterEach
-    void tearDown() throws Exception {
-        // 3. CRUCIAL: Close the resource to trigger cleanup!
-        // This checks for unused stubs and other validation.
-        autoCloseable.close();
+    void tearDown() {
+
     }
 
     @Test
@@ -60,7 +55,7 @@ class UserServiceTest {
     }
 
     @Test
-    void getUserById() {
+    void getUserById_WhenUserExists_ReturnsUserDTO() {
         // given
         UUID id = UUID.randomUUID();
         User user = User.builder()
@@ -73,12 +68,39 @@ class UserServiceTest {
                 .enabled(true)
                 .build();
 
-        // when
-        when(userRepository.save(any(User.class))).thenAnswer(invk -> {
-            User u = invk.getArgument(0);
-            u.setId(id);
-            return u;
-        });
         when(userRepository.findById(id)).thenReturn(java.util.Optional.of(user));
+
+        // when
+        Optional<User> result = userService.getUserById(id);
+
+        // then
+        assertThat(result)
+                .isNotNull()
+                .isPresent()
+                .contains(user)
+                .satisfies(dto -> {
+                    assertThat(dto.get().getId()).isEqualTo(id);
+                    assertThat(dto.get().getFirstname()).isEqualTo("John");
+                    assertThat(dto.get().getLastname()).isEqualTo("Doe");
+                    assertThat(dto.get().getEmail()).isEqualTo("john.doe@example.com");
+                    assertThat(dto.get().isEnabled()).isTrue();
+                });
+
+        verify(userRepository).findById(id);
+    }
+
+    @Test
+    void getUserById_WhenUserNotFound_ThrowsException() {
+        // given
+        UUID nonExistentId = UUID.randomUUID();
+        when(userRepository.findById(nonExistentId)).thenReturn(Optional.empty());
+
+        // when
+        Optional<User> result = userService.getUserById(nonExistentId);
+
+        // then
+        assertThat(result).isEmpty();
+
+        verify(userRepository).findById(nonExistentId);
     }
 }
