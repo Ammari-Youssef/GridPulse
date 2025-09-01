@@ -1,0 +1,4 @@
+mutation Logout {
+    __typename
+    logout
+}
