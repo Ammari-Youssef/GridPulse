@@ -163,8 +163,6 @@ public class AuthenticationService {
         history.setCreatedRecord(true);
         userHistoryRepository.save(history);
 
-        userRepository.save(user);
-
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
 
