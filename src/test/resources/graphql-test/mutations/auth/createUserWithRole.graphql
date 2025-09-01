@@ -1,0 +1,12 @@
+mutation CreateUserWithRole(
+    $registerInput: RegisterInput!
+    $role: String!
+) {
+    createUserWithRole(
+        registerInput:$registerInput
+        role: $role
+    ) {
+        accessToken
+        refreshToken
+    }
+}

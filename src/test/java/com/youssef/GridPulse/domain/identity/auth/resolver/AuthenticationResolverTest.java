@@ -4,21 +4,26 @@ import com.youssef.GridPulse.domain.identity.auth.dto.AuthenticationResponse;
 import com.youssef.GridPulse.domain.identity.auth.dto.LoginInput;
 import com.youssef.GridPulse.domain.identity.auth.dto.RegisterInput;
 import com.youssef.GridPulse.domain.identity.auth.service.AuthenticationService;
+import com.youssef.GridPulse.domain.identity.user.Role;
+import com.youssef.GridPulse.domain.identity.user.entity.User;
 import org.junit.jupiter.api.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
 
 import org.springframework.graphql.test.tester.GraphQlTester;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.Instant;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @GraphQlTest(AuthenticationResolver.class)
 class AuthenticationResolverTest {
@@ -149,6 +154,8 @@ class AuthenticationResolverTest {
         verify(service).authenticate(any());
     }
 
+    // ========== LOGOUT TESTS ==========
+
     @Test
     @DisplayName("logout - Should return true when service returns true")
     void logout_Success() {
@@ -165,7 +172,7 @@ class AuthenticationResolverTest {
         // verify service was called
         verify(service).logout();
     }
-    // ========== LOGOUT TESTS ==========
+
 
     @Test
     @DisplayName("logout - Should return false when service returns false")
@@ -203,7 +210,7 @@ class AuthenticationResolverTest {
                 .entity(String.class)
                 .isEqualTo("refresh-token");
 
-        verify(service.refreshToken(authResponse.getRefreshToken()));
+        verify(service).refreshToken(authResponse.getRefreshToken());
     }
 
     @Test
@@ -225,16 +232,111 @@ class AuthenticationResolverTest {
         verify(service).refreshToken(authResponse.getRefreshToken());
     }
 
+    // ========== CREATE WITH ROLE TESTS ==========
+
+
     @Test
+    @WithMockUser(roles = {"ADMIN"})
     void createUserWithRole_success() {
+        // given
+        when(service.createUserWithRole(registerInput, "ADMIN")).thenReturn(authResponse);
 
+        // when & then
+        graphQlTest.documentName("mutations/auth/createUserWithRole")
+                .variable("registerInput", Map.of(
+                        "email", registerInput.getEmail(),
+                        "password", registerInput.getPassword(),
+                        "firstname", registerInput.getFirstname(),
+                        "lastname", registerInput.getLastname()
+                ))
+                .variable("role", "ADMIN")
+                .execute()
+                .path("createUserWithRole.accessToken")
+                .entity(String.class)
+                .isEqualTo("access-token")
+                .path("createUserWithRole.refreshToken")
+                .entity(String.class)
+                .isEqualTo("refresh-token");
+
+        verify(service).createUserWithRole(registerInput, "ADMIN");
     }
 
     @Test
-    void createUserWithRole() {
+//    @WithMockUser(roles = "USER") // User with USER role, not ADMIN
+    void createUserWithRole_ShouldFailWhenNotAdmin() {
+        // when & then - should get UNAUTHORIZED error, and the service is never called
+        graphQlTest.documentName("mutations/auth/createUserWithRole")
+                .variable("registerInput", Map.of(
+                        "email", registerInput.getEmail(),
+                        "password", registerInput.getPassword(),
+                        "firstname", registerInput.getFirstname(),
+                        "lastname", registerInput.getLastname()
+                ))
+                .variable("role", "ADMIN")
+                .execute()
+                .errors()
+                .satisfy(errors -> {
+                    assertThat(errors).hasSize(1);
+                    assertThat(errors.get(0).getMessage()).contains("INTERNAL_ERROR");
+                    // Or check the classification
+                    assertThat(errors.get(0).getExtensions())
+                            .containsEntry("classification", "UNAUTHORIZED");
+                });
+
+        // Verify service method was NEVER called (security should block it)
+        verify(service, never()).createUserWithRole(any(RegisterInput.class), eq("ADMIN"));
+    }
+
+    // ========== GET CURRENT TESTS ==========
+
+    @Test
+    @WithAnonymousUser
+    void getCurrentUser_Fail() {
+        // given
+        when(service.getCurrentUser()).thenThrow(new AuthenticationException("Invalid bearer token"){} );
+
+        // when & then
+        graphQlTest.documentName("queries/user/getCurrentUser")
+                .execute()
+                .errors()
+                .satisfy(errors -> {
+                    assertThat(errors).hasSize(1);
+                    assertThat(errors.get(0).getMessage())
+                            .contains("INTERNAL_ERROR");
+                });
+
+        verify(service).getCurrentUser();
     }
 
     @Test
-    void getCurrentUser() {
+    @WithMockUser
+    void getCurrentUser_Success() {
+        // given
+        var user = User.builder()
+                .id(UUID.randomUUID())
+                .email("test@example.com")
+                .password("encodedPassword")
+                .firstname("John")
+                .lastname("Doe")
+                .role(Role.USER)
+                .enabled(true)
+                .createdAt(Instant.now())
+                .build();
+
+        when(service.getCurrentUser()).thenReturn(user);
+
+        // when & then
+        graphQlTest.documentName("queries/user/getCurrentUser")
+                .execute()
+                .path("getCurrentUser")
+                .entity(User.class)
+                .satisfies(user1 -> {
+                            assertThat(user1.getFirstname()).isEqualTo(user.getFirstname());
+                            assertThat(user1.getLastname()).isEqualTo(user.getLastname());
+                        }
+                );
+
+        verify(service).getCurrentUser();
     }
+
 }
