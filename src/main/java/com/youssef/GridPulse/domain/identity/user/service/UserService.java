@@ -72,12 +72,14 @@ public class UserService {
     @Transactional
     public boolean toggleUserEnableStatus(UUID userId) {
         return userRepository.findById(userId).map(user -> {
-            // Save history before changing status
+            // Save history BEFORE changing status
             UserHistory history = userMapper.toHistory(user);
-            history.setDisabledRecord(!user.isEnabled()); // log what’s happening
+
+            history.setEnabled(user.isEnabled()); // Record the state before toggle
+
             userHistoryRepository.save(history);
 
-            // Toggle status
+            // Toggle the actual user status
             user.setEnabled(!user.isEnabled());
             userRepository.save(user);
 

@@ -118,7 +118,6 @@ type UserHistory implements AuditableHistory {
     email: String
     role: String
     enabled: Boolean
-    disabledRecord: Boolean
 
     createdBy: String!
     updatedBy: String

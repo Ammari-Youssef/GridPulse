@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="remove_disabledRecord_column_from_user_history_table" author="youssef">
+
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="user_history" columnName="disabled_record"/>
+        </preConditions>
+
+        <dropColumn columnName="disabled_record" tableName="user_history"/>
+
+        <rollback>
+            <addColumn tableName="user_history">
+                <column name="disabled_record" type="BOOLEAN" defaultValueBoolean="false">
+                    <constraints nullable="true" />
+                </column>
+            </addColumn>
+
+            <!-- Update existing rows to have default value -->
+            <sql>UPDATE user_history SET disabled_record = false WHERE disabled_record IS NULL</sql>
+
+            <!-- Then add the NOT NULL constraint -->
+            <addNotNullConstraint tableName="user_history" columnName="disabled_record"/>
+
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
