@@ -1,0 +1,3 @@
+mutation ToggleUserEnableStatus($id: ID!) {
+    toggleUserEnableStatus(id: $id)
+}

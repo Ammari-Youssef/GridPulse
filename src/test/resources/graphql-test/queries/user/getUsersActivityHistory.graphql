@@ -1,0 +1,20 @@
+query GetUsersActivityHistory {
+    getUsersActivityHistory {
+        id
+        originalId
+        firstname
+        lastname
+        email
+        role
+        enabled
+        createdRecord
+        updatedRecord
+        deletedRecord
+        synced
+        source
+        createdBy
+        updatedBy
+        createdAt
+        updatedAt
+    }
+}

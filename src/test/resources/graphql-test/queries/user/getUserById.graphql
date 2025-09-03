@@ -1,0 +1,16 @@
+query GetUserById($id: ID!) {
+    getUserById(id: $id) {
+        id
+        email
+        firstname
+        lastname
+        password
+        role
+        enabled
+        createdBy
+        updatedBy
+        source
+        createdAt
+        updatedAt
+    }
+}
