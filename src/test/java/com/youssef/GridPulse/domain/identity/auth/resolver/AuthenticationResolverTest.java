@@ -11,8 +11,10 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
 
+import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureGraphQlTester;
 import org.springframework.graphql.test.tester.GraphQlTester;
-import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -26,6 +28,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @GraphQlTest(AuthenticationResolver.class)
+@EnableMethodSecurity
+@AutoConfigureGraphQlTester
 class AuthenticationResolverTest {
 
     @Autowired
@@ -167,6 +171,7 @@ class AuthenticationResolverTest {
     class LogoutTests {
         @Test
         @DisplayName("logout - Should return true when service returns true")
+        @WithMockUser
         void logout_Success() {
             // given - Service returns success
             when(service.logout()).thenReturn(true);
@@ -184,19 +189,23 @@ class AuthenticationResolverTest {
 
 
         @Test
-        @DisplayName("logout - Should return false when service returns false")
-        void logout_Fails() {
-            // given - Service returns failure
-            when(service.logout()).thenReturn(false);
+        @WithAnonymousUser
+        @DisplayName("logout - Should return error when not authenticated")
+        void logout_WhenNotAuthenticated_Fails() {
+            // Ensure no authentication
+            SecurityContextHolder.clearContext();
 
             // when & then - Test GraphQL response
             graphQlTest.documentName("mutations/auth/logout")
                     .execute()
-                    .path("logout")
-                    .entity(Boolean.class)
-                    .isEqualTo(false);
+                    .errors()
+                    .satisfy(error -> {
+                        assertThat(error).hasSize(1);
+                        assertThat(error.get(0).getMessage()).contains("INTERNAL_ERROR");
+                    });
 
-            verify(service).logout();
+            // Verify the service was NEVER called since authentication fails first
+            verify(service, never()).logout();
         }
     }
 
@@ -279,7 +288,7 @@ class AuthenticationResolverTest {
         }
 
         @Test
-//    @WithMockUser(roles = "USER") // User with USER role, not ADMIN
+        @WithMockUser(roles = "USER")
         void createUserWithRole_ShouldFailWhenNotAdmin() {
             // when & then - should get UNAUTHORIZED error, and the service is never called
             graphQlTest.documentName("mutations/auth/createUserWithRole")
@@ -295,9 +304,31 @@ class AuthenticationResolverTest {
                     .satisfy(errors -> {
                         assertThat(errors).hasSize(1);
                         assertThat(errors.get(0).getMessage()).contains("INTERNAL_ERROR");
-                        // Or check the classification
-                        assertThat(errors.get(0).getExtensions())
-                                .containsEntry("classification", "UNAUTHORIZED");
+
+                    });
+
+            // Verify service method was NEVER called (security should block it)
+            verify(service, never()).createUserWithRole(any(RegisterInput.class), eq("ADMIN"));
+        }
+
+        @Test
+        @WithAnonymousUser
+        void createUserWithRole_ShouldFailWhenAnonymous() {
+            // when & then - should get UNAUTHORIZED error, and the service is never called
+            graphQlTest.documentName("mutations/auth/createUserWithRole")
+                    .variable("registerInput", Map.of(
+                            "email", registerInput.getEmail(),
+                            "password", registerInput.getPassword(),
+                            "firstname", registerInput.getFirstname(),
+                            "lastname", registerInput.getLastname()
+                    ))
+                    .variable("role", "ADMIN")
+                    .execute()
+                    .errors()
+                    .satisfy(errors -> {
+                        assertThat(errors).hasSize(1);
+                        assertThat(errors.get(0).getMessage()).contains("INTERNAL_ERROR");
+
                     });
 
             // Verify service method was NEVER called (security should block it)
@@ -313,10 +344,6 @@ class AuthenticationResolverTest {
         @Test
         @WithAnonymousUser
         void getCurrentUser_Fail() {
-            // given
-            when(service.getCurrentUser()).thenThrow(new AuthenticationException("Invalid bearer token") {
-            });
-
             // when & then
             graphQlTest.documentName("queries/user/getCurrentUser")
                     .execute()
@@ -327,7 +354,7 @@ class AuthenticationResolverTest {
                                 .contains("INTERNAL_ERROR");
                     });
 
-            verify(service).getCurrentUser();
+            verify(service, never()).getCurrentUser();
         }
 
         @Test

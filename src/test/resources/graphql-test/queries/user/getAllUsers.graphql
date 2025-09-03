@@ -1,0 +1,17 @@
+query GetAllUsers {
+    getAllUsers {
+        __typename
+        id
+        email
+        firstname
+        lastname
+
+        role
+        enabled
+        createdBy
+        updatedBy
+        source
+        createdAt
+        updatedAt
+    }
+}
