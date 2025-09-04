@@ -3,7 +3,6 @@ package com.youssef.GridPulse.domain.base;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -24,16 +23,22 @@ public abstract class BaseServiceTest<
         INPUT,
         S extends BaseService<E, H, ID, INPUT>> {
 
-    @Mock
+    // Remove @Mock annotations from these
     protected JpaRepository<E, ID> repository;
-
-    @Mock
     protected BaseHistoryRepository<H, ID> historyRepository;
-
-    @Mock
     protected BaseMapper<E, H, INPUT> mapper;
 
     protected S service;
+
+    // Add constructor to accept mocks
+    protected BaseServiceTest(JpaRepository<E, ID> repository,
+                              BaseHistoryRepository<H, ID> historyRepository,
+                              BaseMapper<E, H, INPUT> mapper) {
+        this.repository = repository;
+        this.historyRepository = historyRepository;
+        this.mapper = mapper;
+    }
+
 
     private static Instant suiteStartTime;
     private static int testCounter = 1;
