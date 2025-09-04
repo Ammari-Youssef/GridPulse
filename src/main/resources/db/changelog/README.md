@@ -79,7 +79,8 @@ spring.liquibase.show-summary=summary
 ### 📜 Liquibase CLI Commands
 
         ./mvnw liquibase:update	                                # Apply all pending changes
-        ./mvnw liquibase:rollback -Dliquibase.rollbackCount=1	# Rollback last change
+        ./mvnw liquibase:rollback -Dliquibase.rollbackCount=1	# Rollback last change (1 changeSet)
+        ./mvnw liquibase:rollback --define liquibase.rollbackCount=1 # Alternative syntax if the one above don't work
         ./mvnw liquibase:history	                            # View applied changesets
         ./mvnw liquibase:validate	                            # Verify changelog integrity
 
