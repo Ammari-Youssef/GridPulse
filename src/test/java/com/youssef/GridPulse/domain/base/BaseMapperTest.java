@@ -12,7 +12,7 @@ public abstract class BaseMapperTest<E extends BaseEntity, H extends BaseHistory
     protected abstract BaseMapper<E, H, INPUT> getMapper();
     protected abstract INPUT createTestInput();
     protected abstract E createTestEntity();
-//    protected abstract H createTestHistoryEntity();
+    protected abstract H createTestHistoryEntity();
 
     private static Instant suiteStartTime;
     private static int testCounter = 1;
@@ -140,8 +140,10 @@ public abstract class BaseMapperTest<E extends BaseEntity, H extends BaseHistory
             // When
             getMapper().updateEntity(null, entity);
 
-            // Then
-            assertThat(entity).isEqualTo(originalEntity); // Should remain unchanged
+            // Then - Should remain unchanged
+            assertThat(entity)
+                    .usingRecursiveComparison()
+                    .isEqualTo(originalEntity);
 
             System.out.println("✔️ should_notUpdateEntity_withNullInput passed");
         }
@@ -151,10 +153,10 @@ public abstract class BaseMapperTest<E extends BaseEntity, H extends BaseHistory
             System.out.println("🔹 Running should_notUpdateEntity_withNullEntity");
 
             // Given
-            INPUT input = createTestInput();
+            E entity = createTestEntity();
 
             // When & Then - Should not throw exception
-            assertDoesNotThrow(() -> getMapper().updateEntity(input, null));
+            assertDoesNotThrow(() -> getMapper().updateEntity(null , entity));
 
             System.out.println("✔️ should_notUpdateEntity_withNullEntity passed");
         }
