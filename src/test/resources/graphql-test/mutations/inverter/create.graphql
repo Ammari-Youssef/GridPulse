@@ -1,0 +1,16 @@
+mutation CreateInverter(
+    $input: InverterInput!
+) {
+    createInverter(
+        input:$input
+    ) {
+        id
+        name
+        model
+        version
+        manufacturer
+        createdAt
+        updatedAt
+        source
+    }
+}

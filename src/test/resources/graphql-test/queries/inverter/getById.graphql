@@ -1,0 +1,14 @@
+query GetInverterById($id: ID!) {
+    getInverterById(id: $id) {
+        id
+        name
+        model
+        version
+        manufacturer
+        createdBy
+        updatedBy
+        createdAt
+        updatedAt
+        source
+    }
+}

@@ -1,0 +1,19 @@
+query GetInverterHistoryById($historyId: ID!) {
+    getInverterHistoryById(historyId: $historyId) {
+        id
+        originalId
+        name
+        model
+        version
+        manufacturer
+        source
+        createdBy
+        updatedBy
+        createdAt
+        updatedAt
+        createdRecord
+        updatedRecord
+        deletedRecord
+        synced
+    }
+}

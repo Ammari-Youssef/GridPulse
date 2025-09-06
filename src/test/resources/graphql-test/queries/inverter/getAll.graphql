@@ -1,0 +1,11 @@
+query GetAllInverters {
+    getAllInverters {
+        id
+        name
+        model
+        version
+        manufacturer
+        createdAt
+        updatedAt
+    }
+}

@@ -1,0 +1,3 @@
+mutation DeleteInverter($id: ID!) {
+    deleteInverter(id: $id)
+}
