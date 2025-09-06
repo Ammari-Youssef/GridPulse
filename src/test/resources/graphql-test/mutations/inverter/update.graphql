@@ -1,0 +1,12 @@
+mutation UpdateInverter($id: ID!, $input: InverterInput!) {
+    updateInverter(id: $id, input: $input) {
+        id
+        name
+        model
+        version
+        manufacturer
+        createdAt
+        updatedAt
+        source
+    }
+}
