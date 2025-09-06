@@ -1,0 +1,19 @@
+query GetAllInverterHistory {
+    getAllInverterHistory {
+        id
+        originalId
+        name
+        model
+        version
+        manufacturer
+        source
+        createdBy
+        updatedBy
+        createdAt
+        updatedAt
+        createdRecord
+        updatedRecord
+        deletedRecord
+        synced
+    }
+}
