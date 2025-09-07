@@ -157,8 +157,8 @@ input UpdateUserInput {
 }
 
 input InverterInput {
-    name: String!
-    model: String!
-    version: String!
-    manufacturer: String!
+    name: String
+    model: String
+    version: String
+    manufacturer: String
 }
