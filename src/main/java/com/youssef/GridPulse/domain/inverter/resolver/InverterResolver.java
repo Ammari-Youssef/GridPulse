@@ -29,6 +29,7 @@ public class InverterResolver {
     }
 
     @QueryMapping
+    @PreAuthorize("isAuthenticated() ")
     public Inverter getInverterById(@Argument UUID id) {
         return inverterService.getEntityById(id);
     }
@@ -76,7 +77,5 @@ public class InverterResolver {
     public Boolean markInverterHistorySynced(@Argument UUID id) {
         return inverterService.markHistoryRecordAsSynced(id);
     }
-
-
 
 }
