@@ -13,4 +13,5 @@
     <include file="/db/changelog/inverter/v1.0__create-inverter-17-08-changelog.xml"/>
     <include file="/db/changelog/inverter/v1.0__create-inverter-history-17-08-changelog.xml"/>
     <include file="/db/changelog/user/v1.0__remove-disabledRecord-column-from-user-history-30-08-changelog.xml"/>
+    <include file="/db/changelog/security-keys/v1.0__create-security-keys-09-09-changelog.xml"/>
 </databaseChangeLog>
