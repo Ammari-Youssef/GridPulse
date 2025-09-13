@@ -9,11 +9,11 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.youssef</groupId>
-    <artifactId>gridpulse-backend-cloud</artifactId>
+    <artifactId>gridpulse-cloud-backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>GridPulse Backend Cloud</name>
+    <name>GridPulse Cloud Backend</name>
     <description>
-        GridPulse Backend Cloud is the core backend service for an IoT-based energy monitoring platform.
+        GridPulse Cloud Backend is the core backend service for an IoT-based energy monitoring platform.
         It powers smart electrical network optimization and residential energy tracking, built with Spring Boot, GraphQL, and PostgreSQL.
         This service ensures scalable architecture, secure data flow, and precise, auditable insights—ready for cloud deployment and future microservice integration.
     </description>
