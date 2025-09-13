@@ -9,7 +9,6 @@ import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -25,7 +24,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Testcontainers
 @SpringBootTest
-@ActiveProfiles("test")
 public class LiquibaseMigrationTest {
 
     static {
@@ -45,10 +43,24 @@ public class LiquibaseMigrationTest {
 
     @DynamicPropertySource
     public static void overrideProperties(DynamicPropertyRegistry dynamicPropertyRegistry) {
+        // Datasource config from Testcontainers
         dynamicPropertyRegistry.add("spring.datasource.url", postgresqlContainer::getJdbcUrl);
         dynamicPropertyRegistry.add("spring.datasource.username", postgresqlContainer::getUsername);
         dynamicPropertyRegistry.add("spring.datasource.password", postgresqlContainer::getPassword);
         dynamicPropertyRegistry.add("spring.datasource.driver-class-name", postgresqlContainer::getDriverClassName);
+
+        // Liquibase config
+        dynamicPropertyRegistry.add("spring.liquibase.change-log", () -> "classpath:db/changelog/db.changelog-master.xml");
+        dynamicPropertyRegistry.add("spring.liquibase.enabled", () -> true);
+        dynamicPropertyRegistry.add("spring.liquibase.drop-first", () -> false);
+
+        // Hibernate config to avoid conflicts
+        dynamicPropertyRegistry.add("spring.jpa.hibernate.ddl-auto", () -> "none");
+        dynamicPropertyRegistry.add("spring.jpa.defer-datasource-initialization", () -> false);
+
+        // Optional: performance tweaks
+        dynamicPropertyRegistry.add("spring.test.database.replace", () -> "ANY");
+        dynamicPropertyRegistry.add("spring.jpa.properties.hibernate.temp.use_jdbc_metadata_defaults", () -> false);
     }
 
     @Test
