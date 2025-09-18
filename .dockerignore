@@ -1,0 +1,33 @@
+# Ignore build artifacts
+target/
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Ignore Docker and env files
+Dockerfile
+.dockerignore
+.env
+**/.env
+**/Dockerfile*
+
+# Ignore Git
+.git
+.gitignore
+
+# Ignore node and frontend stuff
+**/node_modules
+**/dist
+
+# Ignore docs and logs
+*.md
+*.log
+HELP.md
+
+# Ignore everything in .mvn except wrapper files
+.mvn/*
+!.mvn/wrapper/maven-wrapper.jar
+!.mvn/wrapper/maven-wrapper.properties
+
+# Include Maven wrapper scripts
+!mvnw
+!mvnw.cmd

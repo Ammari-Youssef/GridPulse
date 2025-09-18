@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 
 .env
+.env.docker
 !**/src/main/resources/liquibase.properties  # Liquibase configuration file
 
 ### STS ###

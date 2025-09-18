@@ -1,0 +1,28 @@
+services:
+  gridpulse-db:
+    image: postgres:16
+    container_name: GridPulse-Cloud-DB
+    environment:
+      POSTGRES_DB: gridpulse_cloud
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  gridpulse-cloud-backend:
+    build: .
+    image: gridpulse-cloud-backend
+    container_name: GridPulse-Backend-Cloud
+    depends_on:
+      - gridpulse-db
+    env_file:
+      - .env.docker
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+volumes:
+  pgdata:

@@ -105,7 +105,7 @@ public class AuthenticationService {
 
         final String authHeader = this.request.getHeader("Authorization");
         final String jwt;
-        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return false;
         }
         jwt = authHeader.substring(7);
@@ -119,28 +119,6 @@ public class AuthenticationService {
             return true;
         }
         return false;
-    }
-
-    private void saveUserToken(User user, String jwtToken, TokenType tokenType) {
-        var token = Token.builder()
-                .user(user)
-                .token(jwtToken)
-                .tokenType(tokenType)
-                .expired(false)
-                .revoked(false)
-                .build();
-        tokenRepository.save(token);
-    }
-
-    private void revokeAllUserTokens(User user) {
-        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId(), TokenType.BEARER);
-        if (validUserTokens.isEmpty())
-            return;
-        validUserTokens.forEach(token -> {
-            token.setExpired(true);
-            token.setRevoked(true);
-        });
-        tokenRepository.saveAll(validUserTokens);
     }
 
     public AuthenticationResponse createUserWithRole(RegisterInput request, String role) {
@@ -187,6 +165,33 @@ public class AuthenticationService {
 
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+    }
+
+    public boolean isEmailAvailable(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    //    Helper methods
+    private void saveUserToken(User user, String jwtToken, TokenType tokenType) {
+        var token = Token.builder()
+                .user(user)
+                .token(jwtToken)
+                .tokenType(tokenType)
+                .expired(false)
+                .revoked(false)
+                .build();
+        tokenRepository.save(token);
+    }
+
+    private void revokeAllUserTokens(User user) {
+        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId(), TokenType.BEARER);
+        if (validUserTokens.isEmpty())
+            return;
+        validUserTokens.forEach(token -> {
+            token.setExpired(true);
+            token.setRevoked(true);
+        });
+        tokenRepository.saveAll(validUserTokens);
     }
 
 }

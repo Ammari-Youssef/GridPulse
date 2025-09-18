@@ -9,13 +9,15 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.youssef</groupId>
-    <artifactId>GridPulse</artifactId>
+    <artifactId>gridpulse-cloud-backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>GridPulse</name>
-    <description>GridPulse is the backend for an IoT-based energy monitoring solution designed to optimize and manage
-        smart electrical networks and residential power usage. Built with Spring Boot, GraphQL, and PostgreSQL, it
-        ensures scalability, security, and precise, auditable data tracking.
+    <name>GridPulse Cloud Backend</name>
+    <description>
+        GridPulse Cloud Backend is the core backend service for an IoT-based energy monitoring platform.
+        It powers smart electrical network optimization and residential energy tracking, built with Spring Boot, GraphQL, and PostgreSQL.
+        This service ensures scalable architecture, secure data flow, and precise, auditable insights—ready for cloud deployment and future microservice integration.
     </description>
+
     <url/>
     <licenses>
         <license/>
@@ -126,11 +128,6 @@
             <groupId>net.datafaker</groupId>
             <artifactId>datafaker</artifactId>
             <version>2.4.4</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.cdimascio</groupId>
-            <artifactId>dotenv-java</artifactId>
-            <version>3.0.0</version>
         </dependency>
 
         <!-- Test Dependencies -->
