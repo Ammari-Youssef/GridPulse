@@ -3,9 +3,13 @@ package com.youssef.GridPulse.domain.inverter.entity;
 
 import com.youssef.GridPulse.domain.base.BaseHistoryEntity;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,4 +26,7 @@ public class InverterHistory extends BaseHistoryEntity {
     private String version;
     @Column(nullable = false)
     private String manufacturer;
+
+    @ElementCollection
+    private List<UUID> deviceIds;
 }

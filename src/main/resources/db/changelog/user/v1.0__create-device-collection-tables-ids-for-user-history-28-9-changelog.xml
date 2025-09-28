@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+
+    <changeSet id="create_user_history_used_device_ids_collectionTable" author="youssef">
+        <createTable tableName="user_history_used_device_ids">
+            <column name="user_history_id"
+                    type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="used_device_ids"
+                    type="UUID"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="user_history_used_device_ids"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_user_history_operated_device_ids_collectionTable" author="youssef">
+        <createTable tableName="user_history_operated_device_ids">
+            <column name="user_history_id"
+                    type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="operated_device_ids"
+                    type="UUID"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="user_history_operated_device_ids"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="add_operated_devices_ids_fk_to_user_history" author="youssef">
+        <addForeignKeyConstraint baseColumnNames="user_history_id" baseTableName="user_history_operated_device_ids"
+                                 constraintName="fk_user_history_operated_device_ids_on_user_history"
+                                 referencedColumnNames="id" referencedTableName="user_history"/>
+
+        <rollback>
+            <dropForeignKeyConstraint baseTableName="user_history_operated_device_ids"
+                                      constraintName="fk_user_history_operated_device_ids_on_user_history"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="add_used_devices_ids_fk_to_user_history" author="youssef">
+        <addForeignKeyConstraint baseColumnNames="user_history_id" baseTableName="user_history_used_device_ids"
+                                 constraintName="fk_user_history_used_device_ids_on_user_history"
+                                 referencedColumnNames="id" referencedTableName="user_history"/>
+
+        <rollback>
+            <dropForeignKeyConstraint baseTableName="user_history_used_device_ids"
+                                      constraintName="fk_user_history_used_device_ids_on_user_history"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
