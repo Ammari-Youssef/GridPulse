@@ -13,24 +13,30 @@
             </column>
 
             <column name="soc" type="FLOAT"/>
-            <column name="soh" type="VARCHAR(10)"/>
-            <column name="battery_chemistry" type="VARCHAR(50)"/>
+            <column name="soh" type="VARCHAR(255)"/>
+            <column name="battery_chemistry" type="VARCHAR(255)"/>
             <column name="cycles" type="INT"/>
             <column name="gps_lat" type="DOUBLE"/>
             <column name="gps_long" type="DOUBLE"/>
             <column name="last_seen" type="DATETIME"/>
             <column name="name" type="VARCHAR(255)"/>
             <column name="power_dispatched" type="FLOAT"/>
-            <column name="status" type="VARCHAR(20)"/>
+            <column name="status" type="VARCHAR(255)"/>
             <column name="temperature" type="FLOAT"/>
             <column name="voltage" type="FLOAT"/>
-            <column name="model" type="VARCHAR(100)"/>
-            <column name="manufacturer" type="VARCHAR(100)"/>
-            <column name="software_version" type="VARCHAR(50)"/>
+            <column name="model" type="VARCHAR(255)"/>
+            <column name="manufacturer" type="VARCHAR(255)"/>
+            <column name="software_version" type="VARCHAR(255)"/>
 
-            <column name="user_id" type="UUID"/>
-            <column name="operator_id" type="UUID"/>
-            <column name="inverter_id" type="UUID"/>
+            <column name="user_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="operator_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="inverter_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
 
             <column name="created_at" type="DATETIME">
                 <constraints nullable="false"/>
@@ -66,6 +72,17 @@
 
         <rollback>
             <dropForeignKeyConstraint baseTableName="device" constraintName="FK_DEVICE_ON_USER"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="add_operator_id_fk_to_device" author="youssef">
+        <addForeignKeyConstraint baseColumnNames="operator_id"
+                                 baseTableName="device"
+                                 constraintName="FK_DEVICE_ON_OPERATOR"
+                                 referencedColumnNames="id"
+                                 referencedTableName="_user"/>
+        <rollback>
+            <dropForeignKeyConstraint baseTableName="device" constraintName="FK_DEVICE_ON_OPERATOR"/>
         </rollback>
     </changeSet>
 
