@@ -20,10 +20,13 @@ public class AuthenticationCustomEntryPoint implements AuthenticationEntryPoint 
         response.getWriter().write("""
             {
               "errors": [
-                {
-                  "message": "Unauthorized",
-                  "extensions": { "classification": "UNAUTHORIZED" }
-                }
+               {
+                  "message": "Unauthorized: authentication required",
+                  "extensions": {
+                    "code": "UNAUTHORIZED",
+                    "classification": "SECURITY"
+                  }
+               }
               ]
             }
         """);
