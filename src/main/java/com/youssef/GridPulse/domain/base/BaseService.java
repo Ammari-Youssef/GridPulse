@@ -3,6 +3,7 @@ package com.youssef.GridPulse.domain.base;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -17,14 +18,19 @@ public abstract class BaseService<E extends BaseEntity, H extends BaseHistoryEnt
 
     @Transactional
     public E create(INPUT input) {
+        try{
         E entity = mapper.toEntity(input);
-        E saved = repository.save(entity);
+        entity.setId(null);
+        E saved = repository.saveAndFlush(entity);
 
         H history = mapper.toHistory(saved);
         setCreated(history, getId(saved));
-        historyRepository.save(history);
+        historyRepository.saveAndFlush(history);
 
         return saved;
+    }catch (ObjectOptimisticLockingFailureException e){
+            throw new RuntimeException("Conflict occurred while creating entity. Please try again.", e);
+        }
     }
 
     public List<E> getAll() {
@@ -111,14 +117,17 @@ public abstract class BaseService<E extends BaseEntity, H extends BaseHistoryEnt
     protected abstract ID getId(E entity);
 
     protected void setCreated(H history, ID id) {
+        history.setId(null);
         history.setOriginalId(id);
         history.setCreatedRecord(true);
     }
     protected void setUpdated(H history, ID id) {
+        history.setId(null);
         history.setOriginalId(id);
         history.setUpdatedRecord(true);
     }
     protected void setDeleted(H history, ID id) {
+        history.setId(null);
         history.setOriginalId(id);
         history.setDeletedRecord(true);
     }
