@@ -1,6 +1,6 @@
 package com.youssef.GridPulse.domain.security.entity;
 
-import com.youssef.GridPulse.domain.base.BaseEntity;
+import com.youssef.GridPulse.common.base.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Lob;

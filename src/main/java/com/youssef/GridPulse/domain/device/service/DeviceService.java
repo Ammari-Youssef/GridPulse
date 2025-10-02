@@ -1,6 +1,6 @@
 package com.youssef.GridPulse.domain.device.service;
 
-import com.youssef.GridPulse.domain.base.BaseService;
+import com.youssef.GridPulse.common.base.BaseService;
 import com.youssef.GridPulse.domain.device.dto.DeviceInput;
 import com.youssef.GridPulse.domain.device.entity.Device;
 import com.youssef.GridPulse.domain.device.entity.DeviceHistory;

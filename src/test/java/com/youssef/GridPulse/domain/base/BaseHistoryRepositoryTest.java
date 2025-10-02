@@ -1,5 +1,7 @@
 package com.youssef.GridPulse.domain.base;
 
+import com.youssef.GridPulse.common.base.BaseHistoryEntity;
+import com.youssef.GridPulse.common.base.BaseHistoryRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;

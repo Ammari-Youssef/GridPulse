@@ -1,6 +1,6 @@
 package com.youssef.GridPulse.domain.inverter.service;
 
-import com.youssef.GridPulse.domain.base.BaseService;
+import com.youssef.GridPulse.common.base.BaseService;
 import com.youssef.GridPulse.domain.inverter.dto.InverterInput;
 import com.youssef.GridPulse.domain.inverter.entity.Inverter;
 import com.youssef.GridPulse.domain.inverter.entity.InverterHistory;
