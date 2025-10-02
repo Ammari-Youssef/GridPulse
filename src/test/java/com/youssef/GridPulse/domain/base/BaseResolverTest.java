@@ -1,5 +1,8 @@
 package com.youssef.GridPulse.domain.base;
 
+import com.youssef.GridPulse.common.base.BaseEntity;
+import com.youssef.GridPulse.common.base.BaseHistoryEntity;
+import com.youssef.GridPulse.common.base.BaseService;
 import com.youssef.GridPulse.domain.inverter.entity.Inverter;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;

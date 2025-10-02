@@ -1,6 +1,6 @@
 package com.youssef.GridPulse.domain.device.entity;
 
-import com.youssef.GridPulse.domain.base.BaseEntity;
+import com.youssef.GridPulse.common.base.BaseEntity;
 import com.youssef.GridPulse.domain.identity.user.entity.User;
 import com.youssef.GridPulse.domain.inverter.entity.Inverter;
 import jakarta.persistence.*;

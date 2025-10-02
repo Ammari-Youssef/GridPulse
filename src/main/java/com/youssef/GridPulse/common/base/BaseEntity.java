@@ -1,4 +1,4 @@
-package com.youssef.GridPulse.domain.base;
+package com.youssef.GridPulse.common.base;
 
 import jakarta.persistence.*;
 import lombok.*;

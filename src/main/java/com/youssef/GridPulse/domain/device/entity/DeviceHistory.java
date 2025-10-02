@@ -1,6 +1,6 @@
 package com.youssef.GridPulse.domain.device.entity;
 
-import com.youssef.GridPulse.domain.base.BaseHistoryEntity;
+import com.youssef.GridPulse.common.base.BaseHistoryEntity;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

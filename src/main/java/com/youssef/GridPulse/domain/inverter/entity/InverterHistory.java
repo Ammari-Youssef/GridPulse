@@ -1,7 +1,7 @@
 package com.youssef.GridPulse.domain.inverter.entity;
 
 
-import com.youssef.GridPulse.domain.base.BaseHistoryEntity;
+import com.youssef.GridPulse.common.base.BaseHistoryEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
