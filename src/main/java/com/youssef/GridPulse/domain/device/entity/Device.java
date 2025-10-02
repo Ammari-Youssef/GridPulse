@@ -44,7 +44,7 @@ public class Device extends BaseEntity {
     @JoinColumn(name = "operator_id", referencedColumnName = "id", nullable = false)
     private User operator;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "inverter_id", referencedColumnName = "id", nullable = false)
     private Inverter inverter;
 
