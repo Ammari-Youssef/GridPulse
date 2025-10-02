@@ -1,0 +1,42 @@
+package com.youssef.GridPulse.domain.device.entity;
+
+import com.youssef.GridPulse.domain.base.BaseHistoryEntity;
+import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+
+import java.time.Instant;
+import java.util.UUID;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@SuperBuilder
+@Entity
+public class DeviceHistory extends BaseHistoryEntity {
+
+    private Float soc;
+    private String soh;
+    private String batteryChemistry;
+    private Integer cycles;
+    private Double gpsLat;
+    private Double gpsLong;
+    private Instant lastSeen;
+    private String name;
+    private Float powerDispatched;
+    private String status;
+    private Float temperature;
+    private Float voltage;
+    private String model;
+    private String manufacturer;
+    private String softwareVersion;
+
+    private UUID userId;
+    private UUID operatorId;
+    private UUID inverterId;
+
+}
