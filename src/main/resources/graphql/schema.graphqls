@@ -11,6 +11,12 @@ type Query {
     getAllInverterHistory: [InverterHistory!]!
     getInverterHistoryById(historyId: ID!): InverterHistory!
     getInverterHistory(originalId: ID!): [InverterHistory!]!
+
+    getAllDevices: [Device!]!
+    getDeviceById(id: ID!): Device!
+    getAllDeviceHistory: [DeviceHistory!]!
+    getDeviceHistoryById(historyId: ID!): DeviceHistory!
+    getDeviceHistory(originalId: ID!): [DeviceHistory!]!
 }
 
 type Mutation {
@@ -28,8 +34,13 @@ type Mutation {
     createInverter(input: InverterInput!): Inverter
     updateInverter(id: ID!, input: InverterInput!): Inverter
     deleteInverter(id: ID!): Boolean
-
     markInverterHistorySynced(id: ID!): Boolean!
+
+
+    createDevice(input: DeviceInput!): Device
+    updateDevice(id: ID!, input: DeviceInput!): Device
+    deleteDevice(id: ID!): Boolean
+    markDeviceHistorySynced(id: ID!): Boolean!
 }
 
 # ----------------- Common Interfaces -----------------
@@ -109,6 +120,39 @@ type Inverter implements Auditable {
     source: String!
 }
 
+type Device implements Auditable {
+    id: ID!
+    name: String!
+    soc: Float!
+    soh: String!
+    batteryChemistry: String!
+    cycles: Int!
+    gpsLat: Float
+    gpsLong: Float
+    lastSeen: String!
+    status: String!
+    powerDispatched: Float!
+    temperature: Float!
+    voltage: Float!
+    model: String!
+    softwareVersion: String!
+    manufacturer: String!
+
+    # Relations
+
+    inverter: Inverter!
+    operator: User!
+    user: User!
+
+    # Auditable fields
+
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: String!
+}
+
 # ----------------- History Types -----------------
 type UserHistory implements AuditableHistory {
     id: ID!
@@ -150,6 +194,45 @@ type InverterHistory implements AuditableHistory {
     synced: Boolean!
 }
 
+type DeviceHistory implements AuditableHistory {
+    id: ID!
+    originalId: ID!
+    name: String!
+    soc: Float!
+    soh: String!
+    batteryChemistry: String!
+    cycles: Int!
+    gpsLat: Float
+    gpsLong: Float
+    lastSeen: String!
+    status: String!
+    powerDispatched: Float!
+    temperature: Float!
+    voltage: Float!
+    model: String!
+    softwareVersion: String!
+    manufacturer: String!
+
+    # Relations
+
+    inverterId: ID!
+    operatorId: ID!
+    userId: ID!
+
+    # Auditable fields
+
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: String!
+
+    createdRecord: Boolean!
+    updatedRecord: Boolean!
+    deletedRecord: Boolean!
+    synced: Boolean!
+}
+
 # ----------------- Input DTOs -----------------
 input UpdateUserInput {
     firstname: String
@@ -161,4 +244,26 @@ input InverterInput {
     model: String
     version: String
     manufacturer: String
+}
+
+input DeviceInput {
+    name: String
+    soc: Float
+    soh: String
+    batteryChemistry: String
+    cycles: Int
+    gpsLat: Float
+    gpsLong: Float
+    lastSeen: String
+    status: String
+    powerDispatched: Float
+    temperature: Float
+    voltage: Float
+    model: String
+    softwareVersion: String
+    manufacturer: String
+
+    inverterId: ID!
+    operatorId: ID!
+    userId: ID!
 }
