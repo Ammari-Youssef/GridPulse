@@ -1,6 +1,6 @@
 package com.youssef.GridPulse.domain.inverter.mapper;
 
-import com.youssef.GridPulse.domain.base.BaseMapper;
+import com.youssef.GridPulse.common.base.BaseMapper;
 import com.youssef.GridPulse.domain.base.BaseMapperTest;
 import com.youssef.GridPulse.domain.inverter.dto.InverterInput;
 import com.youssef.GridPulse.domain.inverter.entity.Inverter;

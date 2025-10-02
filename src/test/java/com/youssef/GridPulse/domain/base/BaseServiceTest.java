@@ -1,5 +1,6 @@
 package com.youssef.GridPulse.domain.base;
 
+import com.youssef.GridPulse.common.base.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;

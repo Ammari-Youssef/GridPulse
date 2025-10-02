@@ -1,6 +1,6 @@
 package com.youssef.GridPulse.domain.identity.user.entity;
 
-import com.youssef.GridPulse.domain.base.BaseEntity;
+import com.youssef.GridPulse.common.base.BaseEntity;
 import com.youssef.GridPulse.domain.device.entity.Device;
 import com.youssef.GridPulse.domain.identity.token.Token;
 import com.youssef.GridPulse.domain.identity.user.Role;
