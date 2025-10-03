@@ -2,6 +2,8 @@ package com.youssef.GridPulse.domain.message.entity;
 
 import com.youssef.GridPulse.common.base.BaseEntity;
 import com.youssef.GridPulse.domain.device.entity.Device;
+import com.youssef.GridPulse.domain.message.enums.MessageType;
+import com.youssef.GridPulse.domain.message.enums.Severity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,14 +42,7 @@ public class Message extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Severity severity;
 
-    public enum Severity {
-        LOW, MEDIUM, HIGH, CRITICAL
-    }
-
     @Enumerated(EnumType.STRING)
     private MessageType messageType;
 
-    public enum MessageType {
-        ALERT, STATUS, COMMAND, TELEMETRY
-    }
 }
