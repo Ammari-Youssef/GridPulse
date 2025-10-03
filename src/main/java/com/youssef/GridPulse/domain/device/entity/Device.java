@@ -3,6 +3,7 @@ package com.youssef.GridPulse.domain.device.entity;
 import com.youssef.GridPulse.common.base.BaseEntity;
 import com.youssef.GridPulse.domain.identity.user.entity.User;
 import com.youssef.GridPulse.domain.inverter.entity.Inverter;
+import com.youssef.GridPulse.domain.message.entity.Message;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -47,5 +49,9 @@ public class Device extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "inverter_id", referencedColumnName = "id", nullable = false)
     private Inverter inverter;
+
+    @OneToMany(mappedBy = "device", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    private List<Message> messages;
+
 
 }

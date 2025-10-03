@@ -18,4 +18,6 @@
     <include file="/db/changelog/device/v1.0__create-device-history-26-09-changelog.xml"/>
     <include file="/db/changelog/user/v1.0__create-device-collection-tables-ids-for-user-history-28-9-changelog.xml"/>
     <include file="/db/changelog/inverter/v1.0__create-collection-device-ids-inverter-history-29-09-changelog.xml"/>
+    <include file="/db/changelog/message/v1.0__create-message-3-10-changelog.xml"/>
+    <include file="/db/changelog/message/v1.0__create-message-history-3-10-changelog.xml"/>
 </databaseChangeLog>
