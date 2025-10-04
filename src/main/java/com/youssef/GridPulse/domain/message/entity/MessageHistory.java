@@ -1,6 +1,8 @@
 package com.youssef.GridPulse.domain.message.entity;
 
 import com.youssef.GridPulse.common.base.BaseHistoryEntity;
+import com.youssef.GridPulse.domain.message.enums.MessageType;
+import com.youssef.GridPulse.domain.message.enums.Severity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,11 +41,4 @@ public class MessageHistory extends BaseHistoryEntity {
     @Enumerated(EnumType.STRING)
     private MessageType messageType;
 
-    public enum Severity {
-        LOW, MEDIUM, HIGH, CRITICAL
-    }
-
-    public enum MessageType {
-        ALERT, STATUS, COMMAND, TELEMETRY
-    }
 }
