@@ -16,5 +16,6 @@ public interface DeviceMapper extends BaseMapper<Device, DeviceHistory, DeviceIn
     @Mapping(source = "operator.id", target = "operatorId")
     @Mapping(source = "inverter.id", target = "inverterId")
     @Mapping(source = "bms.id", target = "bmsId")
+    @Mapping(source = "meter.id", target = "meterId")
     DeviceHistory toHistory(Device entity);
 }
