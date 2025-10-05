@@ -21,4 +21,7 @@
     <include file="/db/changelog/message/v1.0__create-message-3-10-changelog.xml"/>
     <include file="/db/changelog/message/v1.0__create-message-history-3-10-changelog.xml"/>
     <include file="db/changelog/message/v1.0__add-message-status-4-10-changelog.xml"/>
+    <include file="/db/changelog/bms/v1.0__create-bms-5-10-changelog.xml"/>
+    <include file="/db/changelog/bms/v1.0__create-bms-history-5-10-changelog.xml"/>
+    <include file="db/changelog/device/v1.0__add-bmsId-to-device-tables.xml"/>
 </databaseChangeLog>
