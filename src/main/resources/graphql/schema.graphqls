@@ -17,6 +17,13 @@ type Query {
     getAllDeviceHistory: [DeviceHistory!]!
     getDeviceHistoryById(historyId: ID!): DeviceHistory!
     getDeviceHistory(originalId: ID!): [DeviceHistory!]!
+
+    getAllBms: [Bms!]!
+    getBmsById(id: ID!): Bms!
+    getAllBmsHistory: [BmsHistory!]!
+    getBmsHistoryById(historyId: ID!): BmsHistory!
+    getBmsHistory(originalId: ID!): [BmsHistory!]!
+
 }
 
 type Mutation {
@@ -41,6 +48,11 @@ type Mutation {
     updateDevice(id: ID!, input: DeviceInput!): Device
     deleteDevice(id: ID!): Boolean
     markDeviceHistorySynced(id: ID!): Boolean!
+
+    createBms(input: BmsInput!): Bms
+    updateBms(id: ID!, input: BmsInput!): Bms
+    deleteBms(id: ID!): Boolean
+    markBmsHistorySynced(id: ID!): Boolean!
 }
 
 # ----------------- Common Interfaces -----------------
@@ -153,6 +165,24 @@ type Device implements Auditable {
     source: String!
 }
 
+type Bms implements Auditable {
+    id: ID!
+    name : String
+    model: String
+    manufacturer: String
+    version: String
+    soh: String
+    soc: Float
+    battery_chemistry: String
+
+    # Auditable fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: String!
+}
+
 # ----------------- History Types -----------------
 type UserHistory implements AuditableHistory {
     id: ID!
@@ -233,6 +263,31 @@ type DeviceHistory implements AuditableHistory {
     synced: Boolean!
 }
 
+type BmsHistory implements AuditableHistory {
+    id: ID!
+    originalId: ID!
+    name : String
+    model: String
+    manufacturer: String
+    version: String
+    soh: String
+    soc: Float
+    battery_chemistry: String
+
+    # Auditable fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: String!
+
+    # History flags
+    createdRecord: Boolean!
+    updatedRecord: Boolean!
+    deletedRecord: Boolean!
+    synced: Boolean!
+}
+
 # ----------------- Input DTOs -----------------
 input UpdateUserInput {
     firstname: String
@@ -266,4 +321,15 @@ input DeviceInput {
     inverterId: ID!
     operatorId: ID!
     userId: ID!
+    bmsId: ID!
+}
+
+input BmsInput {
+    name : String
+    model: String
+    manufacturer: String
+    version: String
+    soh: String
+    soc: Float
+    batteryChemistry: String
 }

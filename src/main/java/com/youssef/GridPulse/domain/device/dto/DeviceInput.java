@@ -65,6 +65,9 @@ public record DeviceInput(
         UUID operatorId,
 
         @NotNull(message = "Inverter ID is mandatory.")
-        UUID inverterId
+        UUID inverterId,
+
+        @NotNull(message = "BMS ID is mandatory.")
+        UUID bmsId
 ) {
 }
