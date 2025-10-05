@@ -1,6 +1,7 @@
 package com.youssef.GridPulse.domain.device.entity;
 
 import com.youssef.GridPulse.common.base.BaseEntity;
+import com.youssef.GridPulse.domain.bms.entity.Bms;
 import com.youssef.GridPulse.domain.identity.user.entity.User;
 import com.youssef.GridPulse.domain.inverter.entity.Inverter;
 import com.youssef.GridPulse.domain.message.entity.Message;
@@ -53,5 +54,8 @@ public class Device extends BaseEntity {
     @OneToMany(mappedBy = "device", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private List<Message> messages;
 
+    @OneToOne
+    @JoinColumn(name = "bms_id")
+    private Bms bms;
 
 }

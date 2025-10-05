@@ -1,6 +1,8 @@
 package com.youssef.GridPulse.domain.device.service;
 
 import com.youssef.GridPulse.common.base.BaseService;
+import com.youssef.GridPulse.domain.bms.entity.Bms;
+import com.youssef.GridPulse.domain.bms.repository.BmsRepository;
 import com.youssef.GridPulse.domain.device.dto.DeviceInput;
 import com.youssef.GridPulse.domain.device.entity.Device;
 import com.youssef.GridPulse.domain.device.entity.DeviceHistory;
@@ -24,6 +26,7 @@ public class DeviceService extends BaseService<Device, DeviceHistory, UUID, Devi
 
     private final UserRepository userRepository;
     private final InverterRepository inverterRepository;
+    private final BmsRepository bmsRepository;
 
     public DeviceService(
             DeviceRepository repository,
@@ -32,11 +35,13 @@ public class DeviceService extends BaseService<Device, DeviceHistory, UUID, Devi
 
 
             UserRepository userRepository,
-            InverterRepository inverterRepository
+            InverterRepository inverterRepository,
+            BmsRepository bmsRepository
     ) {
         super(repository, historyRepository, mapper);
         this.userRepository = userRepository;
         this.inverterRepository = inverterRepository;
+        this.bmsRepository = bmsRepository;
     }
 
     @Override
@@ -52,6 +57,9 @@ public class DeviceService extends BaseService<Device, DeviceHistory, UUID, Devi
         Inverter inverter = inverterRepository.findById(input.inverterId())
                 .orElseThrow(() -> new EntityNotFoundException("Inverter not found"));
 
+        Bms bms = bmsRepository.findById(input.bmsId())
+                .orElseThrow(() -> new EntityNotFoundException("BMS not found"));
+
         // enforce role constraint
         if (operator.getRole() != Role.ADMIN) {
             throw new AccessDeniedException("Operator must have ADMIN role");
@@ -60,6 +68,7 @@ public class DeviceService extends BaseService<Device, DeviceHistory, UUID, Devi
         entity.setUser(user);
         entity.setOperator(operator);
         entity.setInverter(inverter);
+        entity.setBms(bms);
     }
 
     @Transactional
@@ -68,6 +77,7 @@ public class DeviceService extends BaseService<Device, DeviceHistory, UUID, Devi
         history.setUserId(entity.getUser().getId());
         history.setOperatorId(entity.getOperator().getId());
         history.setInverterId(entity.getInverter().getId());
+        history.setBmsId(entity.getBms().getId());
     }
 
 }
