@@ -38,5 +38,7 @@ public class DeviceHistory extends BaseHistoryEntity {
     private UUID userId;
     private UUID operatorId;
     private UUID inverterId;
+    private UUID bmsId;
+    private UUID meterId;
 
 }

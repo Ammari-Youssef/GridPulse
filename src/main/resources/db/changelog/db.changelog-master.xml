@@ -18,4 +18,13 @@
     <include file="/db/changelog/device/v1.0__create-device-history-26-09-changelog.xml"/>
     <include file="/db/changelog/user/v1.0__create-device-collection-tables-ids-for-user-history-28-9-changelog.xml"/>
     <include file="/db/changelog/inverter/v1.0__create-collection-device-ids-inverter-history-29-09-changelog.xml"/>
+    <include file="/db/changelog/message/v1.0__create-message-3-10-changelog.xml"/>
+    <include file="/db/changelog/message/v1.0__create-message-history-3-10-changelog.xml"/>
+    <include file="db/changelog/message/v1.0__add-message-status-4-10-changelog.xml"/>
+    <include file="/db/changelog/bms/v1.0__create-bms-5-10-changelog.xml"/>
+    <include file="/db/changelog/bms/v1.0__create-bms-history-5-10-changelog.xml"/>
+    <include file="db/changelog/device/v1.0__add-bmsId-to-device-tables.xml"/>
+    <include file="db/changelog/meter/v1.0__create-meter-05-10-changelog.xml"/>
+    <include file="db/changelog/meter/v1.0__create-meter-history-05-10-changelog.xml"/>
+    <include file="/db/changelog/device/v1.0__add-meterId-fk-to-device-tables-08-10.xml"/>
 </databaseChangeLog>
