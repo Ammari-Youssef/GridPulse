@@ -71,6 +71,7 @@ public class GraphQLExceptionHandler extends DataFetcherExceptionResolverAdapter
         extensions.put("code", getErrorCode(ex));
         extensions.put("executionId", env.getExecutionId());
         extensions.put("operation", env.getOperationDefinition().getName());
+        extensions.put("reason", ex.getMessage());
 
         if (ex instanceof ConstraintViolationException) {
             extensions.put("details", getValidationDetails((ConstraintViolationException) ex));
