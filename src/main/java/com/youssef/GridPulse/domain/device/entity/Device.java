@@ -5,6 +5,7 @@ import com.youssef.GridPulse.domain.bms.entity.Bms;
 import com.youssef.GridPulse.domain.identity.user.entity.User;
 import com.youssef.GridPulse.domain.inverter.entity.Inverter;
 import com.youssef.GridPulse.domain.message.entity.Message;
+import com.youssef.GridPulse.domain.meter.entity.Meter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -57,5 +58,9 @@ public class Device extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "bms_id")
     private Bms bms;
+
+    @OneToOne
+    @JoinColumn(name = "meter_id")
+    private Meter meter;
 
 }

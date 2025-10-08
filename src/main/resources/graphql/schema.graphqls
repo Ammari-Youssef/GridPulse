@@ -24,6 +24,12 @@ type Query {
     getBmsHistoryById(historyId: ID!): BmsHistory!
     getBmsHistory(originalId: ID!): [BmsHistory!]!
 
+    getAllMeters: [Meter!]!
+    getMeterById(id: ID!): Meter!
+    getAllMeterHistory: [MeterHistory!]!
+    getMeterHistoryById(historyId: ID!): MeterHistory!
+    getMeterHistory(originalId: ID!): [MeterHistory!]!
+
 }
 
 type Mutation {
@@ -53,6 +59,11 @@ type Mutation {
     updateBms(id: ID!, input: BmsInput!): Bms
     deleteBms(id: ID!): Boolean
     markBmsHistorySynced(id: ID!): Boolean!
+
+    createMeter(input: MeterInput!): Meter
+    updateMeter(id: ID!, input: MeterInput!): Meter
+    deleteMeter(id: ID!): Boolean
+    markMeterHistorySynced(id: ID!): Boolean!
 }
 
 # ----------------- Common Interfaces -----------------
@@ -183,6 +194,21 @@ type Bms implements Auditable {
     source: String!
 }
 
+type Meter implements Auditable {
+    id: ID!
+    name : String
+    model: String
+    manufacturer: String
+    version: String
+
+    # Auditable fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: String!
+}
+
 # ----------------- History Types -----------------
 type UserHistory implements AuditableHistory {
     id: ID!
@@ -288,6 +314,28 @@ type BmsHistory implements AuditableHistory {
     synced: Boolean!
 }
 
+type MeterHistory implements AuditableHistory {
+    id: ID!
+    originalId: ID!
+    name : String
+    model: String
+    manufacturer: String
+    version: String
+
+    # Auditable fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: String!
+
+    # History flags
+    createdRecord: Boolean!
+    updatedRecord: Boolean!
+    deletedRecord: Boolean!
+    synced: Boolean!
+}
+
 # ----------------- Input DTOs -----------------
 input UpdateUserInput {
     firstname: String
@@ -332,4 +380,11 @@ input BmsInput {
     soh: String
     soc: Float
     batteryChemistry: String
+}
+
+input MeterInput{
+    name : String
+    model: String
+    manufacturer: String
+    version: String
 }

@@ -24,4 +24,7 @@
     <include file="/db/changelog/bms/v1.0__create-bms-5-10-changelog.xml"/>
     <include file="/db/changelog/bms/v1.0__create-bms-history-5-10-changelog.xml"/>
     <include file="db/changelog/device/v1.0__add-bmsId-to-device-tables.xml"/>
+    <include file="db/changelog/meter/v1.0__create-meter-05-10-changelog.xml"/>
+    <include file="db/changelog/meter/v1.0__create-meter-history-05-10-changelog.xml"/>
+    <include file="/db/changelog/device/v1.0__add-meterId-fk-to-device-tables-08-10.xml"/>
 </databaseChangeLog>
