@@ -14,6 +14,8 @@ import com.youssef.GridPulse.domain.identity.user.entity.User;
 import com.youssef.GridPulse.domain.identity.user.repository.UserRepository;
 import com.youssef.GridPulse.domain.inverter.entity.Inverter;
 import com.youssef.GridPulse.domain.inverter.repository.InverterRepository;
+import com.youssef.GridPulse.domain.meter.entity.Meter;
+import com.youssef.GridPulse.domain.meter.repository.MeterRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,7 @@ public class DeviceService extends BaseService<Device, DeviceHistory, UUID, Devi
     private final UserRepository userRepository;
     private final InverterRepository inverterRepository;
     private final BmsRepository bmsRepository;
+    private final MeterRepository meterRepository;
 
     public DeviceService(
             DeviceRepository repository,
@@ -36,12 +39,14 @@ public class DeviceService extends BaseService<Device, DeviceHistory, UUID, Devi
 
             UserRepository userRepository,
             InverterRepository inverterRepository,
-            BmsRepository bmsRepository
+            BmsRepository bmsRepository,
+            MeterRepository meterRepository
     ) {
         super(repository, historyRepository, mapper);
         this.userRepository = userRepository;
         this.inverterRepository = inverterRepository;
         this.bmsRepository = bmsRepository;
+        this.meterRepository = meterRepository;
     }
 
     @Override
@@ -60,6 +65,9 @@ public class DeviceService extends BaseService<Device, DeviceHistory, UUID, Devi
         Bms bms = bmsRepository.findById(input.bmsId())
                 .orElseThrow(() -> new EntityNotFoundException("BMS not found"));
 
+        Meter meter = meterRepository.findById(input.bmsId())
+                .orElseThrow(() -> new EntityNotFoundException("Meter not found"));
+
         // enforce role constraint
         if (operator.getRole() != Role.ADMIN) {
             throw new AccessDeniedException("Operator must have ADMIN role");
@@ -69,6 +77,7 @@ public class DeviceService extends BaseService<Device, DeviceHistory, UUID, Devi
         entity.setOperator(operator);
         entity.setInverter(inverter);
         entity.setBms(bms);
+        entity.setMeter(meter);
     }
 
     @Transactional
@@ -78,6 +87,7 @@ public class DeviceService extends BaseService<Device, DeviceHistory, UUID, Devi
         history.setOperatorId(entity.getOperator().getId());
         history.setInverterId(entity.getInverter().getId());
         history.setBmsId(entity.getBms().getId());
+        history.setMeterId(entity.getMeter().getId());
     }
 
 }
