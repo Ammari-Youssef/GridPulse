@@ -166,6 +166,8 @@ type Device implements Auditable {
     inverter: Inverter!
     operator: User!
     user: User!
+    bms: Bms!
+    meter: Meter!
 
     # Auditable fields
 
@@ -274,6 +276,8 @@ type DeviceHistory implements AuditableHistory {
     inverterId: ID!
     operatorId: ID!
     userId: ID!
+    bmsId: ID!
+    meterId: ID!
 
     # Auditable fields
 
@@ -370,6 +374,7 @@ input DeviceInput {
     operatorId: ID!
     userId: ID!
     bmsId: ID!
+    meterId: ID!
 }
 
 input BmsInput {
