@@ -40,6 +40,9 @@ public class Device extends BaseEntity {
     private String manufacturer;
     private String softwareVersion;
 
+    private Instant swUpdateTime; // Time of last software update
+    private String ip; // IPv4 or IPv6 address
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
