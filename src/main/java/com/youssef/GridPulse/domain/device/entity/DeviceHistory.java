@@ -34,6 +34,8 @@ public class DeviceHistory extends BaseHistoryEntity {
     private String model;
     private String manufacturer;
     private String softwareVersion;
+    private Instant swUpdateDate;
+    private String ip;
 
     private UUID userId;
     private UUID operatorId;

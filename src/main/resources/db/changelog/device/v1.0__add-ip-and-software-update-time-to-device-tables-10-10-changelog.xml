@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="add_software_update_time_and_ip_to_device_tables" author="youssef">
+        <addColumn tableName="device">
+            <column name="sw_update_time" type="DATETIME"/>
+            <column name="ip" type="VARCHAR(255)"/>
+
+        </addColumn>
+
+        <addColumn tableName="device_history">
+            <column name="sw_update_time" type="DATETIME"/>
+            <column name="ip" type="VARCHAR(255)"/>
+        </addColumn>
+
+        <rollback>
+            <dropColumn tableName="device" columnName="sw_update_time"/>
+            <dropColumn tableName="device" columnName="ip"/>
+            <dropColumn tableName="device_history" columnName="sw_update_time"/>
+            <dropColumn tableName="device_history" columnName="ip"/>
+        </rollback>
+
+        <comment>
+            Added columns to track software update time and date for devices.
+        </comment>
+    </changeSet>
+
+</databaseChangeLog>
