@@ -72,7 +72,7 @@ interface Auditable {
     updatedBy: String
     createdAt: String!
     updatedAt: String
-    source: String!
+    source: Source!
 }
 
 interface AuditableHistory {
@@ -84,7 +84,7 @@ interface AuditableHistory {
     updatedBy: String
     createdAt: String!
     updatedAt: String
-    source: String!
+    source: Source!
 
     # History flags
     createdRecord: Boolean!
@@ -93,6 +93,14 @@ interface AuditableHistory {
     synced: Boolean!
 }
 
+# ----------------- Enums -----------------
+enum Source {
+    APP # internal
+    SYNC # from external system
+    CLOUD # from Cloud API
+    DEVICE # from Device API
+    GATEWAY # from Gateway API
+}
 
 # ----------------- AUTHENTICATION -----------------
 input RegisterInput {
@@ -126,7 +134,7 @@ type User implements Auditable {
     updatedBy: String
     createdAt: String!
     updatedAt: String
-    source: String!
+    source: Source!
 }
 
 type Inverter implements Auditable {
@@ -140,7 +148,7 @@ type Inverter implements Auditable {
     updatedBy: String
     createdAt: String!
     updatedAt: String
-    source: String!
+    source: Source!
 }
 
 type Device implements Auditable {
@@ -175,7 +183,7 @@ type Device implements Auditable {
     updatedBy: String
     createdAt: String!
     updatedAt: String
-    source: String!
+    source: Source!
 }
 
 type Bms implements Auditable {
@@ -193,7 +201,7 @@ type Bms implements Auditable {
     updatedBy: String
     createdAt: String!
     updatedAt: String
-    source: String!
+    source: Source!
 }
 
 type Meter implements Auditable {
@@ -208,7 +216,7 @@ type Meter implements Auditable {
     updatedBy: String
     createdAt: String!
     updatedAt: String
-    source: String!
+    source: Source!
 }
 
 # ----------------- History Types -----------------
@@ -225,7 +233,7 @@ type UserHistory implements AuditableHistory {
     updatedBy: String
     createdAt: String!
     updatedAt: String
-    source: String!
+    source: Source!
 
     createdRecord: Boolean!
     updatedRecord: Boolean!
@@ -245,7 +253,7 @@ type InverterHistory implements AuditableHistory {
     updatedBy: String
     createdAt: String!
     updatedAt: String
-    source: String!
+    source: Source!
     createdRecord: Boolean!
     updatedRecord: Boolean!
     deletedRecord: Boolean!
@@ -285,7 +293,7 @@ type DeviceHistory implements AuditableHistory {
     updatedBy: String
     createdAt: String!
     updatedAt: String
-    source: String!
+    source: Source!
 
     createdRecord: Boolean!
     updatedRecord: Boolean!
@@ -309,7 +317,7 @@ type BmsHistory implements AuditableHistory {
     updatedBy: String
     createdAt: String!
     updatedAt: String
-    source: String!
+    source: Source!
 
     # History flags
     createdRecord: Boolean!
@@ -331,7 +339,7 @@ type MeterHistory implements AuditableHistory {
     updatedBy: String
     createdAt: String!
     updatedAt: String
-    source: String!
+    source: Source!
 
     # History flags
     createdRecord: Boolean!
