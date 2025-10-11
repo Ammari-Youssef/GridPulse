@@ -28,4 +28,5 @@
     <include file="db/changelog/meter/v1.0__create-meter-history-05-10-changelog.xml"/>
     <include file="/db/changelog/device/v1.0__add-meterId-fk-to-device-tables-08-10.xml"/>
     <include file="/db/changelog/device/v1.0__add-ip-and-software-update-time-to-device-tables-10-10-changelog.xml"/>
+    <include file="db/changelog/message/v1.0__add-fields-to-message-tables-10-10-changelog.xml"/>
 </databaseChangeLog>

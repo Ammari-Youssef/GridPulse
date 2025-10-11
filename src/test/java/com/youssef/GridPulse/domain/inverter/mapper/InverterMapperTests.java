@@ -1,6 +1,7 @@
 package com.youssef.GridPulse.domain.inverter.mapper;
 
 import com.youssef.GridPulse.common.base.BaseMapper;
+import com.youssef.GridPulse.common.base.Source;
 import com.youssef.GridPulse.domain.base.BaseMapperTest;
 import com.youssef.GridPulse.domain.inverter.dto.InverterInput;
 import com.youssef.GridPulse.domain.inverter.entity.Inverter;
@@ -36,7 +37,7 @@ public class InverterMapperTests extends BaseMapperTest<Inverter, InverterHistor
                 .model("TX5000")
                 .version("v2.1")
                 .manufacturer("SolarEdge")
-                .source("app")
+                .source(Source.APP)
                 .createdAt(Instant.now())
                 .updatedAt(Instant.now())
                 .build();
