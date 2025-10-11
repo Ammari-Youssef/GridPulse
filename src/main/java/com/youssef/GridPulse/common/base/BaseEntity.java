@@ -42,7 +42,8 @@ public abstract class BaseEntity {
     @Column(insertable = false)
     private String updatedBy;
 
+    @Enumerated(EnumType.STRING)
     @Builder.Default
     @Column(nullable = false)
-    private String source = "app"; // default value can be either 'app' or 'sync'
+    private Source source = Source.APP; // default value can be either 'app' or 'sync'
 }

@@ -15,7 +15,7 @@ public interface BaseMapper<E extends BaseEntity , H extends BaseHistoryEntity, 
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
-    @Mapping(target = "source", constant = "app")
+    @Mapping(target = "source", constant = "APP") // default value can be either 'app' or 'sync'
     E toEntity(INPUT input);
 
     /**
