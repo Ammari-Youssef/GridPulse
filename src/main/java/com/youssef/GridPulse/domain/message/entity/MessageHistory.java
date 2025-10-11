@@ -1,9 +1,7 @@
 package com.youssef.GridPulse.domain.message.entity;
 
 import com.youssef.GridPulse.common.base.BaseHistoryEntity;
-import com.youssef.GridPulse.domain.message.enums.MessageStatus;
-import com.youssef.GridPulse.domain.message.enums.MessageType;
-import com.youssef.GridPulse.domain.message.enums.Severity;
+import com.youssef.GridPulse.domain.message.enums.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,4 +42,12 @@ public class MessageHistory extends BaseHistoryEntity {
 
     @Enumerated(EnumType.STRING)
     private MessageStatus status;
+
+    @Enumerated(EnumType.STRING)
+    private MessageFormat format;
+
+    @Enumerated(EnumType.STRING)
+    private MessagePriority priority;
+
+    private String explanation;
 }

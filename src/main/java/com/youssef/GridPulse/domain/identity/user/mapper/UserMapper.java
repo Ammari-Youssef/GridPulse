@@ -33,7 +33,7 @@ public interface UserMapper {
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "tokens", ignore = true)
     @Mapping(target = "enabled", constant = "true")
-    @Mapping(target = "source", constant = "app")
+    @Mapping(target = "source", constant = "APP") // default source
     @Mapping(target = "role", constant = "USER") // default role
     User toEntity(RegisterInput registerInput);
 

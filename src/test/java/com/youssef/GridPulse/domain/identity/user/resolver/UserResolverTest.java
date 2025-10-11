@@ -1,5 +1,6 @@
 package com.youssef.GridPulse.domain.identity.user.resolver;
 
+import com.youssef.GridPulse.common.base.Source;
 import com.youssef.GridPulse.domain.identity.user.Role;
 import com.youssef.GridPulse.domain.identity.user.dto.UpdateUserInput;
 import com.youssef.GridPulse.domain.identity.user.entity.User;
@@ -88,7 +89,7 @@ class UserResolverTest {
                 .enabled(true)
                 .createdAt(Instant.now())
                 .updatedAt(Instant.now())
-                .source("APP")
+                .source(Source.APP)
                 .build();
 
         testUser2 = User.builder()
@@ -100,7 +101,7 @@ class UserResolverTest {
                 .enabled(true)
                 .createdAt(Instant.now())
                 .updatedAt(Instant.now())
-                .source("APP")
+                .source(Source.APP)
                 .build();
 
         testUserHistory1 = UserHistory.builder()
@@ -115,7 +116,7 @@ class UserResolverTest {
                 .enabled(true)
                 .createdAt(Instant.now())
                 .updatedAt(Instant.now())
-                .source("APP")
+                .source(Source.APP)
                 .build();
 
         testUserHistory2 = UserHistory.builder()
@@ -129,7 +130,7 @@ class UserResolverTest {
                 .enabled(true)
                 .createdAt(Instant.now())
                 .updatedAt(Instant.now())
-                .source("APP")
+                .source(Source.APP)
                 .build();
     }
 
@@ -660,7 +661,7 @@ class UserResolverTest {
 
         @Test
         @WithMockUser
-        void cannotMarkUserHistorySynced_User(){
+        void cannotMarkUserHistorySynced_User() {
             graphQlTester.documentName("mutations/user/markUserHistorySynced")
                     .variable("id", testUserHistory1.getId())
                     .execute()
@@ -712,7 +713,7 @@ class UserResolverTest {
 
         @Test
         @WithMockUser(roles = "USER")
-        void cannotToggleUserEnableStatus_User(){
+        void cannotToggleUserEnableStatus_User() {
             graphQlTester.documentName("mutations/user/toggleUserEnableStatus")
                     .variable("id", testUserId)
                     .execute()
