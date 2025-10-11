@@ -18,6 +18,49 @@ import java.time.Instant;
 import java.util.Base64;
 import java.util.UUID;
 
+/**
+ * Represents a message sent from an IoT device, including type, severity, payload, and metadata.
+ *
+ * <p>This entity models communication from devices across seven distinct message types:</p>
+ * <ul>
+ *   <li><b>IDS</b>: Intrusion Detection System alerts</li>
+ *   <li><b>METER</b>: Metering data and readings</li>
+ *   <li><b>BMS</b>: Battery Management System updates</li>
+ *   <li><b>INVERTER</b>: Inverter status and telemetry</li>
+ *   <li><b>HEARTBEAT</b>: Periodic signals confirming device is online</li>
+ *   <li><b>SOFTWARE</b>: Software update notifications and diagnostics</li>
+ *   <li><b>SYSTEM</b>: General system-level messages</li>
+ * </ul>
+ *
+ * <p>Each message includes a severity level—<code>INFO</code>, <code>LOW</code>, <code>MEDIUM</code>, or <code>CRITICAL</code>—
+ * determined by the message type and its content. Severity logic is handled by {@link SeverityInterpreter}.</p>
+ *
+ * <p>Payloads are typically JSON objects, base64-encoded for transmission integrity.</p>
+ *
+ * <p>Messages are linked to devices via a many-to-one relationship with {@link Device}, allowing multiple messages
+ * to be associated with a single device instance.</p>
+ *
+ * <p>Additional metadata includes:</p>
+ * <ul>
+ *   <li>Message format: {@link MessageFormat} (e.g., TEXT, HEX)</li>
+ *   <li>Message priority: {@link MessagePriority} (LOW, MEDIUM, HIGH)</li>
+ *   <li>Message status: {@link MessageStatus} (NEW, READY, COMPLETE, etc.)</li>
+ * </ul>
+ *
+ * <p>Use the static factory method {@link #fromDevicePayload(Device, String)} to create a Message instance from
+ * a raw device payload. This method handles base64 decoding, JSON parsing, and field population.</p>
+ *
+ * <p>This is a JPA entity mapped to the <code>messages</code> table.</p>
+ *
+ * @see Device
+ * @see MessageType
+ * @see Severity
+ * @see SeverityInterpreter
+ * @see MessageFormat
+ * @see MessagePriority
+ * @see MessageStatus
+ */
+
 @Table(name = "messages")
 @NoArgsConstructor
 @AllArgsConstructor
