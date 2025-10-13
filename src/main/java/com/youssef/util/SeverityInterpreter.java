@@ -1,4 +1,4 @@
-package com.youssef.GridPulse.common.util;
+package com.youssef.util;
 
 import com.youssef.GridPulse.domain.message.enums.MessageType;
 import com.youssef.GridPulse.domain.message.enums.Severity;
