@@ -168,6 +168,8 @@ type Device implements Auditable {
     model: String!
     softwareVersion: String!
     manufacturer: String!
+    swUpdateTime: String
+    ip: String!
 
     # Relations
 
@@ -377,6 +379,8 @@ input DeviceInput {
     model: String
     softwareVersion: String
     manufacturer: String
+    swUpdateTime: String
+    ip: String
 
     inverterId: ID!
     operatorId: ID!
