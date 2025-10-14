@@ -17,6 +17,9 @@ import lombok.experimental.SuperBuilder;
 import java.time.Instant;
 import java.util.List;
 
+import com.youssef.GridPulse.domain.enums.BatteryHealthStatus;
+import static com.youssef.GridPulse.domain.enums.BatteryHealthStatus.*;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -67,5 +70,17 @@ public class Device extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "meter_id")
     private Meter meter;
+
+
+    @Transient
+    public BatteryHealthStatus getHealthStatus() {
+        if (soh == null || soh < 0 || soh > 100) {
+            return UNKNOWN;
+        }
+        return soh < 20 ? CRITICAL :
+                soh < 30 ? DEGRADED :
+                        soh < 50 ? UNHEALTHY :
+                                HEALTHY;
+    }
 
 }

@@ -4,6 +4,7 @@ import com.youssef.GridPulse.common.base.BaseResolver;
 import com.youssef.GridPulse.domain.device.dto.DeviceInput;
 import com.youssef.GridPulse.domain.device.entity.Device;
 import com.youssef.GridPulse.domain.device.entity.DeviceHistory;
+import com.youssef.GridPulse.domain.enums.BatteryHealthStatus;
 import com.youssef.GridPulse.domain.device.service.DeviceService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -18,8 +19,16 @@ import java.util.UUID;
 @PreAuthorize("isAuthenticated()")
 public class DeviceResolver extends BaseResolver<Device, DeviceHistory, UUID, DeviceInput> {
 
+    private final DeviceService service;
+
     public DeviceResolver(DeviceService service) {
         super(service);
+        this.service = service;
+    }
+
+    @QueryMapping
+    public BatteryHealthStatus getHealthStatus(@Argument UUID deviceId) {
+        return service.getHealthStatus(deviceId);
     }
 
     @QueryMapping
