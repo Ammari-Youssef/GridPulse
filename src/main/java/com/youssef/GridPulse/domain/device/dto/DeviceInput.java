@@ -58,6 +58,12 @@ public record DeviceInput(
         @Size(max = 50, message = "Software version must not exceed 50 characters.")
         String softwareVersion,
 
+        @PastOrPresent(message = "Software update time must be in the past or present.")
+        Instant swUpdateTime,
+
+        @Pattern(regexp = "^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.(?!$)|$){4}$", message = "Invalid IP address format.")
+        String ip,
+
         @NotNull(message = "User ID is mandatory.")
         UUID userId,
 
