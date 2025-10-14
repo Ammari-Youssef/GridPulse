@@ -2,6 +2,7 @@ package com.youssef.GridPulse.domain.device.entity;
 
 import com.youssef.GridPulse.common.base.BaseEntity;
 import com.youssef.GridPulse.domain.bms.entity.Bms;
+import com.youssef.GridPulse.domain.device.enums.DeviceStatus;
 import com.youssef.GridPulse.domain.identity.user.entity.User;
 import com.youssef.GridPulse.domain.inverter.entity.Inverter;
 import com.youssef.GridPulse.domain.message.entity.Message;
@@ -33,7 +34,8 @@ public class Device extends BaseEntity {
     private Instant lastSeen;
     private String name;
     private Float powerDispatched; // Can be negative or positive
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private DeviceStatus status;
     private Float temperature;
     private Float voltage;
     private String model;
