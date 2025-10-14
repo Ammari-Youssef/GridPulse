@@ -20,7 +20,7 @@ import java.util.UUID;
 public class DeviceHistory extends BaseHistoryEntity {
 
     private Float soc;
-    private String soh;
+    private Float soh;
     private String batteryChemistry;
     private Integer cycles;
     private Double gpsLat;

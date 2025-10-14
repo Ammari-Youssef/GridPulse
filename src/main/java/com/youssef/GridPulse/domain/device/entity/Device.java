@@ -26,7 +26,7 @@ import java.util.List;
 public class Device extends BaseEntity {
 
     private Float soc; // State of Charge (0.0 - 100.0)
-    private String soh; // e.g., "98%"
+    private Float soh; // State of Health (%) e.g., "98%"
     private String batteryChemistry;
     private Integer cycles;
     private Double gpsLat;

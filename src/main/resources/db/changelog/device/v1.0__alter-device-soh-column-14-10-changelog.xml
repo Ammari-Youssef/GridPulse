@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="change_soh_type" author="youssef">
+        <modifyDataType tableName="device" columnName="soh" newDataType="FLOAT"/>
+        <modifyDataType tableName="device_history" columnName="soh" newDataType="FLOAT"/>
+
+        <rollback>
+            <modifyDataType tableName="device" columnName="soh" newDataType="VARCHAR(255)"/>
+            <modifyDataType tableName="device_history" columnName="soh" newDataType="VARCHAR(255)"/>
+        </rollback>
+
+        <comment>
+            Change the data type of the 'soh' column in the 'device' and 'device_history' tables from VARCHAR to FLOAT.
+            This change is necessary to accurately represent the state of health (SOH) of devices as a numerical value.
+            The rollback section reverts the data type back to VARCHAR if needed.
+        </comment>
+    </changeSet>
+
+</databaseChangeLog>
