@@ -17,6 +17,7 @@ type Query {
     getAllDeviceHistory: [DeviceHistory!]!
     getDeviceHistoryById(historyId: ID!): DeviceHistory!
     getDeviceHistory(originalId: ID!): [DeviceHistory!]!
+    getHealthStatus(deviceId: ID!): BatteryHealthStatus!
 
     getAllBms: [Bms!]!
     getBmsById(id: ID!): Bms!
@@ -102,6 +103,15 @@ enum Source {
     GATEWAY # from Gateway API
 }
 
+enum BatteryHealthStatus {
+    CRITICAL
+    DEGRADED
+    UNHEALTHY
+    HEALTHY
+    UNKNOWN
+}
+
+
 # ----------------- AUTHENTICATION -----------------
 input RegisterInput {
     email: String!
@@ -168,6 +178,8 @@ type Device implements Auditable {
     model: String!
     softwareVersion: String!
     manufacturer: String!
+    swUpdateTime: String
+    ip: String!
 
     # Relations
 
@@ -377,6 +389,8 @@ input DeviceInput {
     model: String
     softwareVersion: String
     manufacturer: String
+    swUpdateTime: String
+    ip: String
 
     inverterId: ID!
     operatorId: ID!
