@@ -65,7 +65,7 @@ public class DeviceService extends BaseService<Device, DeviceHistory, UUID, Devi
         Bms bms = bmsRepository.findById(input.bmsId())
                 .orElseThrow(() -> new EntityNotFoundException("BMS not found"));
 
-        Meter meter = meterRepository.findById(input.bmsId())
+        Meter meter = meterRepository.findById(input.meterId())
                 .orElseThrow(() -> new EntityNotFoundException("Meter not found"));
 
         // enforce role constraint
