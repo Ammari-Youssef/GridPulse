@@ -2,6 +2,7 @@ package com.youssef.GridPulse.domain.device.entity;
 
 import com.youssef.GridPulse.common.base.BaseEntity;
 import com.youssef.GridPulse.domain.bms.entity.Bms;
+import com.youssef.GridPulse.domain.device.enums.DeviceStatus;
 import com.youssef.GridPulse.domain.identity.user.entity.User;
 import com.youssef.GridPulse.domain.inverter.entity.Inverter;
 import com.youssef.GridPulse.domain.message.entity.Message;
@@ -16,6 +17,9 @@ import lombok.experimental.SuperBuilder;
 import java.time.Instant;
 import java.util.List;
 
+import com.youssef.GridPulse.domain.enums.BatteryHealthStatus;
+import static com.youssef.GridPulse.domain.enums.BatteryHealthStatus.*;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -25,7 +29,7 @@ import java.util.List;
 public class Device extends BaseEntity {
 
     private Float soc; // State of Charge (0.0 - 100.0)
-    private String soh; // e.g., "98%"
+    private Float soh; // State of Health (%) e.g., "98%"
     private String batteryChemistry;
     private Integer cycles;
     private Double gpsLat;
@@ -33,7 +37,8 @@ public class Device extends BaseEntity {
     private Instant lastSeen;
     private String name;
     private Float powerDispatched; // Can be negative or positive
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private DeviceStatus status;
     private Float temperature;
     private Float voltage;
     private String model;
@@ -65,5 +70,17 @@ public class Device extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "meter_id")
     private Meter meter;
+
+
+    @Transient
+    public BatteryHealthStatus getHealthStatus() {
+        if (soh == null || soh < 0 || soh > 100) {
+            return UNKNOWN;
+        }
+        return soh < 20 ? CRITICAL :
+                soh < 30 ? DEGRADED :
+                        soh < 50 ? UNHEALTHY :
+                                HEALTHY;
+    }
 
 }

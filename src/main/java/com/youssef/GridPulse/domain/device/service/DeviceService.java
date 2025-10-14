@@ -6,6 +6,7 @@ import com.youssef.GridPulse.domain.bms.repository.BmsRepository;
 import com.youssef.GridPulse.domain.device.dto.DeviceInput;
 import com.youssef.GridPulse.domain.device.entity.Device;
 import com.youssef.GridPulse.domain.device.entity.DeviceHistory;
+import com.youssef.GridPulse.domain.enums.BatteryHealthStatus;
 import com.youssef.GridPulse.domain.device.mapper.DeviceMapper;
 import com.youssef.GridPulse.domain.device.repository.DeviceHistoryRepository;
 import com.youssef.GridPulse.domain.device.repository.DeviceRepository;
@@ -65,7 +66,7 @@ public class DeviceService extends BaseService<Device, DeviceHistory, UUID, Devi
         Bms bms = bmsRepository.findById(input.bmsId())
                 .orElseThrow(() -> new EntityNotFoundException("BMS not found"));
 
-        Meter meter = meterRepository.findById(input.bmsId())
+        Meter meter = meterRepository.findById(input.meterId())
                 .orElseThrow(() -> new EntityNotFoundException("Meter not found"));
 
         // enforce role constraint
@@ -88,6 +89,13 @@ public class DeviceService extends BaseService<Device, DeviceHistory, UUID, Devi
         history.setInverterId(entity.getInverter().getId());
         history.setBmsId(entity.getBms().getId());
         history.setMeterId(entity.getMeter().getId());
+    }
+
+    public BatteryHealthStatus getHealthStatus(UUID deviceId) {
+        Device device = repository.findById(deviceId)
+                .orElseThrow(() -> new EntityNotFoundException("Device not found"));
+
+        return device.getHealthStatus();
     }
 
 }

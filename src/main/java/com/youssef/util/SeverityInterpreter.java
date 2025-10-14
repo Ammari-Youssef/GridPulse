@@ -1,4 +1,4 @@
-package com.youssef.GridPulse.common.util;
+package com.youssef.util;
 
 import com.youssef.GridPulse.domain.message.enums.MessageType;
 import com.youssef.GridPulse.domain.message.enums.Severity;
@@ -68,10 +68,7 @@ public class SeverityInterpreter {
         return switch (type) {
             case IDS -> {
                 IdsPayload ids = (IdsPayload) payload;
-                String attackType = ids.attackType().toLowerCase();
-                yield attackType.contains("backdoor") || attackType.contains("worm") || attackType.contains("exploit") ? Severity.CRITICAL :
-                        attackType.contains("shellcode") ? Severity.MEDIUM :
-                                attackType.contains("fuzzer") || attackType.contains("generic") ? Severity.LOW : Severity.INFO;
+                yield ids.attackType().getSeverity();
             }
 
             case HEARTBEAT -> {
