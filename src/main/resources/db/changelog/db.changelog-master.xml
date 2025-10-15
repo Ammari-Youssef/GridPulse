@@ -30,4 +30,5 @@
     <include file="/db/changelog/device/v1.0__add-ip-and-software-update-time-to-device-tables-10-10-changelog.xml"/>
     <include file="db/changelog/message/v1.0__add-fields-to-message-tables-10-10-changelog.xml"/>
     <include file="db/changelog/device/v1.0__alter-device-soh-column-14-10-changelog.xml"/>
+    <include file="db/changelog/fleet/v1.0__create-fleet-tables-15-10-changelog.xml"/>
 </databaseChangeLog>
