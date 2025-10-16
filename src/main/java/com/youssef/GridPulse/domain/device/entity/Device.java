@@ -3,6 +3,7 @@ package com.youssef.GridPulse.domain.device.entity;
 import com.youssef.GridPulse.common.base.BaseEntity;
 import com.youssef.GridPulse.domain.bms.entity.Bms;
 import com.youssef.GridPulse.domain.device.enums.DeviceStatus;
+import com.youssef.GridPulse.domain.fleet.entity.Fleet;
 import com.youssef.GridPulse.domain.identity.user.entity.User;
 import com.youssef.GridPulse.domain.inverter.entity.Inverter;
 import com.youssef.GridPulse.domain.message.entity.Message;
@@ -70,6 +71,10 @@ public class Device extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "meter_id")
     private Meter meter;
+
+    @ManyToOne
+    @JoinColumn(name = "fleet_id", referencedColumnName = "id")
+    private Fleet fleet;
 
 
     @Transient
