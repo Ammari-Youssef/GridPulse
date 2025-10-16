@@ -12,7 +12,9 @@ import org.springframework.context.annotation.Primary;
 @Primary
 @Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface DeviceMapper extends BaseMapper<Device, DeviceHistory, DeviceInput> {
+
     @Override
+    @Mapping(source = "fleet.id", target = "fleetId")
     @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "operator.id", target = "operatorId")
     @Mapping(source = "inverter.id", target = "inverterId")
@@ -21,11 +23,12 @@ public interface DeviceMapper extends BaseMapper<Device, DeviceHistory, DeviceIn
     DeviceHistory toHistory(Device entity);
 
     @Override
-    @Mapping(source = "bmsId", target = "bms.id")
-    @Mapping(source = "inverterId", target = "inverter.id")
-    @Mapping(source = "meterId", target = "meter.id")
+    @Mapping(source = "fleetId", target = "fleet.id")
     @Mapping(source = "userId", target = "user.id")
     @Mapping(source = "operatorId", target = "operator.id")
+    @Mapping(source = "inverterId", target = "inverter.id")
+    @Mapping(source = "bmsId", target = "bms.id")
+    @Mapping(source = "meterId", target = "meter.id")
     Device toEntity(DeviceInput input);
 
 

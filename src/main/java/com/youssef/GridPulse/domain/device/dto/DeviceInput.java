@@ -77,6 +77,9 @@ public record DeviceInput(
         UUID bmsId,
 
         @NotNull(message = "Meter ID is mandatory.")
-        UUID meterId
+        UUID meterId,
+
+        @NotNull(message = "Fleet ID is mandatory.")
+        UUID fleetId
 ) {
 }
