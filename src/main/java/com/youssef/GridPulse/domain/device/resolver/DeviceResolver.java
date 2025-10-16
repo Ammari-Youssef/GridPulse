@@ -27,6 +27,11 @@ public class DeviceResolver extends BaseResolver<Device, DeviceHistory, UUID, De
     }
 
     @QueryMapping
+    public List<Device> getDevicesByFleetId(@Argument UUID fleetId) {
+        return service.getByFleetId(fleetId);
+    }
+
+    @QueryMapping
     public BatteryHealthStatus getHealthStatus(@Argument UUID deviceId) {
         return service.getHealthStatus(deviceId);
     }

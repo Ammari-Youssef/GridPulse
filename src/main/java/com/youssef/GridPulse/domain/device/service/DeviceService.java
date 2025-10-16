@@ -10,6 +10,8 @@ import com.youssef.GridPulse.domain.enums.BatteryHealthStatus;
 import com.youssef.GridPulse.domain.device.mapper.DeviceMapper;
 import com.youssef.GridPulse.domain.device.repository.DeviceHistoryRepository;
 import com.youssef.GridPulse.domain.device.repository.DeviceRepository;
+import com.youssef.GridPulse.domain.fleet.entity.Fleet;
+import com.youssef.GridPulse.domain.fleet.repository.FleetRepository;
 import com.youssef.GridPulse.domain.identity.user.Role;
 import com.youssef.GridPulse.domain.identity.user.entity.User;
 import com.youssef.GridPulse.domain.identity.user.repository.UserRepository;
@@ -22,6 +24,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -31,6 +34,7 @@ public class DeviceService extends BaseService<Device, DeviceHistory, UUID, Devi
     private final InverterRepository inverterRepository;
     private final BmsRepository bmsRepository;
     private final MeterRepository meterRepository;
+    private final FleetRepository fleetRepository;
 
     public DeviceService(
             DeviceRepository repository,
@@ -41,13 +45,14 @@ public class DeviceService extends BaseService<Device, DeviceHistory, UUID, Devi
             UserRepository userRepository,
             InverterRepository inverterRepository,
             BmsRepository bmsRepository,
-            MeterRepository meterRepository
-    ) {
+            MeterRepository meterRepository,
+            FleetRepository fleetRepository) {
         super(repository, historyRepository, mapper);
         this.userRepository = userRepository;
         this.inverterRepository = inverterRepository;
         this.bmsRepository = bmsRepository;
         this.meterRepository = meterRepository;
+        this.fleetRepository = fleetRepository;
     }
 
     @Override
@@ -69,6 +74,9 @@ public class DeviceService extends BaseService<Device, DeviceHistory, UUID, Devi
         Meter meter = meterRepository.findById(input.meterId())
                 .orElseThrow(() -> new EntityNotFoundException("Meter not found"));
 
+        Fleet fleet = fleetRepository.findById(input.fleetId())
+                .orElseThrow(() -> new EntityNotFoundException("Fleet not found"));
+
         // enforce role constraint
         if (operator.getRole() != Role.ADMIN) {
             throw new AccessDeniedException("Operator must have ADMIN role");
@@ -79,6 +87,7 @@ public class DeviceService extends BaseService<Device, DeviceHistory, UUID, Devi
         entity.setInverter(inverter);
         entity.setBms(bms);
         entity.setMeter(meter);
+        entity.setFleet(fleet);
     }
 
     @Transactional
@@ -89,6 +98,7 @@ public class DeviceService extends BaseService<Device, DeviceHistory, UUID, Devi
         history.setInverterId(entity.getInverter().getId());
         history.setBmsId(entity.getBms().getId());
         history.setMeterId(entity.getMeter().getId());
+        history.setFleetId(entity.getFleet().getId());
     }
 
     public BatteryHealthStatus getHealthStatus(UUID deviceId) {
@@ -96,6 +106,10 @@ public class DeviceService extends BaseService<Device, DeviceHistory, UUID, Devi
                 .orElseThrow(() -> new EntityNotFoundException("Device not found"));
 
         return device.getHealthStatus();
+    }
+
+    public List<Device> getByFleetId(UUID fleetId){
+        return ((DeviceRepository)repository).findByFleetId(fleetId);
     }
 
 }
