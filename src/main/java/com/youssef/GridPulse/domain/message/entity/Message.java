@@ -16,7 +16,6 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
 import java.util.Base64;
-import java.util.UUID;
 
 /**
  * Represents a message sent from an IoT device, including type, severity, payload, and metadata.
@@ -73,8 +72,6 @@ public class Message extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "device_id")
     private Device device;
-
-    private UUID fleetId;
 
     @Column(unique = true)
     private String cloudMessageId;
