@@ -12,6 +12,12 @@ type Query {
     getInverterHistoryById(historyId: ID!): InverterHistory!
     getInverterHistory(originalId: ID!): [InverterHistory!]!
 
+    getAllFleets: [Fleet!]!
+    getFleetById(id: ID!): Fleet!
+    getAllFleetHistory: [FleetHistory!]!
+    getFleetHistoryById(historyId: ID!): FleetHistory!
+    getFleetHistory(originalId: ID!): [FleetHistory!]!
+
     getAllDevices: [Device!]!
     getDeviceById(id: ID!): Device!
     getAllDeviceHistory: [DeviceHistory!]!
@@ -50,6 +56,10 @@ type Mutation {
     deleteInverter(id: ID!): Boolean
     markInverterHistorySynced(id: ID!): Boolean!
 
+    createFleet(input: FleetInput!): Fleet!
+    updateFleet(id: ID!, input: FleetInput!): Fleet!
+    deleteFleet(id: ID!): Boolean!
+    markFleetHistorySynced(id: ID!): Boolean!
 
     createDevice(input: DeviceInput!): Device
     updateDevice(id: ID!, input: DeviceInput!): Device
@@ -183,6 +193,7 @@ type Device implements Auditable {
 
     # Relations
 
+    fleet: Fleet!
     inverter: Inverter!
     operator: User!
     user: User!
@@ -222,6 +233,21 @@ type Meter implements Auditable {
     model: String
     manufacturer: String
     version: String
+
+    # Auditable fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: Source!
+}
+
+type Fleet implements Auditable{
+    id: ID!
+    name: String!
+    location: String
+    owner: String
+    description: String
 
     # Auditable fields
     createdBy: String!
@@ -272,6 +298,26 @@ type InverterHistory implements AuditableHistory {
     synced: Boolean!
 }
 
+type FleetHistory implements AuditableHistory{
+    id: ID!
+    originalId: ID!
+    name: String!
+    location: String
+    owner: String
+    description: String
+
+    # Auditable fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: Source!
+    createdRecord: Boolean!
+    updatedRecord: Boolean!
+    deletedRecord: Boolean!
+    synced: Boolean!
+}
+
 type DeviceHistory implements AuditableHistory {
     id: ID!
     originalId: ID!
@@ -292,7 +338,7 @@ type DeviceHistory implements AuditableHistory {
     manufacturer: String!
 
     # Relations
-
+    fleetId: ID!
     inverterId: ID!
     operatorId: ID!
     userId: ID!
@@ -373,6 +419,13 @@ input InverterInput {
     manufacturer: String
 }
 
+input FleetInput {
+    name: String!
+    location: String
+    owner: String
+    description: String
+}
+
 input DeviceInput {
     name: String
     soc: Float
@@ -392,6 +445,8 @@ input DeviceInput {
     swUpdateTime: String
     ip: String
 
+    # Relations
+    FleetId: ID!
     inverterId: ID!
     operatorId: ID!
     userId: ID!
