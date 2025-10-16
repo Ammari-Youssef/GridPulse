@@ -175,7 +175,7 @@ type Device implements Auditable {
     id: ID!
     name: String!
     soc: Float!
-    soh: String!
+    soh: Float!
     batteryChemistry: String!
     cycles: Int!
     gpsLat: Float
@@ -323,7 +323,7 @@ type DeviceHistory implements AuditableHistory {
     originalId: ID!
     name: String!
     soc: Float!
-    soh: String!
+    soh: Float!
     batteryChemistry: String!
     cycles: Int!
     gpsLat: Float
@@ -429,7 +429,7 @@ input FleetInput {
 input DeviceInput {
     name: String
     soc: Float
-    soh: String
+    soh: Float
     batteryChemistry: String
     cycles: Int
     gpsLat: Float
@@ -446,7 +446,7 @@ input DeviceInput {
     ip: String
 
     # Relations
-    FleetId: ID!
+    fleetId: ID!
     inverterId: ID!
     operatorId: ID!
     userId: ID!
