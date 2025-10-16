@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="add_fleet_id_to_device_tables" author="youssef">
+        <addColumn tableName="device">
+            <column name="fleet_id" type="UUID"/>
+        </addColumn>
+
+        <addForeignKeyConstraint baseColumnNames="fleet_id" baseTableName="device" constraintName="FK_DEVICE_ON_FLEET"
+                                 referencedColumnNames="id" referencedTableName="fleet"/>
+
+        <addColumn tableName="device_history">
+            <column name="fleet_id" type="UUID"/>
+        </addColumn>
+
+        <comment>
+            Note: Existing records in the 'device' and 'device_history' tables will have NULL in the new 'fleet_id' column.
+            Future application logic should ensure that new records include a valid 'fleet_id'.
+            Consider adding a default value or updating existing records if necessary.
+        </comment>
+
+        <rollback>
+            <dropForeignKeyConstraint baseTableName="device" constraintName="FK_DEVICE_ON_FLEET"/>
+            <dropColumn tableName="device" columnName="fleet_id"/>
+            <dropColumn tableName="device_history" columnName="fleet_id"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
