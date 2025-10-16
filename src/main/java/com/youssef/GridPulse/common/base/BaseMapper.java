@@ -3,6 +3,9 @@ package com.youssef.GridPulse.common.base;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
+import org.mapstruct.BeanMapping;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+
 public interface BaseMapper<E extends BaseEntity , H extends BaseHistoryEntity, INPUT> {
 
     /**
@@ -32,6 +35,7 @@ public interface BaseMapper<E extends BaseEntity , H extends BaseHistoryEntity, 
     H toHistory(E entity);
 
     // Optional hook if you want to update fields instead of overwriting
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEntity(INPUT input, @MappingTarget E entity);
 
 }
