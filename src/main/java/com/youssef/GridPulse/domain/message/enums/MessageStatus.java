@@ -6,11 +6,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum MessageStatus {
-    New(0),
-    Ready(4),
-    Sending(5),
-    Complete(6),
-    Failed(7);
+    NEW(0),
+    READY(4),
+    SENDING(5),
+    COMPLETE(6),
+    FAILED(7);
 
     private final int code;
 
