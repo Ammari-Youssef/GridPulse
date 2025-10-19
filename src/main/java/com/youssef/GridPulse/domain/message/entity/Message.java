@@ -6,7 +6,7 @@ import com.youssef.GridPulse.domain.message.dto.DevicePayload;
 import com.youssef.GridPulse.domain.message.enums.*;
 import com.youssef.GridPulse.domain.message.parser.MessagePayloadParser;
 
-import com.youssef.util.SeverityInterpreter;
+import com.youssef.GridPulse.common.util.SeverityInterpreter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

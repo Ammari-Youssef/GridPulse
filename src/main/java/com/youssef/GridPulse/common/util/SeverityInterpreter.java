@@ -1,13 +1,15 @@
-package com.youssef.util;
+package com.youssef.GridPulse.common.util;
 
 import com.youssef.GridPulse.domain.message.enums.MessageType;
 import com.youssef.GridPulse.domain.message.enums.Severity;
 import com.youssef.GridPulse.domain.message.payload.enums.SoftwareMessageUpdateStatus;
 import com.youssef.GridPulse.domain.message.payload.*;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class SeverityInterpreter {
 
-    public static String explain(Severity severity, MessageType type) {
+    public String explain(Severity severity, MessageType type) {
         return switch (type) {
 
             case IDS -> switch (severity) {
@@ -64,7 +66,7 @@ public class SeverityInterpreter {
         };
     }
 
-    public static Severity calculate(MessageType type, Object payload) {
+    public Severity calculate(MessageType type, Object payload) {
         return switch (type) {
             case IDS -> {
                 IdsPayload ids = (IdsPayload) payload;
