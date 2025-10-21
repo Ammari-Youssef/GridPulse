@@ -1,0 +1,9 @@
+{
+  "attackType": "DOS_DDOS",
+  "sourceIp": "192.168.1.10",
+  "destinationIp": "192.168.1.100",
+  "sourcePort": 22,
+  "destinationPort": 22000,
+  "protocol": "tcp",
+  "rawMessage": "Detected DoS attack signature"
+}

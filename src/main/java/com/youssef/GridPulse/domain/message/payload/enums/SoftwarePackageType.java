@@ -16,20 +16,20 @@ import java.util.Arrays;
 @Getter
 @RequiredArgsConstructor
 public enum SoftwarePackageType {
-    OS("0"),
-    COMMS("1"),
-    IDS("2"),
-    BMS("3"),
-    INV("4"),
-    METER("5"),
-    API("6");
+    OS(0),
+    COMMS(1),
+    IDS(2),
+    BMS(3),
+    INV(4),
+    METER(5),
+    API(6);
 
-    private final String code;
+    private final int code;
 
 
-    public static SoftwarePackageType fromCode(String code) {
+    public static SoftwarePackageType fromCode(int code) {
         return Arrays.stream(values())
-                .filter(p -> p.code.equals(code))
+                .filter(p -> p.code == code )
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Unknown package type: " + code));
     }

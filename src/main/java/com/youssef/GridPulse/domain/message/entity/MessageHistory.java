@@ -23,8 +23,6 @@ public class MessageHistory extends BaseHistoryEntity {
     @Column(nullable = false)
     private UUID deviceId;
 
-    private UUID fleetId;
-
     private String cloudMessageId;
 
     @Column(columnDefinition = "TEXT")

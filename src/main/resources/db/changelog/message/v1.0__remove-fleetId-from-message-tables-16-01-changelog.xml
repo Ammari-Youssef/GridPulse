@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="remove_fleet_id_from_message_tables" author="youssef">
+        <dropColumn columnName="fleet_id" tableName="messages"/>
+
+        <dropColumn columnName="fleet_id" tableName="message_history"/>
+
+        <rollback>
+            <addColumn tableName="messages">
+                <column name="fleet_id" type="UUID"/>
+            </addColumn>
+
+            <addColumn tableName="message_history">
+                <column name="fleet_id" type="UUID"/>
+            </addColumn>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

@@ -6,7 +6,7 @@ import com.youssef.GridPulse.domain.message.dto.DevicePayload;
 import com.youssef.GridPulse.domain.message.enums.*;
 import com.youssef.GridPulse.domain.message.parser.MessagePayloadParser;
 
-import com.youssef.util.SeverityInterpreter;
+import com.youssef.GridPulse.domain.message.util.SeverityInterpreter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +16,6 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
 import java.util.Base64;
-import java.util.UUID;
 
 /**
  * Represents a message sent from an IoT device, including type, severity, payload, and metadata.
@@ -74,8 +73,6 @@ public class Message extends BaseEntity {
     @JoinColumn(name = "device_id")
     private Device device;
 
-    private UUID fleetId;
-
     @Column(unique = true)
     private String cloudMessageId;
 
@@ -104,9 +101,24 @@ public class Message extends BaseEntity {
     private String explanation;
 
     /**
-     * Basic factory method to transform a payload device (format:
-     * Message_ID/Message_B64/Date/Priority/Format/Status|IDS) in Message entity.
-     * Implement the actual parsing according to the exact format and encoding.
+     * Factory method to transform a raw, encoded payload string received from an IoT device into a {@link Message} entity.
+     * <p>
+     * Expected payload format (pipe-delimited):<br>
+     * {@code Message_ID|Base64EncodedMessage|Date|Priority|Format|Status|MessageType}
+     * <p>
+     * This method performs the following steps:
+     * <ol>
+     *   <li>Parses the raw payload string into a {@link DevicePayload} DTO</li>
+     *   <li>Decodes the base64-encoded message content</li>
+     *   <li>Parses the decoded JSON into a typed payload object using {@link MessagePayloadParser}</li>
+     *   <li>Calculates {@link Severity} and explanation using {@link SeverityInterpreter}</li>
+     *   <li>Builds and returns a fully populated {@link Message} entity</li>
+     * </ol>
+     *
+     * @param device     the associated {@link Device} entity
+     * @param rawPayload the raw pipe-delimited payload string received from the device
+     * @return a constructed {@link Message} entity with resolved severity and explanation
+     * @throws IllegalArgumentException if parsing or decoding fails
      */
     public static Message fromDevicePayload(Device device, String rawPayload) {
         DevicePayload dto = DevicePayload.fromRaw(rawPayload);

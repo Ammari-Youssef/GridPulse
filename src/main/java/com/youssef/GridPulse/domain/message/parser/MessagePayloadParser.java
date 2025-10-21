@@ -1,6 +1,8 @@
 package com.youssef.GridPulse.domain.message.parser;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.youssef.GridPulse.domain.message.enums.MessageType;
 import com.youssef.GridPulse.domain.message.payload.*;
 
@@ -24,7 +26,8 @@ import java.util.Base64;
  */
 public class MessagePayloadParser {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
     public static Object parse(MessageType type, String base64MessageText) {
         String json = decodeBase64(base64MessageText);
