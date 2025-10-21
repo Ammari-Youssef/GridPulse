@@ -1,0 +1,9 @@
+{
+  "attackType": "SHELLCODE",
+  "sourceIp": "192.168.1.11",
+  "destinationIp": "192.168.1.101",
+  "sourcePort": 80,
+  "destinationPort": 8080,
+  "protocol": "tcp",
+  "rawMessage": "Shellcode pattern detected"
+}
