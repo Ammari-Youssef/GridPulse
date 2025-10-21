@@ -270,7 +270,7 @@ type Bms implements Auditable {
     version: String
     soh: String
     soc: Float
-    battery_chemistry: String
+    batteryChemistry: String
 
     # Auditable fields
     createdBy: String!
@@ -443,7 +443,7 @@ type BmsHistory implements AuditableHistory {
     version: String
     soh: String
     soc: Float
-    battery_chemistry: String
+    batteryChemistry: String
 
     # Auditable fields
     createdBy: String!
