@@ -1,0 +1,9 @@
+{
+  "attackType": "RECONNAISSANCE",
+  "sourceIp": "192.168.1.13",
+  "destinationIp": "192.168.1.103",
+  "sourcePort": 53,
+  "destinationPort": 5353,
+  "protocol": "udp",
+  "rawMessage": "Normal scan activity"
+}

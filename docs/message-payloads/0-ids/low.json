@@ -1,0 +1,9 @@
+{
+  "attackType": "FUZZERS",
+  "sourceIp": "192.168.1.12",
+  "destinationIp": "192.168.1.102",
+  "sourcePort": 443,
+  "destinationPort": 8443,
+  "protocol": "tcp",
+  "rawMessage": "Generic fuzzing attempt"
+}

@@ -1,21 +1,17 @@
-package com.youssef.util;
+package com.youssef.GridPulse.domain.message.util;
 
 import com.youssef.GridPulse.domain.message.enums.MessageType;
 import com.youssef.GridPulse.domain.message.enums.Severity;
+import com.youssef.GridPulse.domain.message.payload.enums.AttackType;
 import com.youssef.GridPulse.domain.message.payload.enums.SoftwareMessageUpdateStatus;
 import com.youssef.GridPulse.domain.message.payload.*;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class SeverityInterpreter {
 
-    public static String explain(Severity severity, MessageType type) {
+    public String explain(Severity severity, MessageType type) {
         return switch (type) {
-
-            case IDS -> switch (severity) {
-                case CRITICAL -> "Backdoor, Exploit, DoS/DDoS, Worm";
-                case MEDIUM -> "Shellcode";
-                case LOW -> "Fuzzers, Generic";
-                case INFO -> "Analysis, Reconnaissance, Normal";
-            };
 
             case SYSTEM -> switch (severity) {
                 case CRITICAL -> "CPU overload, Memory overload, disk full";
@@ -60,11 +56,37 @@ public class SeverityInterpreter {
             };
 
 
-//            default -> "Severity interpretation not defined for this type";
+            default -> "Severity interpretation not defined for this type";
         };
     }
 
-    public static Severity calculate(MessageType type, Object payload) {
+    /**
+     * Provides a detailed explanation for IDS messages based on the specific {@link AttackType}.
+     * Only valid when {@code type == MessageType.IDS}.
+     *
+     * @throws IllegalArgumentException if called with a non-IDS type
+     */
+
+    public String explain(MessageType type, AttackType attackType) {
+        if (type != MessageType.IDS) {
+            throw new IllegalArgumentException("AttackType is only valid for IDS messages");
+        }
+
+        return switch (attackType) {
+            case BACKDOOR -> "Backdoor detected: unauthorized remote access attempt";
+            case EXPLOIT -> "Exploit detected: known vulnerability targeted";
+            case DOS_DDOS -> "Denial-of-Service attack detected: traffic flood or resource exhaustion";
+            case WORMS -> "Worm activity detected: self-replicating malware spreading across the network";
+            case SHELLCODE -> "Shellcode detected: payload attempting to execute arbitrary code";
+            case FUZZERS -> "Fuzzer activity detected: input mutation tools probing for vulnerabilities";
+            case GENERIC -> "Generic threat detected: pattern matches known suspicious behavior";
+            case NORMAL -> "Normal traffic pattern observed";
+            case ANALYSIS -> "Analysis tool detected: passive inspection or scanning";
+            case RECONNAISSANCE -> "Reconnaissance activity detected: probing for open ports or services";
+        };
+    }
+
+    public Severity calculate(MessageType type, Object payload) {
         return switch (type) {
             case IDS -> {
                 IdsPayload ids = (IdsPayload) payload;

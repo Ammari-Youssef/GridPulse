@@ -38,6 +38,14 @@ type Query {
     getMeterHistoryById(historyId: ID!): MeterHistory!
     getMeterHistory(originalId: ID!): [MeterHistory!]!
 
+    getAllMessages: [Message!]!
+    getMessagesByDevice(deviceId: ID!): [Message!]!
+    getMessageById(id: ID!): Message!
+    getAllMessageHistory: [MessageHistory!]!
+    getMessageHistoryById(historyId: ID!): MessageHistory!
+    getMessageHistory(originalId: ID!): [MessageHistory!]!
+
+
 }
 
 type Mutation {
@@ -76,6 +84,13 @@ type Mutation {
     updateMeter(id: ID!, input: MeterInput!): Meter
     deleteMeter(id: ID!): Boolean
     markMeterHistorySynced(id: ID!): Boolean!
+
+    createMessage(input: MessageInput!): Message
+    updateMessage(id: ID!, input: MessageInput!): Message
+    deleteMessage(id: ID!): Boolean
+    markMessageHistorySynced(id: ID!): Boolean!
+    ingestMessage(deviceId: ID!, payload: String!): Message
+
 }
 
 # ----------------- Common Interfaces -----------------
@@ -106,6 +121,7 @@ interface AuditableHistory {
 }
 
 # ----------------- Enums -----------------
+# ------- Common Enums -------
 enum Source {
     APP # internal
     SYNC # from external system
@@ -113,13 +129,49 @@ enum Source {
     DEVICE # from Device API
     GATEWAY # from Gateway API
 }
-
+# ------- DEVICE & BMS Related Enums -------
 enum BatteryHealthStatus {
     CRITICAL
     DEGRADED
     UNHEALTHY
     HEALTHY
     UNKNOWN
+}
+# ------- MESSAGE Related Enums -------
+enum MessageType{
+    IDS
+    HEARTBEAT
+    SYSTEM
+    SOFTWARE
+    BMS
+    METER
+    INVERTER
+}
+
+enum Severity{
+    CRITICAL
+    MEDIUM
+    LOW
+    INFO
+}
+
+enum MessageStatus{
+    NEW
+    READY
+    SENDING
+    COMPLETE
+    FAILED
+}
+
+enum MessageFormat{
+    TEXT   # MQTT
+    HEX    # Satellite
+}
+
+enum MessagePriority{
+    HIGH
+    MEDIUM
+    LOW
 }
 
 
@@ -249,6 +301,28 @@ type Fleet implements Auditable{
     location: String
     owner: String
     description: String
+
+    # Auditable fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: Source!
+}
+
+type Message implements Auditable{
+    id: ID!
+    device: Device!
+    cloudMessageId: String
+    messageText: String!
+    messageType: MessageType!
+    status: MessageStatus!
+    severity: Severity!
+    format: MessageFormat!
+    priority: MessagePriority!
+    explanation: String
+    sentAt: String!
+    receivedAt: String!
 
     # Auditable fields
     createdBy: String!
@@ -407,6 +481,39 @@ type MeterHistory implements AuditableHistory {
     synced: Boolean!
 }
 
+type MessageHistory implements AuditableHistory{
+    id: ID!
+    originalId: ID!
+
+
+    cloudMessageId: String
+    messageText: String!
+    messageType: MessageType!
+    status: MessageStatus!
+    severity: Severity!
+    format: MessageFormat!
+    priority: MessagePriority!
+    explanation: String
+    sentAt: String!
+    receivedAt: String!
+
+    # Relations
+    deviceId: ID!
+
+    # Auditable fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: Source!
+
+    # History flags
+    createdRecord: Boolean!
+    updatedRecord: Boolean!
+    deletedRecord: Boolean!
+    synced: Boolean!
+}
+
 # ----------------- Input DTOs -----------------
 input UpdateUserInput {
     firstname: String
@@ -471,3 +578,16 @@ input MeterInput{
     manufacturer: String
     version: String
 }
+
+input MessageInput {
+    deviceId: ID!
+    cloudMessageId: String
+    messageText: String!
+    messageType: MessageType!
+    format: MessageFormat!
+    status: MessageStatus!
+    priority: MessagePriority!
+    sentAt: String!
+    receivedAt: String!
+}
+
