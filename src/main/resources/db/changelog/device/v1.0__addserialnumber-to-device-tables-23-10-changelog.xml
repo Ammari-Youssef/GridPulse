@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="20251023-add-serial-number-to-device" author="youssef">
+        <addColumn tableName="device">
+            <column name="serial_number" type="VARCHAR(255)"/>
+        </addColumn>
+
+        <addColumn tableName="device_history">
+            <column name="serial_number" type="VARCHAR(255)"/>
+        </addColumn>
+
+        <!-- Fill existing rows with filler data -->
+        <update tableName="device">
+            <column name="serial_number" valueComputed="CONCAT('FILLER-', id::text)"/>
+            <where>serial_number IS NULL</where>
+        </update>
+
+
+
+        <addNotNullConstraint columnDataType="VARCHAR(255)" columnName="name" tableName="device" validate="true"/>
+
+        <addNotNullConstraint columnDataType="VARCHAR(50)" columnName="status" tableName="device" validate="true"/>
+
+        <addNotNullConstraint columnName="serial_number" tableName="device"/>
+
+        <addUniqueConstraint columnNames="serial_number" constraintName="uc_device_serial_number" tableName="device"/>
+
+        <modifyDataType columnName="status" newDataType="VARCHAR(50)" tableName="device"/>
+
+        <rollback>
+            <dropColumn tableName="device" columnName="serial_number"/>
+            <dropColumn tableName="device_history" columnName="serial_number"/>
+            <dropNotNullConstraint columnName="name" tableName="device" columnDataType="VARCHAR(255)"/>
+            <dropNotNullConstraint columnName="status" tableName="device" columnDataType="VARCHAR(50)"/>
+            <modifyDataType columnName="status" newDataType="VARCHAR(255)" tableName="device"/>
+        </rollback>
+
+    </changeSet>
+
+</databaseChangeLog>
