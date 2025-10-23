@@ -16,7 +16,7 @@ public record SecurityKeyInput(
         @NotNull SecurityType securityType,
         @NotBlank @Size(max = 255) String serialNumber,
         @NotBlank String publicKey,
-        @NotNull KeySource source,
+        @NotNull KeySource keySource,
         @NotNull KeyStatus status,
         Instant revokedTimestamp
 ) {}
