@@ -8,6 +8,7 @@ import com.youssef.GridPulse.domain.identity.user.entity.User;
 import com.youssef.GridPulse.domain.inverter.entity.Inverter;
 import com.youssef.GridPulse.domain.message.entity.Message;
 import com.youssef.GridPulse.domain.meter.entity.Meter;
+import com.youssef.GridPulse.domain.security.entity.SecurityKey;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,6 +20,7 @@ import java.time.Instant;
 import java.util.List;
 
 import com.youssef.GridPulse.domain.enums.BatteryHealthStatus;
+
 import static com.youssef.GridPulse.domain.enums.BatteryHealthStatus.*;
 
 @NoArgsConstructor
@@ -29,25 +31,53 @@ import static com.youssef.GridPulse.domain.enums.BatteryHealthStatus.*;
 @Entity
 public class Device extends BaseEntity {
 
+    // --- Identity & Metadata ---
+    @Column(nullable = false, unique = true)
+    private String serialNumber;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column
+    private String model;
+
+    @Column
+    private String manufacturer;
+
+    // --- Status & Lifecycle ---
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 50)
+    private DeviceStatus status;
+
+    private Instant lastSeen;
+
+    // --- Battery & Power ---
     private Float soc; // State of Charge (0.0 - 100.0)
-    private Float soh; // State of Health (%) e.g., "98%"
+    private Float soh; // State of Health (%)
     private String batteryChemistry;
     private Integer cycles;
-    private Double gpsLat;
-    private Double gpsLong;
-    private Instant lastSeen;
-    private String name;
     private Float powerDispatched; // Can be negative or positive
-    @Enumerated(EnumType.STRING)
-    private DeviceStatus status;
     private Float temperature;
     private Float voltage;
-    private String model;
-    private String manufacturer;
-    private String softwareVersion;
 
-    private Instant swUpdateTime; // Time of last software update
-    private String ip; // IPv4 or IPv6 address
+    // --- Software & Connectivity ---
+    private String softwareVersion;
+    private Instant swUpdateTime; // Last software update
+    private String ip; // IPv4 or IPv6
+
+    // --- Location ---
+    private Double gpsLat;
+    private Double gpsLong;
+
+
+    // --- Relationships ---
+    @OneToOne
+    @JoinColumn(name = "bms_id")
+    private Bms bms;
+
+    @OneToOne
+    @JoinColumn(name = "meter_id")
+    private Meter meter;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
@@ -61,20 +91,15 @@ public class Device extends BaseEntity {
     @JoinColumn(name = "inverter_id", referencedColumnName = "id", nullable = false)
     private Inverter inverter;
 
-    @OneToMany(mappedBy = "device", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    private List<Message> messages;
-
-    @OneToOne
-    @JoinColumn(name = "bms_id")
-    private Bms bms;
-
-    @OneToOne
-    @JoinColumn(name = "meter_id")
-    private Meter meter;
-
     @ManyToOne
     @JoinColumn(name = "fleet_id", referencedColumnName = "id")
     private Fleet fleet;
+
+    @OneToMany(mappedBy = "device", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    private List<Message> messages;
+
+    @OneToMany(mappedBy = "device")
+    private List<SecurityKey> securityKeys;
 
 
     @Transient
