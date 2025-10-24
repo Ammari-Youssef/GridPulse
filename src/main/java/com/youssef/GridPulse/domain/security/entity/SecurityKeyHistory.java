@@ -36,11 +36,9 @@ public class SecurityKeyHistory extends BaseHistoryEntity {
 
     private String serialNumber;
 
-    @Lob
     @Column(columnDefinition = "TEXT")
     private String publicKey;
 
-    @Lob
     @Column(columnDefinition = "TEXT")
     private String privateKey;
 

@@ -52,11 +52,9 @@ public class SecurityKey extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String serialNumber;
 
-    @Lob
     @Column(columnDefinition = "TEXT", nullable = false)
     private String publicKey;
 
-    @Lob
     @Column(columnDefinition = "TEXT", nullable = false)
     private String privateKey;
 
