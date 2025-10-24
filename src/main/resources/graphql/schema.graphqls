@@ -26,6 +26,12 @@ type Query {
     getHealthStatus(deviceId: ID!): BatteryHealthStatus!
     getDevicesByFleetId(fleetId: ID!): [Device!]!
 
+    getAllSecurityKeys: [SecurityKey!]!
+    getSecurityKeyById(id: ID!): SecurityKey!
+    getAllSecurityKeyHistory: [SecurityKeyHistory!]!
+    getSecurityKeyHistoryById(historyId: ID!): SecurityKeyHistory!
+    getSecurityKeyHistory(originalId: ID!): [SecurityKeyHistory!]!
+
     getAllBms: [Bms!]!
     getBmsById(id: ID!): Bms!
     getAllBmsHistory: [BmsHistory!]!
@@ -74,6 +80,12 @@ type Mutation {
     updateDevice(id: ID!, input: DeviceInput!): Device
     deleteDevice(id: ID!): Boolean
     markDeviceHistorySynced(id: ID!): Boolean!
+
+    importSecurityKey(input: ImportSecurityKeyInput!): SecurityKey!
+    createSecurityKey(input: SecurityKeyInput!): SecurityKey
+    updateSecurityKey(id: ID!, input: SecurityKeyInput!): SecurityKey
+    deleteSecurityKey(id: ID!): Boolean
+    markSecurityKeyHistorySynced(id: ID!): Boolean!
 
     createBms(input: BmsInput!): Bms
     updateBms(id: ID!, input: BmsInput!): Bms
@@ -174,6 +186,24 @@ enum MessagePriority{
     LOW
 }
 
+# ------- Security Key Related Enums -------
+enum KeySource {
+    CLOUD,
+    DEVICE,
+    GATEWAY
+}
+
+enum KeyStatus {
+    ACTIVE,
+    REVOKED
+}
+
+enum SecurityType {
+    SOFTWARE_KEY, # for Cloud Keys
+    SOFT, # for Device Keys
+    TPM # for IoT Device Keys but generated on a TPM: A hardware-based security chip, typically on a computer's motherboard, that performs cryptographic functions.
+}
+
 
 # ----------------- AUTHENTICATION -----------------
 input RegisterInput {
@@ -227,6 +257,7 @@ type Inverter implements Auditable {
 type Device implements Auditable {
     id: ID!
     name: String!
+    serialNumber: String!
     soc: Float!
     soh: Float!
     batteryChemistry: String!
@@ -261,6 +292,38 @@ type Device implements Auditable {
     updatedAt: String
     source: Source!
 }
+
+"""
+Represents a stored security key associated with a device and an owner.
+Implements Auditable to include creation/update metadata.
+"""
+type SecurityKey implements Auditable {
+    id: ID!
+    name: String!
+    device: Device!
+    owner: User!
+    securityType: SecurityType!
+    serialNumber: String
+
+    """
+    Private key material should never be exposed through GraphQL.
+    Keep persisted private-key bytes encrypted and out of public API.
+    """
+    privateKey: String @deprecated(reason: "Private key material must not be exposed via API")
+    publicKey: String!
+
+    keySource: KeySource!
+    status: KeyStatus!
+    revokedTimestamp: String
+
+    # Auditable fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: Source!
+}
+
 
 type Bms implements Auditable {
     id: ID!
@@ -397,6 +460,7 @@ type DeviceHistory implements AuditableHistory {
     id: ID!
     originalId: ID!
     name: String!
+    serialNumber: String!
     soc: Float!
     soh: Float!
     batteryChemistry: String!
@@ -428,6 +492,41 @@ type DeviceHistory implements AuditableHistory {
     updatedAt: String
     source: Source!
 
+    createdRecord: Boolean!
+    updatedRecord: Boolean!
+    deletedRecord: Boolean!
+    synced: Boolean!
+}
+
+type SecurityKeyHistory implements AuditableHistory {
+    id: ID!
+    originalId: ID!
+
+    name: String!
+    deviceId: ID!
+    ownerId: ID!
+    securityType: SecurityType!
+    serialNumber: String
+
+    """
+    Private key material should never be exposed through GraphQL.
+    Keep persisted private-key bytes encrypted and out of public API.
+    """
+    privateKey: String @deprecated(reason: "Private key material must not be exposed via API")
+    publicKey: String!
+
+    keySource: KeySource!
+    status: KeyStatus!
+    revokedTimestamp: String
+
+    # Auditable fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: Source!
+
+    # History flags
     createdRecord: Boolean!
     updatedRecord: Boolean!
     deletedRecord: Boolean!
@@ -536,6 +635,7 @@ input FleetInput {
 
 input DeviceInput {
     name: String
+    serialNumber: String
     soc: Float
     soh: Float
     batteryChemistry: String
@@ -561,6 +661,41 @@ input DeviceInput {
     bmsId: ID!
     meterId: ID!
 }
+
+input SecurityKeyInput{
+
+    # Relations
+    deviceId: ID!
+    ownerId: ID!
+
+    # Core fields
+    name: String!
+    securityType: SecurityType!
+    serialNumber: String
+    publicKey: String!
+    keySource: KeySource!
+    status: KeyStatus!
+
+    # Optional lifecycle fields
+    revokedTimestamp: String
+
+}
+
+input ImportSecurityKeyInput {
+    name: String!
+    securityType: SecurityType!
+    serialNumber: String!
+    publicKey: String!
+    privateKey: String! # Only accepted here for secure import
+    keySource: KeySource!
+    revokedTimestamp: String
+
+    # Relations
+    deviceId: ID!
+    ownerId: ID!
+
+}
+
 
 input BmsInput {
     name : String
