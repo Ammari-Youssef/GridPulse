@@ -13,7 +13,6 @@
     <include file="/db/changelog/inverter/v1.0__create-inverter-17-08-changelog.xml"/>
     <include file="/db/changelog/inverter/v1.0__create-inverter-history-17-08-changelog.xml"/>
     <include file="/db/changelog/user/v1.0__remove-disabledRecord-column-from-user-history-30-08-changelog.xml"/>
-    <include file="/db/changelog/security-keys/v1.0__create-security-keys-09-09-changelog.xml"/>
     <include file="db/changelog/device/v1.0__create-device-23-09-changelog.xml"/>
     <include file="/db/changelog/device/v1.0__create-device-history-26-09-changelog.xml"/>
     <include file="/db/changelog/user/v1.0__create-device-collection-tables-ids-for-user-history-28-9-changelog.xml"/>
@@ -33,4 +32,6 @@
     <include file="db/changelog/fleet/v1.0__create-fleet-tables-15-10-changelog.xml"/>
     <include file="db/changelog/device/v1.0__add-fleetId-to-device-tables-16-10-changelog.xml"/>
     <include file="/db/changelog/message/v1.0__remove-fleetId-from-message-tables-16-01-changelog.xml"/>
+     <include file="db/changelog/security-keys/v1.1__create-security-keys-23-10-2025-changelog.xml"/>
+    <include file="db/changelog/device/v1.0__addserialnumber-to-device-tables-23-10-changelog.xml"/>
 </databaseChangeLog>

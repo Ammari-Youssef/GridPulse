@@ -4,6 +4,7 @@ import com.youssef.GridPulse.common.base.BaseEntity;
 import com.youssef.GridPulse.domain.device.entity.Device;
 import com.youssef.GridPulse.domain.identity.token.Token;
 import com.youssef.GridPulse.domain.identity.user.Role;
+import com.youssef.GridPulse.domain.security.entity.SecurityKey;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -37,6 +38,9 @@ public class User extends BaseEntity implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "owner")
+    private List<SecurityKey> securityKeys;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Device> usedDevices;
