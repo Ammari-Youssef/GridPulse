@@ -141,6 +141,21 @@ enum Source {
     DEVICE # from Device API
     GATEWAY # from Gateway API
 }
+# ------- DEVICE Related Enums -------
+enum DeviceStatus{
+    # Core Operational states
+    ONLINE,
+    OFFLINE,
+    MAINTENANCE,
+    ERROR,
+    NEW,
+    UNKNOWN,
+    # Lifecycle states
+    COMMISSIONING,
+    STANDBY,
+    DECOMMISSIONED,
+    RETIRED
+}
 # ------- DEVICE & BMS Related Enums -------
 enum BatteryHealthStatus {
     CRITICAL
@@ -265,7 +280,7 @@ type Device implements Auditable {
     gpsLat: Float
     gpsLong: Float
     lastSeen: String!
-    status: String!
+    status: DeviceStatus!
     powerDispatched: Float!
     temperature: Float!
     voltage: Float!
