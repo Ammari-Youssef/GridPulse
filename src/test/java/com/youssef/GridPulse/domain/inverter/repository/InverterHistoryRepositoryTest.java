@@ -2,7 +2,8 @@ package com.youssef.GridPulse.domain.inverter.repository;
 
 import com.youssef.GridPulse.common.base.BaseHistoryRepository;
 import com.youssef.GridPulse.domain.base.BaseHistoryRepositoryTest;
-import com.youssef.GridPulse.domain.inverter.entity.InverterHistory;
+import com.youssef.GridPulse.domain.inverter.inverter.entity.InverterHistory;
+import com.youssef.GridPulse.domain.inverter.inverter.repository.InverterHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Instant;
