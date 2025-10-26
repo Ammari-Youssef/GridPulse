@@ -1,6 +1,6 @@
-package com.youssef.GridPulse.domain.inverter.repository;
+package com.youssef.GridPulse.domain.inverter.inverter.repository;
 
-import com.youssef.GridPulse.domain.inverter.entity.Inverter;
+import com.youssef.GridPulse.domain.inverter.inverter.entity.Inverter;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;

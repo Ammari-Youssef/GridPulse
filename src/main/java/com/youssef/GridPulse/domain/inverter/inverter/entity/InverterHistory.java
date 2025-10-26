@@ -1,4 +1,4 @@
-package com.youssef.GridPulse.domain.inverter.entity;
+package com.youssef.GridPulse.domain.inverter.inverter.entity;
 
 
 import com.youssef.GridPulse.common.base.BaseHistoryEntity;
