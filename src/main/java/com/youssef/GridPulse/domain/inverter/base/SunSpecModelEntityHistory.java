@@ -6,6 +6,8 @@ import jakarta.persistence.MappedSuperclass;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.UUID;
+
 @MappedSuperclass
 @Getter
 @Setter
@@ -28,5 +30,11 @@ public abstract class SunSpecModelEntityHistory extends BaseHistoryEntity {
     @Column(name = "model_length")
     @Builder.Default
     protected int modelLength = 0; // SunSpec model length (L)
+
+    /**
+     * Inverter id
+     * JSON name: "inverterId
+     */
+    protected UUID inverterId;
 }
 
