@@ -10,6 +10,6 @@ import java.util.UUID;
 public interface SunSpecModelHistoryRepository<SH extends SunSpecModelEntityHistory, ID extends UUID>
         extends BaseHistoryRepository<SH, ID> {
 
-    List<SH> findByInverter_Id(ID inverterId);
+    List<SH> findByInverterId(ID inverterId);
 }
 
