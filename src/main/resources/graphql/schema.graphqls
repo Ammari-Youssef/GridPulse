@@ -107,6 +107,10 @@ type Mutation {
 
 # ----------------- Common Interfaces -----------------
 interface Auditable {
+    id: ID!
+
+    # Auditing fields
+
     createdBy: String!
     updatedBy: String
     createdAt: String!
@@ -117,6 +121,43 @@ interface Auditable {
 interface AuditableHistory {
     id: ID!
     originalId: ID!
+
+    # Auditable fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: Source!
+
+    # History flags
+    createdRecord: Boolean!
+    updatedRecord: Boolean!
+    deletedRecord: Boolean!
+    synced: Boolean!
+}
+
+interface SunSpecModelAuditable implements Auditable{
+    id: ID!
+
+    # SunSpec Must be fields
+    modelId: ID! #  ID/modId/modelId in SunSpec documentation
+    modelLength: Int!  # L in SunSpec documentation
+
+    # Relationship
+    inverter: Inverter!
+
+    # Auditing fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: Source!
+}
+
+interface SunSpecModelAuditableHistory implements AuditableHistory{
+    id: ID!
+    originalId: ID!
+    inverterId: ID!
 
     # Auditable fields
     createdBy: String!
