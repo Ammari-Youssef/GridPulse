@@ -136,41 +136,22 @@ interface AuditableHistory {
     synced: Boolean!
 }
 
-interface SunSpecModelAuditable implements Auditable{
-    id: ID!
-
-    # SunSpec Must be fields
-    modelId: ID! #  ID/modId/modelId in SunSpec documentation
+interface SunSpecModelAuditable {
+    # SunSpec fields
+    modelId: Int! #  ID/modId/modelId in SunSpec documentation
     modelLength: Int!  # L in SunSpec documentation
 
     # Relationship
     inverter: Inverter!
-
-    # Auditing fields
-    createdBy: String!
-    updatedBy: String
-    createdAt: String!
-    updatedAt: String
-    source: Source!
 }
 
-interface SunSpecModelAuditableHistory implements AuditableHistory{
-    id: ID!
-    originalId: ID!
+interface SunSpecModelAuditableHistory {
+    # SunSpec fields
+    modelId: Int! #  ID/modId/modelId in SunSpec documentation
+    modelLength: Int!  # L in SunSpec documentation
+
+    # Relationship
     inverterId: ID!
-
-    # Auditable fields
-    createdBy: String!
-    updatedBy: String
-    createdAt: String!
-    updatedAt: String
-    source: Source!
-
-    # History flags
-    createdRecord: Boolean!
-    updatedRecord: Boolean!
-    deletedRecord: Boolean!
-    synced: Boolean!
 }
 
 # ----------------- Enums -----------------
