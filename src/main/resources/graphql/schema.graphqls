@@ -12,6 +12,16 @@ type Query {
     getInverterHistoryById(historyId: ID!): InverterHistory!
     getInverterHistory(originalId: ID!): [InverterHistory!]!
 
+    # InvCommon entity queries
+    getInvCommonById(id: ID!): InvCommon
+    getAllInvCommons: [InvCommon!]!
+    getInvCommonsByInverterId(inverterId: ID!): [InvCommon!]!
+    # InvCommon history queries
+    getInvCommonHistoryById(historyId: ID!): InvCommonHistory!
+    getInvCommonHistory(originalId: ID!): [InvCommonHistory!]!
+    getAllInvCommonHistory: [InvCommonHistory!]!
+    getInvCommonHistoryByInverterId(inverterId: ID!): [InvCommonHistory!]!
+
     getAllFleets: [Fleet!]!
     getFleetById(id: ID!): Fleet!
     getAllFleetHistory: [FleetHistory!]!
@@ -70,6 +80,11 @@ type Mutation {
     updateInverter(id: ID!, input: InverterInput!): Inverter
     deleteInverter(id: ID!): Boolean
     markInverterHistorySynced(id: ID!): Boolean!
+
+    createInvCommon(input: InvCommonInput!): InvCommon
+    updateInvCommon(id: ID!, input: InvCommonInput!): InvCommon
+    deleteInvCommon(id: ID!): Boolean
+    markInvCommonHistorySynced(id: ID!): Boolean!
 
     createFleet(input: FleetInput!): Fleet!
     updateFleet(id: ID!, input: FleetInput!): Fleet!
@@ -290,6 +305,83 @@ type Inverter implements Auditable {
     updatedAt: String
     source: Source!
 }
+
+type InvCommon implements SunSpecModelAuditable & Auditable {
+    id: ID!
+
+    # SunSpec fields
+    modelId: Int!         # Constant value (e.g., 1)
+    modelLength: Int!    # L in SunSpec
+
+    # Metadata fields
+    manufacturer: String!
+    model: String!
+    options: String
+    version: String
+    serialNumber: String
+    deviceAddress: Int!
+    pad: Int
+
+    # Relationship
+    inverter: Inverter!
+
+    # Auditing fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: Source!
+}
+
+type InvCommonHistory implements SunSpecModelAuditableHistory & AuditableHistory{
+    id: ID!
+    originalId: ID!
+    inverterId: ID! # Track inverter id
+
+    # SunSpec fields
+    modelId: Int!         # Constant value (e.g., 1)
+    modelLength: Int!    # L in SunSpec
+
+    # Metadata fields
+    manufacturer: String!
+    model: String!
+    options: String
+    version: String
+    serialNumber: String
+    deviceAddress: Int!
+    pad: Int
+
+    # Auditing fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: Source!
+
+    #  History Flags
+    createdRecord: Boolean!
+    updatedRecord: Boolean!
+    deletedRecord: Boolean!
+    synced: Boolean!
+}
+
+input InvCommonInput {
+    inverterId: ID!
+
+    # SunSpec fields
+    modelLength: Int!
+
+    # Optional metadata
+    manufacturer: String
+    model: String
+    options: String
+    version: String
+    serialNumber: String
+    deviceAddress: Int
+    pad: Int
+}
+
+
 
 type Device implements Auditable {
     id: ID!
