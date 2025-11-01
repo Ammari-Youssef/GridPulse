@@ -3,6 +3,7 @@ package com.youssef.GridPulse.domain.inverter.mapper;
 import com.youssef.GridPulse.domain.inverter.inverter.dto.InverterInput;
 import com.youssef.GridPulse.domain.inverter.inverter.entity.Inverter;
 import com.youssef.GridPulse.domain.inverter.inverter.mapper.InverterMapper;
+import com.youssef.GridPulse.domain.inverter.inverter.mapper.InverterMapperImpl;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
