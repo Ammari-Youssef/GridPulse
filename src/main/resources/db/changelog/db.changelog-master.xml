@@ -34,4 +34,5 @@
     <include file="/db/changelog/message/v1.0__remove-fleetId-from-message-tables-16-01-changelog.xml"/>
      <include file="db/changelog/security-keys/v1.1__create-security-keys-23-10-2025-changelog.xml"/>
     <include file="db/changelog/device/v1.0__addserialnumber-to-device-tables-23-10-changelog.xml"/>
+    <include file="db/changelog/inverter/common/v1.0__create-inv-common-tables-26-01-changelog.xml"/>
 </databaseChangeLog>
