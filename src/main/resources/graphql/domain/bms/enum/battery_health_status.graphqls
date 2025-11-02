@@ -1,0 +1,7 @@
+enum BatteryHealthStatus {
+    CRITICAL
+    DEGRADED
+    UNHEALTHY
+    HEALTHY
+    UNKNOWN
+}

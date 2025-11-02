@@ -1,0 +1,35 @@
+enum MessageType{
+    IDS
+    HEARTBEAT
+    SYSTEM
+    SOFTWARE
+    BMS
+    METER
+    INVERTER
+}
+
+enum Severity{
+    CRITICAL
+    MEDIUM
+    LOW
+    INFO
+}
+
+enum MessageStatus{
+    NEW
+    READY
+    SENDING
+    COMPLETE
+    FAILED
+}
+
+enum MessageFormat{
+    TEXT   # MQTT
+    HEX    # Satellite
+}
+
+enum MessagePriority{
+    HIGH
+    MEDIUM
+    LOW
+}

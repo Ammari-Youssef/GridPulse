@@ -1,0 +1,7 @@
+extend type Mutation {
+    createMessage(input: MessageInput!): Message
+    updateMessage(id: ID!, input: MessageInput!): Message
+    deleteMessage(id: ID!): Boolean
+    markMessageHistorySynced(id: ID!): Boolean!
+    ingestMessage(deviceId: ID!, payload: String!): Message
+}

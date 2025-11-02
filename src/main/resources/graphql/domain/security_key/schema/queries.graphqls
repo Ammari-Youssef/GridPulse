@@ -1,0 +1,7 @@
+extend type Query {
+    getAllSecurityKeys: [SecurityKey!]!
+    getSecurityKeyById(id: ID!): SecurityKey!
+    getAllSecurityKeyHistory: [SecurityKeyHistory!]!
+    getSecurityKeyHistoryById(historyId: ID!): SecurityKeyHistory!
+    getSecurityKeyHistory(originalId: ID!): [SecurityKeyHistory!]!
+}

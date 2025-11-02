@@ -1,0 +1,34 @@
+type SecurityKeyHistory implements Auditable & AuditableHistory {
+    id: ID!
+    originalId: ID!
+
+    name: String!
+    deviceId: ID!
+    ownerId: ID!
+    securityType: SecurityType!
+    serialNumber: String
+
+    """
+    Private key material should never be exposed through GraphQL.
+    Keep persisted private-key bytes encrypted and out of public API.
+    """
+    privateKey: String @deprecated(reason: "Private key material must not be exposed via API")
+    publicKey: String!
+
+    keySource: KeySource!
+    status: KeyStatus!
+    revokedTimestamp: String
+
+    # Auditable fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: Source!
+
+    # History flags
+    createdRecord: Boolean!
+    updatedRecord: Boolean!
+    deletedRecord: Boolean!
+    synced: Boolean!
+}

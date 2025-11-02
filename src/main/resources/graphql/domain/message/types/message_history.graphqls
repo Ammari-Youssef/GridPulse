@@ -1,0 +1,32 @@
+type MessageHistory implements Auditable & AuditableHistory {
+    id: ID!
+    originalId: ID!
+
+
+    cloudMessageId: String
+    messageText: String!
+    messageType: MessageType!
+    status: MessageStatus!
+    severity: Severity!
+    format: MessageFormat!
+    priority: MessagePriority!
+    explanation: String
+    sentAt: String!
+    receivedAt: String!
+
+    # Relations
+    deviceId: ID!
+
+    # Auditable fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: Source!
+
+    # History flags
+    createdRecord: Boolean!
+    updatedRecord: Boolean!
+    deletedRecord: Boolean!
+    synced: Boolean!
+}

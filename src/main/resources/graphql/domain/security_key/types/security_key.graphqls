@@ -1,0 +1,30 @@
+"""
+Represents a stored security key associated with a device and an owner.
+Implements Auditable to include creation/update metadata.
+"""
+type SecurityKey implements Auditable {
+    id: ID!
+    name: String!
+    device: Device!
+    owner: User!
+    securityType: SecurityType!
+    serialNumber: String
+
+    """
+    Private key material should never be exposed through GraphQL.
+    Keep persisted private-key bytes encrypted and out of public API.
+    """
+    privateKey: String @deprecated(reason: "Private key material must not be exposed via API")
+    publicKey: String!
+
+    keySource: KeySource!
+    status: KeyStatus!
+    revokedTimestamp: String
+
+    # Auditable fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: Source!
+}

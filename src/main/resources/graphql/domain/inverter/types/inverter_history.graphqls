@@ -1,0 +1,18 @@
+type InverterHistory implements Auditable & AuditableHistory {
+    id: ID!
+    originalId: ID!
+    name: String!
+    model: String!
+    version: String!
+    manufacturer: String!
+
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: Source!
+    createdRecord: Boolean!
+    updatedRecord: Boolean!
+    deletedRecord: Boolean!
+    synced: Boolean!
+}
