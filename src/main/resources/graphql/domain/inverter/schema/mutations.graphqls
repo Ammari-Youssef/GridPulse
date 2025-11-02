@@ -1,0 +1,6 @@
+extend type Mutation {
+    createInverter(input: InverterInput!): Inverter
+    updateInverter(id: ID!, input: InverterInput!): Inverter
+    deleteInverter(id: ID!): Boolean
+    markInverterHistorySynced(id: ID!): Boolean!
+}

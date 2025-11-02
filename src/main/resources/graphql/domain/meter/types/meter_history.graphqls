@@ -1,0 +1,21 @@
+type MeterHistory implements Auditable & AuditableHistory {
+    id: ID!
+    originalId: ID!
+    name : String
+    model: String
+    manufacturer: String
+    version: String
+
+    # Auditable fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: Source!
+
+    # History flags
+    createdRecord: Boolean!
+    updatedRecord: Boolean!
+    deletedRecord: Boolean!
+    synced: Boolean!
+}

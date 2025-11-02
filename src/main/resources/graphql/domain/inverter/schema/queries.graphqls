@@ -1,0 +1,7 @@
+extend type Query {
+    getInverterById(id: ID!): Inverter
+    getAllInverters: [Inverter!]!
+    getAllInverterHistory: [InverterHistory!]!
+    getInverterHistoryById(historyId: ID!): InverterHistory!
+    getInverterHistory(originalId: ID!): [InverterHistory!]!
+}

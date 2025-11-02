@@ -1,0 +1,7 @@
+extend type Query {
+    getAllBms: [Bms!]!
+    getBmsById(id: ID!): Bms!
+    getAllBmsHistory: [BmsHistory!]!
+    getBmsHistoryById(historyId: ID!): BmsHistory!
+    getBmsHistory(originalId: ID!): [BmsHistory!]!
+}

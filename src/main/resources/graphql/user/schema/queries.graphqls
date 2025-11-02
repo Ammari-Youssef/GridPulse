@@ -1,0 +1,6 @@
+extend type Query {
+    getAllUsers: [User!]!
+    getCurrentUser:  User!
+    getUserById(id: ID!): User!
+    getUsersActivityHistory: [UserHistory!]!
+}

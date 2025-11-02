@@ -1,0 +1,8 @@
+extend type Query {
+    getAllMessages: [Message!]!
+    getMessagesByDevice(deviceId: ID!): [Message!]!
+    getMessageById(id: ID!): Message!
+    getAllMessageHistory: [MessageHistory!]!
+    getMessageHistoryById(historyId: ID!): MessageHistory!
+    getMessageHistory(originalId: ID!): [MessageHistory!]!
+}

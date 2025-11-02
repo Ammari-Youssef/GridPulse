@@ -1,0 +1,14 @@
+input ImportSecurityKeyInput {
+    name: String!
+    securityType: SecurityType!
+    serialNumber: String!
+    publicKey: String!
+    privateKey: String! # Only accepted here for secure import
+    keySource: KeySource!
+    revokedTimestamp: String
+
+    # Relations
+    deviceId: ID!
+    ownerId: ID!
+
+}

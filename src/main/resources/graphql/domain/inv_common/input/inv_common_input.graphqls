@@ -1,0 +1,15 @@
+input InvCommonInput {
+    inverterId: ID!
+
+    # SunSpec fields
+    modelLength: Int!
+
+    # Optional metadata
+    manufacturer: String
+    model: String
+    options: String
+    version: String
+    serialNumber: String
+    deviceAddress: Int
+    pad: Int
+}

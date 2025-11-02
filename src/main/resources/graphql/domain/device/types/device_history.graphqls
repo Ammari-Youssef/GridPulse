@@ -1,0 +1,41 @@
+type DeviceHistory implements Auditable & AuditableHistory {
+    id: ID!
+    originalId: ID!
+    name: String!
+    serialNumber: String!
+    soc: Float!
+    soh: Float!
+    batteryChemistry: String!
+    cycles: Int!
+    gpsLat: Float
+    gpsLong: Float
+    lastSeen: String!
+    status: String!
+    powerDispatched: Float!
+    temperature: Float!
+    voltage: Float!
+    model: String!
+    softwareVersion: String!
+    manufacturer: String!
+
+    # Relations
+    fleetId: ID!
+    inverterId: ID!
+    operatorId: ID!
+    userId: ID!
+    bmsId: ID!
+    meterId: ID!
+
+    # Auditable fields
+
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: Source!
+
+    createdRecord: Boolean!
+    updatedRecord: Boolean!
+    deletedRecord: Boolean!
+    synced: Boolean!
+}

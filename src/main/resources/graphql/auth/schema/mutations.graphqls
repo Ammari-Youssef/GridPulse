@@ -1,0 +1,7 @@
+extend type Mutation {
+    register(registerInput: RegisterInput!): AuthenticationResponse!
+    login(loginInput: LoginInput!): AuthenticationResponse!
+    logout: Boolean!
+    refreshToken(refreshToken: String!): AuthenticationResponse!
+    createUserWithRole(registerInput: RegisterInput!, role: String): AuthenticationResponse!
+}

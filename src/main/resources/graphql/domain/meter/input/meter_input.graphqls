@@ -1,0 +1,6 @@
+input MeterInput{
+    name : String
+    model: String
+    manufacturer: String
+    version: String
+}
