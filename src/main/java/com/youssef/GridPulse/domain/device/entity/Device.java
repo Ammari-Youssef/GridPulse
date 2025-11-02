@@ -5,7 +5,7 @@ import com.youssef.GridPulse.domain.bms.entity.Bms;
 import com.youssef.GridPulse.domain.device.enums.DeviceStatus;
 import com.youssef.GridPulse.domain.fleet.entity.Fleet;
 import com.youssef.GridPulse.domain.identity.user.entity.User;
-import com.youssef.GridPulse.domain.inverter.entity.Inverter;
+import com.youssef.GridPulse.domain.inverter.inverter.entity.Inverter;
 import com.youssef.GridPulse.domain.message.entity.Message;
 import com.youssef.GridPulse.domain.meter.entity.Meter;
 import com.youssef.GridPulse.domain.security.entity.SecurityKey;

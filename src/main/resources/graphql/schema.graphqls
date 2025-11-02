@@ -107,6 +107,10 @@ type Mutation {
 
 # ----------------- Common Interfaces -----------------
 interface Auditable {
+    id: ID!
+
+    # Auditing fields
+
     createdBy: String!
     updatedBy: String
     createdAt: String!
@@ -130,6 +134,24 @@ interface AuditableHistory {
     updatedRecord: Boolean!
     deletedRecord: Boolean!
     synced: Boolean!
+}
+
+interface SunSpecModelAuditable {
+    # SunSpec fields
+    modelId: Int! #  ID/modId/modelId in SunSpec documentation
+    modelLength: Int!  # L in SunSpec documentation
+
+    # Relationship
+    inverter: Inverter!
+}
+
+interface SunSpecModelAuditableHistory {
+    # SunSpec fields
+    modelId: Int! #  ID/modId/modelId in SunSpec documentation
+    modelLength: Int!  # L in SunSpec documentation
+
+    # Relationship
+    inverterId: ID!
 }
 
 # ----------------- Enums -----------------

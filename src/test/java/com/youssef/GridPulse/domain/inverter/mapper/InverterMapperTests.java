@@ -3,9 +3,11 @@ package com.youssef.GridPulse.domain.inverter.mapper;
 import com.youssef.GridPulse.common.base.BaseMapper;
 import com.youssef.GridPulse.common.base.Source;
 import com.youssef.GridPulse.domain.base.BaseMapperTest;
-import com.youssef.GridPulse.domain.inverter.dto.InverterInput;
-import com.youssef.GridPulse.domain.inverter.entity.Inverter;
-import com.youssef.GridPulse.domain.inverter.entity.InverterHistory;
+import com.youssef.GridPulse.domain.inverter.inverter.dto.InverterInput;
+import com.youssef.GridPulse.domain.inverter.inverter.entity.Inverter;
+import com.youssef.GridPulse.domain.inverter.inverter.entity.InverterHistory;
+import com.youssef.GridPulse.domain.inverter.inverter.mapper.InverterMapper;
+import com.youssef.GridPulse.domain.inverter.inverter.mapper.InverterMapperImpl;
 
 import java.time.Instant;
 import java.util.UUID;

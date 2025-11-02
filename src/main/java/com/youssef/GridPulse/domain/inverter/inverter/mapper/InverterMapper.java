@@ -1,10 +1,10 @@
-package com.youssef.GridPulse.domain.inverter.mapper;
+package com.youssef.GridPulse.domain.inverter.inverter.mapper;
 
 import com.youssef.GridPulse.common.base.BaseMapper;
 import com.youssef.GridPulse.domain.device.entity.Device;
-import com.youssef.GridPulse.domain.inverter.dto.InverterInput;
-import com.youssef.GridPulse.domain.inverter.entity.Inverter;
-import com.youssef.GridPulse.domain.inverter.entity.InverterHistory;
+import com.youssef.GridPulse.domain.inverter.inverter.dto.InverterInput;
+import com.youssef.GridPulse.domain.inverter.inverter.entity.Inverter;
+import com.youssef.GridPulse.domain.inverter.inverter.entity.InverterHistory;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
