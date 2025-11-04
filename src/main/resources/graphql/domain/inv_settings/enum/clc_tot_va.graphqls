@@ -1,0 +1,4 @@
+enum ClcTotVaMethod {
+    VECTOR
+    ARITHMETIC
+}

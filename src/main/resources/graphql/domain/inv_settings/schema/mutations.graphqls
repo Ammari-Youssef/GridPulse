@@ -1,0 +1,6 @@
+extend type Mutation {
+    createInvSettings(input: InvSettingsInput!): InvSettings
+    updateInvSettings(id: ID!, input: InvSettingsInput!): InvSettings
+    deleteInvSettings(id: ID!): Boolean
+    markInvSettingsHistorySynced(id: ID!): Boolean!
+}
