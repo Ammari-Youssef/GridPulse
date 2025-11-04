@@ -1,0 +1,10 @@
+extend type Query {
+    getAllInvNameplates: [InvNameplate!]!
+    getInvNameplatesByInverterId(inverterId: ID!): [InvNameplate!]!
+    getInvNameplateById(id: ID!): InvNameplate
+
+    getAllInvNameplateHistory: [InvNameplateHistory!]!
+    getInvNameplateHistoryById(historyId: ID!): InvNameplateHistory!
+    getInvNameplateHistory(originalId: ID!): [InvNameplateHistory!]!
+    getInvNameplateHistoryByInverterId(inverterId: ID!): [InvNameplateHistory!]!
+}
