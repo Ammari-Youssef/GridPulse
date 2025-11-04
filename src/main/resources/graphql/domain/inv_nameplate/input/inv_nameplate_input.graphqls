@@ -1,0 +1,41 @@
+input InvNameplateInput {
+    inverterId: ID!
+    modelLength: Int!
+
+    derType: Int
+
+    wRating: Int
+    wRatingSf: Int
+
+    vaRating: Int
+    vaRatingSf: Int
+
+    varRatingQ1: Int
+    varRatingQ2: Int
+    varRatingQ3: Int
+    varRatingQ4: Int
+    varRatingSf: Int
+
+    acCurrentRating: Int
+    acCurrentRatingSf: Int
+
+    pfRatingQ1: Int
+    pfRatingQ2: Int
+    pfRatingQ3: Int
+    pfRatingQ4: Int
+    pfRatingSf: Int
+
+    energyRatingWh: Int
+    energyRatingWhSf: Int
+
+    ampHourRating: Int
+    ampHourRatingSf: Int
+
+    maxChargeRate: Int
+    maxChargeRateSf: Int
+
+    maxDischargeRate: Int
+    maxDischargeRateSf: Int
+
+    pad: Int
+}
