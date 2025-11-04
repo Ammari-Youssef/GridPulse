@@ -36,4 +36,5 @@
     <include file="db/changelog/device/v1.0__addserialnumber-to-device-tables-23-10-changelog.xml"/>
     <include file="db/changelog/inverter/common/v1.0__create-inv-common-tables-26-01-changelog.xml"/>
     <include file="db/changelog/inverter/nameplate/v1.0__create-inv-nameplate-tables-04-11-changelog.xml"/>
+    <include file="/db/changelog/inverter/settings/v1.0__create-inv-settings-tables-04-11-changelog.xml"/>
 </databaseChangeLog>

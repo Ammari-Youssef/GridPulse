@@ -1,0 +1,46 @@
+type InvSettingsHistory implements Auditable & AuditableHistory & SunSpecModelAuditableHistory {
+    id: ID!
+    originalId: ID!
+    inverterId: ID!
+    modelId: Int!
+    modelLength: Int!
+
+
+    wMax: Int
+    vRef: Int
+    vRefOfs: Int
+    vMax: Int
+    vMin: Int
+    vaMax: Int
+
+    varMaxQ1: Int
+    varMaxQ2: Int
+    varMaxQ3: Int
+    varMaxQ4: Int
+
+    wGra: Int
+
+    pfMinQ1: Int
+    pfMinQ2: Int
+    pfMinQ3: Int
+    pfMinQ4: Int
+
+    varAct: VarAction
+    clcTotVa: ClcTotVaMethod
+    maxRmpRte: Int
+    ecpNomHz: Int
+    connPh: ConnPhase
+
+    # Auditing fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: String!
+    updatedAt: String
+    source: Source!
+
+    # History flags
+    createdRecord: Boolean!
+    updatedRecord: Boolean!
+    deletedRecord: Boolean!
+    synced: Boolean!
+}
