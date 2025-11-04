@@ -15,6 +15,5 @@ public interface InvSettingsMapper extends SunSpecModelMapper<InvSettings, InvSe
 
     @Override
     @Mapping(target = "modelId", constant = "121")
-    @Mapping(target = "wMax", source = "wMax")
     InvSettings toEntity(InvSettingsInput input);
 }
