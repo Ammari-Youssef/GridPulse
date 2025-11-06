@@ -26,6 +26,7 @@ public class InvCommonHistory extends SunSpecModelEntityHistory {
      * Model length
      * JSON name: "L"
      */
+    @Builder.Default
     private int modelLength = 0;
 
     /**

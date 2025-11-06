@@ -3,6 +3,7 @@ package com.youssef.GridPulse.domain.inverter.inverter.entity;
 import com.youssef.GridPulse.common.base.BaseEntity;
 import com.youssef.GridPulse.domain.device.entity.Device;
 import com.youssef.GridPulse.domain.inverter.common.entity.InvCommon;
+import com.youssef.GridPulse.domain.inverter.settings.entity.InvSettings;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -31,5 +32,8 @@ public class Inverter extends BaseEntity {
 
     @OneToMany(mappedBy = "inverter", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<InvCommon> commonList;
+
+    @OneToMany(mappedBy = "inverter", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<InvSettings> settingsList;
 
 }

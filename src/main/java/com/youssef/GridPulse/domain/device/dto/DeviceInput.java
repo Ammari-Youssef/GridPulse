@@ -35,6 +35,9 @@ public record DeviceInput(
         @Size(min = 1, max = 255, message = "Device name must be between 1 and 255 characters.")
         String name,
 
+        @NotBlank(message = "Serial number is mandatory.")
+        String serialNumber,
+
         Float powerDispatched,
 
         @NotBlank(message = "Status is mandatory.")
