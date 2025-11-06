@@ -30,6 +30,7 @@ public class InvNameplate extends SunSpecModelEntity {
      * Model length
      * JSON name: "L"
      */
+    @Builder.Default
     private int modelLength = 0;
 
     /**

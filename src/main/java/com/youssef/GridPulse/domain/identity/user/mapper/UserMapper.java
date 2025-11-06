@@ -4,14 +4,14 @@ import com.youssef.GridPulse.domain.device.entity.Device;
 import com.youssef.GridPulse.domain.identity.auth.dto.RegisterInput;
 import com.youssef.GridPulse.domain.identity.user.entity.User;
 import com.youssef.GridPulse.domain.identity.user.entity.UserHistory;
+import com.youssef.GridPulse.configuration.mapping.BaseMappingConfig;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 import java.util.UUID;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(config = BaseMappingConfig.class)
 public interface UserMapper {
 
     // 1️⃣ Entity → History
@@ -35,6 +35,9 @@ public interface UserMapper {
     @Mapping(target = "enabled", constant = "true")
     @Mapping(target = "source", constant = "APP") // default source
     @Mapping(target = "role", constant = "USER") // default role
+    @Mapping(target = "securityKeys", ignore = true)
+    @Mapping(target = "usedDevices", ignore = true)
+    @Mapping(target = "operatedDevices", ignore = true)
     User toEntity(RegisterInput registerInput);
 
     // 3️⃣ Custom mapping for devices to device IDs
