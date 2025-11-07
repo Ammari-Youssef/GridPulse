@@ -1,4 +1,4 @@
-package com.youssef.GridPulse.common.exception;
+package com.youssef.GridPulse.configuration.graphql;
 
 import graphql.GraphQLError;
 import graphql.GraphqlErrorBuilder;
