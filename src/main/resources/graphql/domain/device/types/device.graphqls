@@ -1,5 +1,5 @@
 type Device implements Auditable {
-    id: ID!
+    id: UUID!
     name: String!
     serialNumber: String!
     soc: Float!
@@ -8,7 +8,7 @@ type Device implements Auditable {
     cycles: Int!
     gpsLat: Float
     gpsLong: Float
-    lastSeen: String!
+    lastSeen: DateTime!
     status: DeviceStatus!
     powerDispatched: Float!
     temperature: Float!
@@ -16,7 +16,7 @@ type Device implements Auditable {
     model: String!
     softwareVersion: String!
     manufacturer: String!
-    swUpdateTime: String
+    swUpdateTime: DateTime
     ip: String!
 
     # Relations
@@ -32,7 +32,7 @@ type Device implements Auditable {
 
     createdBy: String!
     updatedBy: String
-    createdAt: String!
-    updatedAt: String
+    createdAt: DateTime!
+    updatedAt: DateTime
     source: Source!
 }

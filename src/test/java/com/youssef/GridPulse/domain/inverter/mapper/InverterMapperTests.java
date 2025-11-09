@@ -9,7 +9,8 @@ import com.youssef.GridPulse.domain.inverter.inverter.entity.InverterHistory;
 import com.youssef.GridPulse.domain.inverter.inverter.mapper.InverterMapper;
 import com.youssef.GridPulse.domain.inverter.inverter.mapper.InverterMapperImpl;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.UUID;
 
 public class InverterMapperTests extends BaseMapperTest<Inverter, InverterHistory, InverterInput> {
@@ -40,8 +41,8 @@ public class InverterMapperTests extends BaseMapperTest<Inverter, InverterHistor
                 .version("v2.1")
                 .manufacturer("SolarEdge")
                 .source(Source.APP)
-                .createdAt(Instant.now())
-                .updatedAt(Instant.now())
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
+                .updatedAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .build();
     }
 

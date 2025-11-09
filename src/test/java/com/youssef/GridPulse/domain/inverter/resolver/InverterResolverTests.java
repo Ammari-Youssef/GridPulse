@@ -14,7 +14,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-import java.time.Instant;
+import java.time.ZoneId;
+import java.time.OffsetDateTime;
 import java.util.Map;
 import java.util.UUID;
 
@@ -46,7 +47,7 @@ class InverterResolverTests extends BaseResolverTest<InverterResolver, Inverter,
                 .manufacturer("Test Manufacturer")
                 .model("Test Model")
                 .version("Test Version")
-                .createdAt(Instant.now())
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .build();
     }
 
@@ -59,7 +60,7 @@ class InverterResolverTests extends BaseResolverTest<InverterResolver, Inverter,
                 .manufacturer("Test Manufacturer")
                 .model("Test Model")
                 .version("Test Version")
-                .createdAt(Instant.now())
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .build();
     }
 

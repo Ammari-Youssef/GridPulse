@@ -4,7 +4,7 @@ import com.youssef.GridPulse.domain.security.enums.KeySource;
 import com.youssef.GridPulse.domain.security.enums.SecurityType;
 import jakarta.validation.constraints.*;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 public record ImportSecurityKeyInput(
@@ -16,5 +16,5 @@ public record ImportSecurityKeyInput(
         @NotBlank String publicKey,
         @NotBlank String privateKey, // accepted only here
         @NotNull KeySource keySource,
-        Instant revokedTimestamp) {}
+        OffsetDateTime revokedTimestamp) {}
 

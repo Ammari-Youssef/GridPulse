@@ -21,6 +21,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -87,8 +89,8 @@ class UserResolverTest {
                 .password("encoded password")
                 .role(Role.USER)
                 .enabled(true)
-                .createdAt(Instant.now())
-                .updatedAt(Instant.now())
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
+                .updatedAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .source(Source.APP)
                 .build();
 
@@ -99,8 +101,8 @@ class UserResolverTest {
                 .email("jane.smith@example.com")
                 .role(Role.ADMIN)
                 .enabled(true)
-                .createdAt(Instant.now())
-                .updatedAt(Instant.now())
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
+                .updatedAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .source(Source.APP)
                 .build();
 
@@ -114,8 +116,8 @@ class UserResolverTest {
                 .createdBy("SYSTEM")
                 .role("ADMIN")
                 .enabled(true)
-                .createdAt(Instant.now())
-                .updatedAt(Instant.now())
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
+                .updatedAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .source(Source.APP)
                 .build();
 
@@ -128,8 +130,8 @@ class UserResolverTest {
                 .role("USER")
                 .createdBy(testUserId.toString())
                 .enabled(true)
-                .createdAt(Instant.now())
-                .updatedAt(Instant.now())
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
+                .updatedAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .source(Source.APP)
                 .build();
     }

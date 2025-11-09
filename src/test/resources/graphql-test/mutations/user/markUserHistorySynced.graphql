@@ -1,3 +1,3 @@
-mutation MarkUserHistorySynced($id: ID!) {
+mutation MarkUserHistorySynced($id: UUID!) {
     markUserHistorySynced(id: $id)
 }

@@ -1,4 +1,4 @@
-query GetInverterById($id: ID!) {
+query GetInverterById($id: UUID!) {
     getInverterById(id: $id) {
         id
         name

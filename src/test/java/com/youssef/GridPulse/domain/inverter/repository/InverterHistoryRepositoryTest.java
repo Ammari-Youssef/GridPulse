@@ -6,7 +6,8 @@ import com.youssef.GridPulse.domain.inverter.inverter.entity.InverterHistory;
 import com.youssef.GridPulse.domain.inverter.inverter.repository.InverterHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.UUID;
 
 class InverterHistoryRepositoryTest extends BaseHistoryRepositoryTest<InverterHistory, UUID> {
@@ -28,7 +29,7 @@ class InverterHistoryRepositoryTest extends BaseHistoryRepositoryTest<InverterHi
                 .model("Test Model")
                 .version("Test Version")
                 .synced(false)
-                .createdAt(Instant.now())
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .build();
     }
 

@@ -1,6 +1,6 @@
 extend type Mutation {
     createFleet(input: FleetInput!): Fleet!
-    updateFleet(id: ID!, input: FleetInput!): Fleet!
-    deleteFleet(id: ID!): Boolean!
-    markFleetHistorySynced(id: ID!): Boolean!
+    updateFleet(id: UUID!, input: FleetInput!): Fleet!
+    deleteFleet(id: UUID!): Boolean!
+    markFleetHistorySynced(id: UUID!): Boolean!
 }

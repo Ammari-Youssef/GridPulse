@@ -16,6 +16,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -84,7 +86,7 @@ class UserServiceTest {
         testUserId = UUID.randomUUID();
         testUser = User.builder()
                 .id(testUserId)
-                .createdAt(Instant.now())
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .firstname("John")
                 .lastname("Doe")
                 .email("john.doe@example.com")

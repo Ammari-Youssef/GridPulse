@@ -1,5 +1,5 @@
 type Fleet implements Auditable {
-    id: ID!
+    id: UUID!
     name: String!
     location: String
     owner: String
@@ -8,7 +8,7 @@ type Fleet implements Auditable {
     # Auditable fields
     createdBy: String!
     updatedBy: String
-    createdAt: String!
-    updatedAt: String
+    createdAt: DateTime!
+    updatedAt: DateTime
     source: Source!
 }

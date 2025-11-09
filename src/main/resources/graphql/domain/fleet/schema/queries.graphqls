@@ -1,7 +1,7 @@
 extend type Query {
     getAllFleets: [Fleet!]!
-    getFleetById(id: ID!): Fleet!
+    getFleetById(id: UUID!): Fleet!
     getAllFleetHistory: [FleetHistory!]!
-    getFleetHistoryById(historyId: ID!): FleetHistory!
-    getFleetHistory(originalId: ID!): [FleetHistory!]!
+    getFleetHistoryById(historyId: UUID!): FleetHistory!
+    getFleetHistory(originalId: UUID!): [FleetHistory!]!
 }

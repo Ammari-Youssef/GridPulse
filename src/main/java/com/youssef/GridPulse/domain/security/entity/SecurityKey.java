@@ -11,7 +11,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 /**
  * Represents a cryptographic key pair used for secure communication,
@@ -64,5 +64,5 @@ public class SecurityKey extends BaseEntity {
     @Column(nullable = false, length = 50)
     private KeyStatus status = KeyStatus.ACTIVE;
 
-    private Instant revokedTimestamp;
+    private OffsetDateTime revokedTimestamp;
 }

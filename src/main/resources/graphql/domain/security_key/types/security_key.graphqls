@@ -3,7 +3,7 @@ Represents a stored security key associated with a device and an owner.
 Implements Auditable to include creation/update metadata.
 """
 type SecurityKey implements Auditable {
-    id: ID!
+    id: UUID!
     name: String!
     device: Device!
     owner: User!
@@ -19,12 +19,12 @@ type SecurityKey implements Auditable {
 
     keySource: KeySource!
     status: KeyStatus!
-    revokedTimestamp: String
+    revokedTimestamp: DateTime
 
     # Auditable fields
     createdBy: String!
     updatedBy: String
-    createdAt: String!
-    updatedAt: String
+    createdAt: DateTime!
+    updatedAt: DateTime
     source: Source!
 }

@@ -20,6 +20,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.Map;
 import java.util.UUID;
 
@@ -369,7 +371,7 @@ class AuthenticationResolverTest {
                     .lastname("Doe")
                     .role(Role.USER)
                     .enabled(true)
-                    .createdAt(Instant.now())
+                    .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                     .build();
 
             when(service.getCurrentUser()).thenReturn(user);

@@ -1,5 +1,5 @@
 type User implements Auditable {
-    id: ID!
+    id: UUID!
     email: String!
     firstname: String!
     lastname: String!
@@ -9,7 +9,7 @@ type User implements Auditable {
 
     createdBy: String!
     updatedBy: String
-    createdAt: String!
-    updatedAt: String
+    createdAt: DateTime!
+    updatedAt: DateTime
     source: Source!
 }

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -25,7 +25,7 @@ public class DeviceHistory extends BaseHistoryEntity {
     private Integer cycles;
     private Double gpsLat;
     private Double gpsLong;
-    private Instant lastSeen;
+    private OffsetDateTime lastSeen;
     private String name;
     private Float powerDispatched;
     private String status;
@@ -34,7 +34,7 @@ public class DeviceHistory extends BaseHistoryEntity {
     private String model;
     private String manufacturer;
     private String softwareVersion;
-    private Instant swUpdateTime;
+    private OffsetDateTime swUpdateTime;
     private String ip;
     private String serialNumber;
 
