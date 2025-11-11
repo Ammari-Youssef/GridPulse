@@ -1,4 +1,4 @@
-query GetInverterHistory($originalId: ID!) {
+query GetInverterHistory($originalId: UUID!) {
     getInverterHistory(originalId: $originalId) {
         id
         originalId

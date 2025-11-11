@@ -1,5 +1,5 @@
 type InvCommon implements SunSpecModelAuditable & Auditable {
-    id: ID!
+    id: UUID!
 
     # SunSpec fields
     modelId: Int!         # Constant value (e.g., 1)
@@ -20,7 +20,7 @@ type InvCommon implements SunSpecModelAuditable & Auditable {
     # Auditing fields
     createdBy: String!
     updatedBy: String
-    createdAt: String!
-    updatedAt: String
+    createdAt: DateTime!
+    updatedAt: DateTime
     source: Source!
 }

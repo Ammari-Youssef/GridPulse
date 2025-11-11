@@ -1,7 +1,7 @@
 extend type Query {
     getAllBms: [Bms!]!
-    getBmsById(id: ID!): Bms!
+    getBmsById(id: UUID!): Bms!
     getAllBmsHistory: [BmsHistory!]!
-    getBmsHistoryById(historyId: ID!): BmsHistory!
-    getBmsHistory(originalId: ID!): [BmsHistory!]!
+    getBmsHistoryById(historyId: UUID!): BmsHistory!
+    getBmsHistory(originalId: UUID!): [BmsHistory!]!
 }

@@ -1,10 +1,10 @@
 extend type Query {
     getAllInvCommons: [InvCommon!]!
-    getInvCommonsByInverterId(inverterId: ID!): [InvCommon!]!
-    getInvCommonById(id: ID!): InvCommon
+    getInvCommonsByInverterId(inverterId: UUID!): [InvCommon!]!
+    getInvCommonById(id: UUID!): InvCommon
 
     getAllInvCommonHistory: [InvCommonHistory!]!
-    getInvCommonHistoryById(historyId: ID!): InvCommonHistory!
-    getInvCommonHistory(originalId: ID!): [InvCommonHistory!]!
-    getInvCommonHistoryByInverterId(inverterId: ID!): [InvCommonHistory!]!
+    getInvCommonHistoryById(historyId: UUID!): InvCommonHistory!
+    getInvCommonHistory(originalId: UUID!): [InvCommonHistory!]!
+    getInvCommonHistoryByInverterId(inverterId: UUID!): [InvCommonHistory!]!
 }

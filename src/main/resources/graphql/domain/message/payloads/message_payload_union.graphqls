@@ -1,0 +1,2 @@
+# Base union for all message payloads
+union MessagePayload = IdsPayload | HeartbeatPayload | SystemPayload | SoftwarePayload | BmsPayload | MeterPayload | InverterPayload

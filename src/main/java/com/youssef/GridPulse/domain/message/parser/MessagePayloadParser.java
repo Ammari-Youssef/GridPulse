@@ -1,10 +1,12 @@
 package com.youssef.GridPulse.domain.message.parser;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.youssef.GridPulse.domain.message.enums.MessageType;
 import com.youssef.GridPulse.domain.message.payload.*;
+import lombok.Getter;
 
 import java.util.Base64;
 
@@ -26,23 +28,28 @@ import java.util.Base64;
  */
 public class MessagePayloadParser {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule())
+    @Getter
+    private static final ObjectMapper objectMapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-    public static Object parse(MessageType type, String base64MessageText) {
-        String json = decodeBase64(base64MessageText);
-
+    public static Object parse(MessageType type, JsonNode jsonNode) {
         try {
-            return switch (type) {
-                case INVERTER -> objectMapper.readValue(json, InverterPayload.class);
-                case BMS -> objectMapper.readValue(json, BmsPayload.class);
-                case METER -> objectMapper.readValue(json, MeterPayload.class);
-                case HEARTBEAT -> objectMapper.readValue(json, HeartbeatPayload.class);
-                case SYSTEM -> objectMapper.readValue(json, SystemPayload.class);
-                case SOFTWARE -> objectMapper.readValue(json, SoftwarePayload.class);
-                case IDS -> objectMapper.readValue(json, IdsPayload.class);
-                default -> throw new IllegalArgumentException("Unsupported message type: " + type);
+            // Si la valeur reçue est un TextNode contenant du JSON brut, la parser d'abord.
+            JsonNode nodeToUse = jsonNode;
+            if (nodeToUse != null && nodeToUse.isTextual()) {
+                nodeToUse = objectMapper.readTree(nodeToUse.asText());
+            }
 
+            return switch (type) {
+                case IDS -> objectMapper.treeToValue(nodeToUse, IdsPayload.class);
+                case HEARTBEAT -> objectMapper.treeToValue(nodeToUse, HeartbeatPayload.class);
+                case BMS -> objectMapper.treeToValue(nodeToUse, BmsPayload.class);
+                case METER -> objectMapper.treeToValue(nodeToUse, MeterPayload.class);
+                case SYSTEM -> objectMapper.treeToValue(nodeToUse, SystemPayload.class);
+                case SOFTWARE -> objectMapper.treeToValue(nodeToUse, SoftwarePayload.class);
+                case INVERTER -> objectMapper.treeToValue(nodeToUse, InverterPayload.class);
+                default -> throw new IllegalArgumentException("Unsupported message type: " + type);
             };
         } catch (Exception e) {
             throw new RuntimeException("Failed to parse message payload: " + e.getMessage(), e);

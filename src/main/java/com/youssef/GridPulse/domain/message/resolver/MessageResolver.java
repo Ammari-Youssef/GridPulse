@@ -2,7 +2,7 @@ package com.youssef.GridPulse.domain.message.resolver;
 
 import com.youssef.GridPulse.common.base.BaseResolver;
 
-import com.youssef.GridPulse.domain.message.dto.MessageInput;
+import com.youssef.GridPulse.domain.message.dto.*;
 import com.youssef.GridPulse.domain.message.entity.Message;
 import com.youssef.GridPulse.domain.message.entity.MessageHistory;
 import com.youssef.GridPulse.domain.message.service.MessageService;
@@ -31,10 +31,10 @@ public class MessageResolver extends BaseResolver<Message, MessageHistory, UUID,
         return service.getMessagesByDevice(deviceId);
     }
 
-    @MutationMapping
-    public Message ingestMessage(@Argument UUID deviceId, @Argument(name = "payload") String rawPayload) {
-        return service.ingestRawMessage(deviceId, rawPayload);
-    }
+//    @MutationMapping
+//    public Message ingestMessage(@Argument UUID deviceId, @Argument(name = "payload") String rawPayload) {
+//        return service.ingestRawMessage(deviceId, rawPayload);
+//    }
 
     @QueryMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -55,7 +55,7 @@ public class MessageResolver extends BaseResolver<Message, MessageHistory, UUID,
 
     @MutationMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public Message updateMessage(@Argument UUID id, @Argument MessageInput input) {
+    public Message updateMessage(@Argument UUID id, @Argument UpdateMessageInput input) {
         return service.update(id, input);
     }
 
@@ -89,15 +89,5 @@ public class MessageResolver extends BaseResolver<Message, MessageHistory, UUID,
     public Boolean markMessageHistorySynced(@Argument UUID id) {
         return super.markHistorySynced(id);
     }
-
-
-//    @MutationMapping
-//    public Message ingestRawMessage(@Argument UUID deviceId, @Argument String rawPayload) {
-//        var device = service.getDeviceRepository.findById(deviceId)
-//                .orElseThrow(() -> new EntityNotFoundException("Device not found"));
-//        Message message = Message.fromDevicePayload(deviceId, rawPayload); // Add an overloaded version of method with deviceId
-//        return messageRepository.save(message);
-//    }
-
 
 }

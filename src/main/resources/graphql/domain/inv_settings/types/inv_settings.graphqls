@@ -1,5 +1,5 @@
 type InvSettings implements SunSpecModelAuditable & Auditable {
-    id: ID!
+    id: UUID!
     inverter: Inverter!
     modelId: Int!
     modelLength: Int!
@@ -29,8 +29,8 @@ type InvSettings implements SunSpecModelAuditable & Auditable {
     ecpNomHz: Int
     connPh: ConnPhase
 
-    createdAt: String!
-    updatedAt: String
+    createdAt: DateTime!
+    updatedAt: DateTime
     createdBy: String!
     updatedBy: String
     source: Source!

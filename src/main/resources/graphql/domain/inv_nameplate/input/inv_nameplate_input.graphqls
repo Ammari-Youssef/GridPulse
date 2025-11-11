@@ -1,5 +1,5 @@
 input InvNameplateInput {
-    inverterId: ID!
+    inverterId: UUID!
     modelLength: Int!
 
     derType: Int

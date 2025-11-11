@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="convert-message-text-to-jsonb" author="youssef">
+        <preConditions onFail="HALT">
+            <tableExists tableName="messages"/>
+            <columnExists tableName="messages" columnName="message_text"/>
+            <tableExists tableName="message_history"/>
+            <columnExists tableName="message_history" columnName="message_text"/>
+        </preConditions>
+
+        <modifyDataType
+                tableName="messages"
+                columnName="message_text"
+                newDataType="jsonb"/>
+
+        <modifyDataType
+                tableName="message_history"
+                columnName="message_text"
+                newDataType="jsonb"/>
+
+        <rollback>
+            <modifyDataType
+                    tableName="messages"
+                    columnName="message_text"
+                    newDataType="text"/>
+
+            <modifyDataType
+                    tableName="message_history"
+                    columnName="message_text"
+                    newDataType="text"/>
+        </rollback>
+    </changeSet>
+
+
+</databaseChangeLog>

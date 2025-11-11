@@ -1,6 +1,6 @@
 type MeterHistory implements Auditable & AuditableHistory {
-    id: ID!
-    originalId: ID!
+    id: UUID!
+    originalId: UUID!
     name : String
     model: String
     manufacturer: String
@@ -9,8 +9,8 @@ type MeterHistory implements Auditable & AuditableHistory {
     # Auditable fields
     createdBy: String!
     updatedBy: String
-    createdAt: String!
-    updatedAt: String
+    createdAt: DateTime!
+    updatedAt: DateTime
     source: Source!
 
     # History flags

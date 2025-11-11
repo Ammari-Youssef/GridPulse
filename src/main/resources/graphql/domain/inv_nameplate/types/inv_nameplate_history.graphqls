@@ -1,7 +1,7 @@
 type InvNameplateHistory implements Auditable & AuditableHistory & SunSpecModelAuditableHistory {
-    id: ID!
-    originalId: ID!
-    inverterId: ID!
+    id: UUID!
+    originalId: UUID!
+    inverterId: UUID!
     modelId: Int!
     modelLength: Int!
 
@@ -45,8 +45,8 @@ type InvNameplateHistory implements Auditable & AuditableHistory & SunSpecModelA
     # Auditing fields
     createdBy: String!
     updatedBy: String
-    createdAt: String!
-    updatedAt: String
+    createdAt: DateTime!
+    updatedAt: DateTime
     source: Source!
 
     # History flags

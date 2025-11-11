@@ -1,8 +1,8 @@
 input SecurityKeyInput{
 
     # Relations
-    deviceId: ID!
-    ownerId: ID!
+    deviceId: UUID!
+    ownerId: UUID!
 
     # Core fields
     name: String!

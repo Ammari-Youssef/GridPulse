@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 public record SecurityKeyInput(
         @NotBlank @Size(max = 255) String name,
@@ -18,5 +18,5 @@ public record SecurityKeyInput(
         @NotBlank String publicKey,
         @NotNull KeySource keySource,
         @NotNull KeyStatus status,
-        Instant revokedTimestamp
+        OffsetDateTime revokedTimestamp
 ) {}

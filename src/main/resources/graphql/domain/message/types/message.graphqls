@@ -1,21 +1,21 @@
 type Message implements Auditable {
-    id: ID!
+    id: UUID!
     device: Device!
     cloudMessageId: String
-    messageText: String!
+    messageText: MessagePayload!
     messageType: MessageType!
     status: MessageStatus!
     severity: Severity!
     format: MessageFormat!
     priority: MessagePriority!
     explanation: String
-    sentAt: String!
-    receivedAt: String!
+    sentAt: DateTime!
+    receivedAt: DateTime!
 
     # Auditable fields
     createdBy: String!
     updatedBy: String
-    createdAt: String!
-    updatedAt: String
+    createdAt: DateTime!
+    updatedAt: DateTime
     source: Source!
 }

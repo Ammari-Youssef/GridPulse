@@ -1,0 +1,8 @@
+type InverterPayload {
+    out_pwr: Float!
+    voltage: Float!
+    current: Float!
+    frequency: Float!
+    efficiency: Float!
+    temperature: Float!
+}

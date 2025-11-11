@@ -1,5 +1,5 @@
 type Inverter implements Auditable {
-    id: ID!
+    id: UUID!
     name: String!
     model: String!
     version: String!
@@ -7,7 +7,7 @@ type Inverter implements Auditable {
 
     createdBy: String!
     updatedBy: String
-    createdAt: String!
-    updatedAt: String
+    createdAt: DateTime!
+    updatedAt: DateTime
     source: Source!
 }

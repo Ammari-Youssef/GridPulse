@@ -1,10 +1,10 @@
 extend type Query {
     getAllInvSettings: [InvSettings!]!
-    getInvSettingsByInverterId(inverterId: ID!): [InvSettings!]!
-    getInvSettingsById(id: ID!): InvSettings
+    getInvSettingsByInverterId(inverterId: UUID!): [InvSettings!]!
+    getInvSettingsById(id: UUID!): InvSettings
 
     getAllInvSettingsHistory: [InvSettingsHistory!]!
-    getInvSettingsHistoryById(historyId: ID!): InvSettingsHistory!
-    getInvSettingsHistory(originalId: ID!): [InvSettingsHistory!]!
-    getInvSettingsHistoryByInverterId(inverterId: ID!): [InvSettingsHistory!]!
+    getInvSettingsHistoryById(historyId: UUID!): InvSettingsHistory!
+    getInvSettingsHistory(originalId: UUID!): [InvSettingsHistory!]!
+    getInvSettingsHistoryByInverterId(inverterId: UUID!): [InvSettingsHistory!]!
 }

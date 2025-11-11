@@ -1,6 +1,6 @@
 extend type Mutation {
     createBms(input: BmsInput!): Bms
-    updateBms(id: ID!, input: BmsInput!): Bms
-    deleteBms(id: ID!): Boolean
-    markBmsHistorySynced(id: ID!): Boolean!
+    updateBms(id: UUID!, input: BmsInput!): Bms
+    deleteBms(id: UUID!): Boolean
+    markBmsHistorySynced(id: UUID!): Boolean!
 }

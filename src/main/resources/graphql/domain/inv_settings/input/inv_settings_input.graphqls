@@ -1,5 +1,5 @@
 input InvSettingsInput {
-    inverterId: ID!
+    inverterId: UUID!
     modelLength: Int!
 
     wMax: Int

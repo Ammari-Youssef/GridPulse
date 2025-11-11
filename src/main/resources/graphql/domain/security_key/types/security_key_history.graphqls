@@ -1,10 +1,10 @@
 type SecurityKeyHistory implements Auditable & AuditableHistory {
-    id: ID!
-    originalId: ID!
+    id: UUID!
+    originalId: UUID!
 
     name: String!
-    deviceId: ID!
-    ownerId: ID!
+    deviceId: UUID!
+    ownerId: UUID!
     securityType: SecurityType!
     serialNumber: String
 
@@ -17,13 +17,13 @@ type SecurityKeyHistory implements Auditable & AuditableHistory {
 
     keySource: KeySource!
     status: KeyStatus!
-    revokedTimestamp: String
+    revokedTimestamp: DateTime
 
     # Auditable fields
     createdBy: String!
     updatedBy: String
-    createdAt: String!
-    updatedAt: String
+    createdAt: DateTime!
+    updatedAt: DateTime
     source: Source!
 
     # History flags

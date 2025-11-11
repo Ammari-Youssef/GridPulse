@@ -1,4 +1,4 @@
-mutation UpdateUser($id: ID!, $input: UpdateUserInput) {
+mutation UpdateUser($id: UUID!, $input: UpdateUserInput) {
     updateUser(id: $id, input: $input) {
         __typename
         id

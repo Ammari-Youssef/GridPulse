@@ -1,7 +1,7 @@
 extend type Query {
     getAllMeters: [Meter!]!
-    getMeterById(id: ID!): Meter!
+    getMeterById(id: UUID!): Meter!
     getAllMeterHistory: [MeterHistory!]!
-    getMeterHistoryById(historyId: ID!): MeterHistory!
-    getMeterHistory(originalId: ID!): [MeterHistory!]!
+    getMeterHistoryById(historyId: UUID!): MeterHistory!
+    getMeterHistory(originalId: UUID!): [MeterHistory!]!
 }

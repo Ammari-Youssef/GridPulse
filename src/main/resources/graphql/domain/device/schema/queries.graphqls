@@ -1,9 +1,9 @@
 extend type Query {
     getAllDevices: [Device!]!
-    getDeviceById(id: ID!): Device!
+    getDeviceById(id: UUID!): Device!
     getAllDeviceHistory: [DeviceHistory!]!
-    getDeviceHistoryById(historyId: ID!): DeviceHistory!
-    getDeviceHistory(originalId: ID!): [DeviceHistory!]!
-    getHealthStatus(deviceId: ID!): BatteryHealthStatus!
-    getDevicesByFleetId(fleetId: ID!): [Device!]!
+    getDeviceHistoryById(historyId: UUID!): DeviceHistory!
+    getDeviceHistory(originalId: UUID!): [DeviceHistory!]!
+    getHealthStatus(deviceId: UUID!): BatteryHealthStatus!
+    getDevicesByFleetId(fleetId: UUID!): [Device!]!
 }

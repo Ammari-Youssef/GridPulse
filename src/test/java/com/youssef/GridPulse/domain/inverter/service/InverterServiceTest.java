@@ -11,7 +11,8 @@ import com.youssef.GridPulse.domain.inverter.inverter.repository.InverterReposit
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mock;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.UUID;
 
 class InverterServiceTest extends BaseServiceTest<Inverter, InverterHistory, UUID, InverterInput, InverterService> {
@@ -62,7 +63,7 @@ class InverterServiceTest extends BaseServiceTest<Inverter, InverterHistory, UUI
                 .model("Test Model")
                 .version("Test Version")
                 .synced(false)
-                .createdAt(Instant.now())
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .build();
     }
 

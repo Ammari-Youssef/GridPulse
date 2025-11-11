@@ -1,5 +1,5 @@
 type InvNameplate implements SunSpecModelAuditable & Auditable {
-    id: ID!
+    id: UUID!
     inverter: Inverter!
     modelId: Int!
     modelLength: Int!
@@ -43,7 +43,7 @@ type InvNameplate implements SunSpecModelAuditable & Auditable {
 
     createdBy: String!
     updatedBy: String
-    createdAt: String!
-    updatedAt: String
+    createdAt: DateTime!
+    updatedAt: DateTime
     source: Source!
 }

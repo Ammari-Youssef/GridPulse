@@ -8,8 +8,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.Duration;
-import java.time.Instant;
+import java.time.*;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -62,13 +61,13 @@ class InverterMapperTest {
             System.out.println("🔹 Running should_map_toHistory");
 
             // Given
-            var inverter = Inverter.builder()
+            Inverter inverter = Inverter.builder()
                     .id(UUID.randomUUID())
                     .name("Main Inverter")
                     .model("ModelX")
                     .manufacturer("InverterCo")
-                    .createdAt(Instant.now())
-                    .updatedAt(Instant.now())
+                    .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
+                    .updatedAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                     .build();
 
             // When

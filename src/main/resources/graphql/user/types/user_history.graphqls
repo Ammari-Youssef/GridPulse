@@ -1,6 +1,6 @@
 type UserHistory implements Auditable & AuditableHistory {
-    id: ID!
-    originalId: ID!
+    id: UUID!
+    originalId: UUID!
     firstname: String
     lastname: String
     email: String
@@ -9,8 +9,8 @@ type UserHistory implements Auditable & AuditableHistory {
 
     createdBy: String!
     updatedBy: String
-    createdAt: String!
-    updatedAt: String
+    createdAt: DateTime!
+    updatedAt: DateTime
     source: Source!
 
     createdRecord: Boolean!

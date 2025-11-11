@@ -20,6 +20,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -81,7 +83,7 @@ class InverterResolverTest {
                 .manufacturer("Test Manufacturer")
                 .model("Test Model")
                 .version("Test Version")
-                .createdAt(Instant.now())
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .build();
 
 
@@ -91,7 +93,7 @@ class InverterResolverTest {
                 .manufacturer("Test Manufacturer")
                 .model("Test Model")
                 .version("Test Version")
-                .createdAt(Instant.now())
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .build();
 
         testHistory = InverterHistory.builder()
@@ -101,7 +103,7 @@ class InverterResolverTest {
                 .manufacturer("Test Manufacturer")
                 .model("Test Model")
                 .version("Test Version")
-                .createdAt(Instant.now())
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .build();
 
         testHistory2 = InverterHistory.builder()
@@ -111,7 +113,7 @@ class InverterResolverTest {
                 .manufacturer("Test Manufacturer")
                 .model("Test Model")
                 .version("Test Version")
-                .createdAt(Instant.now())
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .build();
 
         InverterInput testInput = new InverterInput("Test Inverter", "TX5000", "v2.1", "SolarEdge");
@@ -665,7 +667,7 @@ class InverterResolverTest {
                     .model("TX5000")
                     .version("v2.1")
                     .manufacturer("SolarEdge")
-                    .createdAt(Instant.now())
+                    .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                     .build();
 
             when(service.update(eq(anyEntityId), any(InverterInput.class))).thenReturn(updatedEntity);
