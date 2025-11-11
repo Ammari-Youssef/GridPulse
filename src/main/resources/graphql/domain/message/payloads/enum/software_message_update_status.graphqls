@@ -1,0 +1,4 @@
+enum SoftwareMessageUpdateStatus {
+    SUCCESS
+    FAILURE
+}
