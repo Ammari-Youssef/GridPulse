@@ -1,6 +1,7 @@
 package com.youssef.GridPulse.configuration.graphql;
 
 import graphql.scalars.ExtendedScalars;
+import graphql.schema.idl.TypeRuntimeWiring;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.graphql.execution.RuntimeWiringConfigurer;
@@ -18,7 +19,15 @@ public class GraphQLConfig {
                 .scalar(ExtendedScalars.Date)
                 .scalar(ExtendedScalars.DateTime)
                 .scalar(ExtendedScalars.LocalTime)
-                .scalar(ExtendedScalars.Url);
+                .scalar(ExtendedScalars.Url)
+                // Add a union type MessagePayload
+                .type(messagePayloadWiring());
+
+    }
+
+    private TypeRuntimeWiring.Builder messagePayloadWiring() {
+        return TypeRuntimeWiring.newTypeWiring("MessagePayload")
+                .typeResolver(new MessagePayloadResolver());
     }
 
 }
