@@ -37,5 +37,6 @@
     <include file="db/changelog/inverter/common/v1.0__create-inv-common-tables-26-01-changelog.xml"/>
     <include file="db/changelog/inverter/nameplate/v1.0__create-inv-nameplate-tables-04-11-changelog.xml"/>
     <include file="/db/changelog/inverter/settings/v1.0__create-inv-settings-tables-04-11-changelog.xml"/>
+    <include file="db/changelog/message/v1.0__change-messageText-type-to-json-07-11-changelog.xml"/>
     <include file="db/changelog/system/v1.1__normalize-timestamps-with-timezone__2025-11-08-changelog.xml"/>
 </databaseChangeLog>
