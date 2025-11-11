@@ -1,0 +1,6 @@
+enum Severity{
+    CRITICAL
+    MEDIUM
+    LOW
+    INFO
+}

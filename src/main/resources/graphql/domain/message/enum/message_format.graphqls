@@ -1,0 +1,4 @@
+enum MessageFormat{
+    TEXT   # MQTT
+    HEX    # Satellite
+}
