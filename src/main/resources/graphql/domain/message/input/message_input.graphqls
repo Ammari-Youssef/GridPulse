@@ -1,12 +1,12 @@
 input MessageInput {
-    deviceId: ID!
+    deviceId: UUID!
     cloudMessageId: String
-    messageText: String!
+    messageText: JSON!
     messageType: MessageType!
     format: MessageFormat!
     status: MessageStatus!
     priority: MessagePriority!
-    sentAt: String!
-    receivedAt: String!
+    sentAt: DateTime!
+    receivedAt: DateTime!
 }
 
