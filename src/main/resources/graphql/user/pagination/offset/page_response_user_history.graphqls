@@ -1,0 +1,8 @@
+type PageResponse_UserHistory {
+    content: [UserHistory!]!
+    pageNumber: Int!
+    pageSize: Int!
+    totalElements: Long!
+    totalPages: Int!
+    last: Boolean!
+}
