@@ -1,6 +1,8 @@
 package com.youssef.GridPulse.domain.security.resolver;
 
 import com.youssef.GridPulse.common.base.BaseResolver;
+import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageRequestInput;
+import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageResponse;
 import com.youssef.GridPulse.domain.security.dto.ImportSecurityKeyInput;
 import com.youssef.GridPulse.domain.security.entity.SecurityKey;
 import com.youssef.GridPulse.domain.security.entity.SecurityKeyHistory;
@@ -25,6 +27,24 @@ public class SecurityKeyResolver extends BaseResolver<SecurityKey, SecurityKeyHi
         super(service);
         this.service = service;
     }
+
+    // Pagination Offset
+    @QueryMapping
+    public PageResponse<SecurityKey> getAllSecurityKeyPaged(@Argument PageRequestInput pageRequest) {
+        return super.getAllPaged(pageRequest);
+    }
+
+    @QueryMapping
+    public PageResponse<SecurityKeyHistory> getAllSecurityKeyHistoryPaged(@Argument PageRequestInput pageRequest) {
+        return super.getAllHistoryPaged(pageRequest);
+    }
+
+    @QueryMapping
+    public PageResponse<SecurityKeyHistory> getSecurityKeyHistoryByOriginalIdPaged(@Argument UUID originalId, @Argument PageRequestInput pageRequest) {
+        return super.getHistoryByOriginalIdPaged(originalId, pageRequest);
+    }
+
+    // Common CRUD
 
     @QueryMapping
     @PreAuthorize("hasRole('ADMIN')")

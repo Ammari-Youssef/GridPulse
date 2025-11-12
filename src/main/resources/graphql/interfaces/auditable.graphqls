@@ -1,15 +1,15 @@
 interface Auditable {
-    id: ID!
+    id: UUID!
     # Auditing fields
     createdBy: String!
     updatedBy: String
-    createdAt: String!
-    updatedAt: String
+    createdAt: DateTime!
+    updatedAt: DateTime
     source: Source!
 }
 
 interface AuditableHistory {
-    originalId: ID!
+    originalId: UUID!
     # History flags
     createdRecord: Boolean!
     updatedRecord: Boolean!

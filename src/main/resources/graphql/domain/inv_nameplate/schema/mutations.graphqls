@@ -1,0 +1,6 @@
+extend type Mutation {
+    createInvNameplate(input: InvNameplateInput!): InvNameplate
+    updateInvNameplate(id: UUID!, input: InvNameplateInput!): InvNameplate
+    deleteInvNameplate(id: UUID!): Boolean
+    markInvNameplateHistorySynced(id: UUID!): Boolean!
+}

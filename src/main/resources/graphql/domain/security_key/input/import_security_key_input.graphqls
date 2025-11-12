@@ -8,7 +8,7 @@ input ImportSecurityKeyInput {
     revokedTimestamp: String
 
     # Relations
-    deviceId: ID!
-    ownerId: ID!
+    deviceId: UUID!
+    ownerId: UUID!
 
 }

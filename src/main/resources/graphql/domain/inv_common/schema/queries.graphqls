@@ -1,10 +1,19 @@
 extend type Query {
+    # Non-paginated queries
     getAllInvCommons: [InvCommon!]!
-    getInvCommonsByInverterId(inverterId: ID!): [InvCommon!]!
-    getInvCommonById(id: ID!): InvCommon
+    getInvCommonsByInverterId(inverterId: UUID!): [InvCommon!]!
+    getInvCommonById(id: UUID!): InvCommon
 
     getAllInvCommonHistory: [InvCommonHistory!]!
-    getInvCommonHistoryById(historyId: ID!): InvCommonHistory!
-    getInvCommonHistory(originalId: ID!): [InvCommonHistory!]!
-    getInvCommonHistoryByInverterId(inverterId: ID!): [InvCommonHistory!]!
+    getInvCommonHistoryById(historyId: UUID!): InvCommonHistory!
+    getInvCommonHistory(originalId: UUID!): [InvCommonHistory!]!
+    getInvCommonHistoryByInverterId(inverterId: UUID!): [InvCommonHistory!]!
+
+    # Offset Pagination
+    getAllInvCommonPaged(pageRequest: PageRequestInput!): PageResponse_InvCommon!
+    getInvCommonByInverterIdPaged(inverterId: UUID!, pageRequest: PageRequestInput!): PageResponse_InvCommon!
+    getAllInvCommonHistoryPaged(pageRequest: PageRequestInput!): PageResponse_InvCommonHistory!
+
+    getInvCommonHistoryByOriginalIdPaged(originalId: UUID!, pageRequest: PageRequestInput!): PageResponse_InvCommonHistory!
+    getInvCommonHistoryByInverterIdPaged(inverterId: UUID!, pageRequest: PageRequestInput!): PageResponse_InvCommonHistory!
 }

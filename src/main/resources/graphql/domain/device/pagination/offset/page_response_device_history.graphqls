@@ -1,0 +1,8 @@
+﻿type PageResponse_DeviceHistory {
+    content: [DeviceHistory!]!
+    pageNumber: Int!
+    pageSize: Int!
+    totalElements: Long!
+    totalPages: Int!
+    last: Boolean!
+}

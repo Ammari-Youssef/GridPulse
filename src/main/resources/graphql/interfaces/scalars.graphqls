@@ -1,0 +1,8 @@
+scalar UUID
+scalar JSON
+scalar Long
+scalar BigDecimal
+scalar Date
+scalar DateTime
+scalar LocalTime
+scalar Url

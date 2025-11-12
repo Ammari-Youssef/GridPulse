@@ -1,6 +1,8 @@
 package com.youssef.GridPulse.domain.inverter.base;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.youssef.GridPulse.common.base.BaseRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.List;
@@ -8,7 +10,10 @@ import java.util.UUID;
 
 @NoRepositoryBean
 public interface SunSpecModelRepository <S extends SunSpecModelEntity, ID extends UUID>
-        extends JpaRepository<S, ID> {
+        extends BaseRepository<S, ID> {
 
     List<S> findByInverter_Id(ID inverterId);
+
+    // Pagination method
+    Page<S> findByInverter_Id(UUID inverterId, Pageable pageable);
 }

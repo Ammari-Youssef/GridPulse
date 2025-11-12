@@ -1,0 +1,19 @@
+﻿extend type Query {
+    # Non-paginated queries
+    getAllInvSettings: [InvSettings!]!
+    getAllInvSettingsHistory: [InvSettingsHistory!]!
+    getInvSettingsById(id: UUID!): InvSettings!
+
+    getInvSettingsHistoryById(historyId: UUID!): InvSettingsHistory!
+    getInvSettingsHistory(originalId: UUID!): [InvSettingsHistory!]!
+    getInvSettingsByInverterId(inverterId: UUID!): [InvSettings!]!
+    getInvSettingsHistoryByInverterId(inverterId: UUID!): [InvSettingsHistory!]!
+
+    # Offset Pagination
+    getAllInvSettingsPaged(pageRequest: PageRequestInput!): PageResponse_InvSettings!
+    getInvSettingsByInverterIdPaged(inverterId: UUID!, pageRequest: PageRequestInput!): PageResponse_InvSettings!
+
+    getAllInvSettingsHistoryPaged(pageRequest: PageRequestInput!): PageResponse_InvSettingsHistory!
+    getInvSettingsHistoryByOriginalIdPaged(originalId: UUID!, pageRequest: PageRequestInput!): PageResponse_InvSettingsHistory!
+    getInvSettingsHistoryByInverterIdPaged(inverterId: UUID!, pageRequest: PageRequestInput!): PageResponse_InvSettingsHistory!
+}

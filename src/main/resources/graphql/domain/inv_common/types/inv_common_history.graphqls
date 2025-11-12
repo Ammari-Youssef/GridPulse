@@ -1,7 +1,7 @@
 type InvCommonHistory implements Auditable & AuditableHistory & SunSpecModelAuditableHistory {
-    id: ID!
-    originalId: ID!
-    inverterId: ID! # Track inverter id
+    id: UUID!
+    originalId: UUID!
+    inverterId: UUID! # Track inverter id
 
     # SunSpec fields
     modelId: Int!         # Constant value (e.g., 1)
@@ -19,8 +19,8 @@ type InvCommonHistory implements Auditable & AuditableHistory & SunSpecModelAudi
     # Auditing fields
     createdBy: String!
     updatedBy: String
-    createdAt: String!
-    updatedAt: String
+    createdAt: DateTime!
+    updatedAt: DateTime
     source: Source!
 
     #  History Flags

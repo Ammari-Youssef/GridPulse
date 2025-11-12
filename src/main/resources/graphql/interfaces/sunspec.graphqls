@@ -13,5 +13,5 @@ interface SunSpecModelAuditableHistory {
     modelLength: Int!  # L in SunSpec documentation
 
     # Relationship
-    inverterId: ID!
+    inverterId: UUID!
 }

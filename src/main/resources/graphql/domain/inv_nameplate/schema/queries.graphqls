@@ -1,0 +1,20 @@
+﻿extend type Query {
+    # Non-paginated queries
+    getAllInvNameplates: [InvNameplate!]!
+    getAllInvNameplateHistory: [InvNameplateHistory!]!
+    getInvNameplateById(id: UUID!): InvNameplate!
+
+
+    getInvNameplateHistoryById(historyId: UUID!): InvNameplateHistory!
+    getInvNameplateHistory(originalId: UUID!): [InvNameplateHistory!]!
+    getInvNameplateByInverterId(inverterId: UUID!): [InvNameplate!]!
+    getInvNameplateHistoryByInverterId(inverterId: UUID!): [InvNameplateHistory!]!
+
+    # Offset Pagination
+    getAllInvNameplatePaged(pageRequest: PageRequestInput!): PageResponse_InvNameplate!
+    getInvNameplateByInverterIdPaged(inverterId: UUID!, pageRequest: PageRequestInput!): PageResponse_InvNameplate!
+
+    getAllInvNameplateHistoryPaged(pageRequest: PageRequestInput!): PageResponse_InvNameplateHistory!
+    getInvNameplateHistoryByOriginalIdPaged(originalId: UUID!, pageRequest: PageRequestInput!): PageResponse_InvNameplateHistory!
+    getInvNameplateHistoryByInverterIdPaged(inverterId: UUID!, pageRequest: PageRequestInput!): PageResponse_InvNameplateHistory!
+}

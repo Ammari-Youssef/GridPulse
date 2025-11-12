@@ -1,5 +1,5 @@
 type Bms implements Auditable {
-    id: ID!
+    id: UUID!
     name: String
     model: String
     manufacturer: String
@@ -10,7 +10,7 @@ type Bms implements Auditable {
 
     createdBy: String!
     updatedBy: String
-    createdAt: String!
-    updatedAt: String
+    createdAt: DateTime!
+    updatedAt: DateTime
     source: Source!
 }

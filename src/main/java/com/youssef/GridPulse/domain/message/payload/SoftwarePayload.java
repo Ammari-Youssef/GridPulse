@@ -3,7 +3,7 @@ package com.youssef.GridPulse.domain.message.payload;
 import com.youssef.GridPulse.domain.message.payload.enums.SoftwareMessageUpdateStatus;
 import com.youssef.GridPulse.domain.message.payload.enums.SoftwarePackageType;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 /**
  * Represents the payload structure for a software update message.
@@ -40,8 +40,8 @@ import java.time.Instant;
  * <p>This payload supports device lifecycle management, update tracking, and audit logging.</p>
  */
 public record SoftwarePayload(
-        Instant startTime,
-        Instant endTime,
+        OffsetDateTime startTime,
+        OffsetDateTime endTime,
         SoftwarePackageType packageType,
         String version,
         SoftwareMessageUpdateStatus status

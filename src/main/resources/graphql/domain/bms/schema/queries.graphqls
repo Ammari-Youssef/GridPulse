@@ -1,7 +1,13 @@
 extend type Query {
+    # Non-paginated queries
     getAllBms: [Bms!]!
-    getBmsById(id: ID!): Bms!
     getAllBmsHistory: [BmsHistory!]!
-    getBmsHistoryById(historyId: ID!): BmsHistory!
-    getBmsHistory(originalId: ID!): [BmsHistory!]!
+    getBmsById(id: UUID!): Bms!
+    getBmsHistoryById(historyId: UUID!): BmsHistory!
+    getBmsHistory(originalId: UUID!): [BmsHistory!]!
+
+    # Offset Pagination
+    getAllBmsPaged(pageRequest: PageRequestInput!): PageResponse_Bms!
+    getAllBmsHistoryPaged(pageRequest: PageRequestInput!): PageResponse_BmsHistory!
+    getBmsHistoryByOriginalIdPaged(originalId: UUID!, pageRequest: PageRequestInput!): PageResponse_BmsHistory!
 }

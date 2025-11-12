@@ -1,0 +1,4 @@
+type MeterPayload {
+    pwrIn: Float!
+    pwrOut: Float!
+}

@@ -1,8 +1,15 @@
-extend type Query {
+﻿extend type Query {
+    # Non-paginated queries
     getAllMessages: [Message!]!
-    getMessagesByDevice(deviceId: ID!): [Message!]!
-    getMessageById(id: ID!): Message!
+    getMessagesByDevice(deviceId: UUID!): [Message!]!
+    getMessageById(id: UUID!): Message!
     getAllMessageHistory: [MessageHistory!]!
-    getMessageHistoryById(historyId: ID!): MessageHistory!
-    getMessageHistory(originalId: ID!): [MessageHistory!]!
+    getMessageHistoryById(historyId: UUID!): MessageHistory!
+    getMessageHistory(originalId: UUID!): [MessageHistory!]!
+
+    # Offset Pagination
+    getAllMessagePaged(pageRequest: PageRequestInput!): PageResponse_Message!
+    getMessageByDeviceIdPaged(deviceId: UUID!, pageRequest: PageRequestInput! ): PageResponse_Message!
+    getAllMessageHistoryPaged(pageRequest: PageRequestInput!): PageResponse_MessageHistory!
+    getMessageHistoryByOriginalIdPaged(originalId: UUID!, pageRequest: PageRequestInput!): PageResponse_MessageHistory!
 }

@@ -1,5 +1,5 @@
 input InvCommonInput {
-    inverterId: ID!
+    inverterId: UUID!
 
     # SunSpec fields
     modelLength: Int!

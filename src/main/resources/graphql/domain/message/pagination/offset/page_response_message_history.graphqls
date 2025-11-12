@@ -1,0 +1,8 @@
+﻿type PageResponse_MessageHistory {
+    content: [MessageHistory!]!
+    pageNumber: Int!
+    pageSize: Int!
+    totalElements: Long!
+    totalPages: Int!
+    last: Boolean!
+}

@@ -7,7 +7,7 @@ input DeviceInput {
     cycles: Int
     gpsLat: Float
     gpsLong: Float
-    lastSeen: String
+    lastSeen: DateTime
     status: String
     powerDispatched: Float
     temperature: Float
@@ -15,14 +15,14 @@ input DeviceInput {
     model: String
     softwareVersion: String
     manufacturer: String
-    swUpdateTime: String
+    swUpdateTime: DateTime
     ip: String
 
     # Relations
-    fleetId: ID!
-    inverterId: ID!
-    operatorId: ID!
-    userId: ID!
-    bmsId: ID!
-    meterId: ID!
+    fleetId: UUID!
+    inverterId: UUID!
+    operatorId: UUID!
+    userId: UUID!
+    bmsId: UUID!
+    meterId: UUID!
 }

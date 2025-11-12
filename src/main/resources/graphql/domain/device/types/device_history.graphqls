@@ -1,6 +1,6 @@
 type DeviceHistory implements Auditable & AuditableHistory {
-    id: ID!
-    originalId: ID!
+    id: UUID!
+    originalId: UUID!
     name: String!
     serialNumber: String!
     soc: Float!
@@ -9,7 +9,8 @@ type DeviceHistory implements Auditable & AuditableHistory {
     cycles: Int!
     gpsLat: Float
     gpsLong: Float
-    lastSeen: String!
+    lastSeen: DateTime!
+    swUpdateTime: DateTime
     status: String!
     powerDispatched: Float!
     temperature: Float!
@@ -19,19 +20,19 @@ type DeviceHistory implements Auditable & AuditableHistory {
     manufacturer: String!
 
     # Relations
-    fleetId: ID!
-    inverterId: ID!
-    operatorId: ID!
-    userId: ID!
-    bmsId: ID!
-    meterId: ID!
+    fleetId: UUID!
+    inverterId: UUID!
+    operatorId: UUID!
+    userId: UUID!
+    bmsId: UUID!
+    meterId: UUID!
 
     # Auditable fields
 
     createdBy: String!
     updatedBy: String
-    createdAt: String!
-    updatedAt: String
+    createdAt: DateTime!
+    updatedAt: DateTime
     source: Source!
 
     createdRecord: Boolean!
