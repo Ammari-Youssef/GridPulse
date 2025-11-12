@@ -1,5 +1,7 @@
 package com.youssef.GridPulse.domain.inverter.settings.resolver;
 
+import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageRequestInput;
+import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageResponse;
 import com.youssef.GridPulse.domain.inverter.base.SunSpecModelResolver;
 import com.youssef.GridPulse.domain.inverter.settings.dto.InvSettingsInput;
 import com.youssef.GridPulse.domain.inverter.settings.entity.InvSettings;
@@ -21,6 +23,39 @@ public class InvSettingsResolver extends SunSpecModelResolver<InvSettings, InvSe
     public InvSettingsResolver(InvSettingsService service) {
         super(service);
     }
+
+    //    Pagination Offset
+    @QueryMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public PageResponse<InvSettings> getAllInvSettingsPaged(@Argument PageRequestInput pageRequest) {
+        return super.getAllPaged(pageRequest);
+    }
+
+    @QueryMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public PageResponse<InvSettingsHistory> getAllInvSettingsHistoryPaged(@Argument PageRequestInput pageRequest) {
+        return super.getAllHistoryPaged(pageRequest);
+    }
+
+    @QueryMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public PageResponse<InvSettingsHistory> getInvSettingsHistoryByOriginalIdPaged(@Argument UUID originalId, @Argument PageRequestInput pageRequest) {
+        return super.getHistoryByOriginalIdPaged(originalId, pageRequest);
+    }
+
+    @QueryMapping
+    @PreAuthorize("isAuthenticated()")
+    public PageResponse<InvSettings> getInvSettingsByInverterIdPaged(@Argument UUID inverterId, @Argument PageRequestInput pageRequest) {
+        return super.getAllByInverterIdPaged(inverterId, pageRequest);
+    }
+
+    @QueryMapping
+    @PreAuthorize("isAuthenticated()")
+    public PageResponse<InvSettingsHistory> getInvSettingsHistoryByInverterIdPaged(@Argument UUID inverterId, @Argument PageRequestInput pageRequest) {
+        return super.getAllHistoryByInverterIdPaged(inverterId, pageRequest);
+    }
+
+    // CRUD
 
     @QueryMapping
     @PreAuthorize("hasRole('ADMIN')")
