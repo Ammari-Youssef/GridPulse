@@ -1,6 +1,8 @@
 package com.youssef.GridPulse.domain.inverter.base;
 
 import com.youssef.GridPulse.common.base.BaseResolver;
+import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageRequestInput;
+import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageResponse;
 
 import java.util.List;
 import java.util.UUID;
@@ -55,9 +57,17 @@ public abstract class SunSpecModelResolver<S extends SunSpecModelEntity, SH exte
      * @param inverterId UUID of the inverter
      * @return List of matching SunSpec model history records
      */
-    public List<SH>
-    getAllHistoryByInverterId(ID inverterId) {
+    public List<SH> getAllHistoryByInverterId(ID inverterId) {
         return service.findHistoryByInverterId(inverterId);
+    }
+
+    // pagination methods
+    public PageResponse<S> getAllByInverterIdPaged(ID inverterId, PageRequestInput pageRequestInput){
+        return service.findByInverterIdOffsetBased(inverterId, pageRequestInput);
+    }
+
+    public PageResponse<SH> getAllHistoryByInverterIdPaged(UUID inverterId, PageRequestInput pageRequest) {
+        return service.findHistoryByInverterIdOffsetBased(inverterId, pageRequest);
     }
 
 }

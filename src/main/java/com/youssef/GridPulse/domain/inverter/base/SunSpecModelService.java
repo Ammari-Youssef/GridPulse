@@ -1,9 +1,13 @@
 package com.youssef.GridPulse.domain.inverter.base;
 
 import com.youssef.GridPulse.common.base.BaseService;
+import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageRequestInput;
+import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageResponse;
 import com.youssef.GridPulse.domain.inverter.inverter.entity.Inverter;
 import com.youssef.GridPulse.domain.inverter.inverter.repository.InverterRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.UUID;
 import java.util.List;
@@ -30,7 +34,7 @@ import java.util.List;
  * @param <ID>    Identifier type (UUID)
  * @param <INPUT> Input DTO type implementing {@link SunSpecModelInput}
  */
-public class SunSpecModelService <S extends SunSpecModelEntity, SH extends SunSpecModelEntityHistory, ID extends UUID,  INPUT extends SunSpecModelInput>
+public class SunSpecModelService<S extends SunSpecModelEntity, SH extends SunSpecModelEntityHistory, ID extends UUID, INPUT extends SunSpecModelInput>
         extends BaseService<S, SH, ID, INPUT> {
 
     // Repository for SunSpec model entities; stored separately for direct access to custom queries like findByInverter_Id
@@ -45,7 +49,7 @@ public class SunSpecModelService <S extends SunSpecModelEntity, SH extends SunSp
     public SunSpecModelService(
             SunSpecModelRepository<S, ID> repository,
             SunSpecModelHistoryRepository<SH, ID> historyRepository,
-            SunSpecModelMapper <S, SH, INPUT>  mapper,
+            SunSpecModelMapper<S, SH, INPUT> mapper,
 
             InverterRepository inverterRepository) {
         super(repository, historyRepository, mapper);
@@ -92,5 +96,34 @@ public class SunSpecModelService <S extends SunSpecModelEntity, SH extends SunSp
     private Inverter resolveInverter(UUID inverterId) {
         return inverterRepository.findById(inverterId)
                 .orElseThrow(() -> new EntityNotFoundException("Inverter not found"));
+    }
+
+    // Pagination methods
+    public PageResponse<S> findByInverterIdOffsetBased(UUID inverterId, PageRequestInput pageRequest) {
+        Pageable pageable = BaseService.setPageRequestFields(pageRequest);
+        Page<S> result = repository.findByInverter_Id(inverterId, pageable);
+
+        return new PageResponse<>(
+                result.getContent(),
+                result.getNumber(),
+                result.getSize(),
+                result.getTotalElements(),
+                result.getTotalPages(),
+                result.isLast()
+        );
+    }
+
+    public PageResponse<SH> findHistoryByInverterIdOffsetBased(UUID inverterId, PageRequestInput pageRequest) {
+        Pageable pageable = BaseService.setPageRequestFields(pageRequest);
+        Page<SH> result = historyRepository.findByInverterId(inverterId, pageable);
+
+        return new PageResponse<>(
+                result.getContent(),
+                result.getNumber(),
+                result.getSize(),
+                result.getTotalElements(),
+                result.getTotalPages(),
+                result.isLast()
+        );
     }
 }

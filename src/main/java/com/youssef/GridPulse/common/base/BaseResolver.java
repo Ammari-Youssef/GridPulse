@@ -1,5 +1,7 @@
 package com.youssef.GridPulse.common.base;
 
+import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageRequestInput;
+import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageResponse;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -9,6 +11,21 @@ import java.util.UUID;
 public abstract class BaseResolver<E extends BaseEntity, H extends BaseHistoryEntity, ID extends UUID, INPUT> {
 
     protected final BaseService<E, H, ID, INPUT> service;
+
+    // Pagination Offset
+    public PageResponse<E> getAllPaged(PageRequestInput pageRequest) {
+        return service.getAllOffsetBased(pageRequest);
+    }
+
+    public PageResponse<H> getAllHistoryPaged(PageRequestInput pageRequest) {
+        return service.getAllHistoryOffsetBased(pageRequest);
+    }
+
+    public PageResponse<H> getHistoryByOriginalIdPaged(UUID originalId, PageRequestInput pageRequest) {
+        return service.getHistoryByOriginalIdOffsetBased(originalId, pageRequest);
+    }
+
+
 
     // Common CRUD operations
     public List<E> getAll() {
@@ -47,4 +64,8 @@ public abstract class BaseResolver<E extends BaseEntity, H extends BaseHistoryEn
     public Boolean markHistorySynced(ID id) {
         return service.markHistoryRecordAsSynced(id);
     }
+
+
+
+
 }
