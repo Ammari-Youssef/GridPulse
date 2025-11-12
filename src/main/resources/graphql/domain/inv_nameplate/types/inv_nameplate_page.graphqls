@@ -1,0 +1,15 @@
+﻿type InvNameplatePage {
+    content: [InvNameplate!]!
+    totalPages: Int
+    totalElements: Int
+    number: Int
+    size: Int
+}
+
+type InvNameplateHistoryPage {
+    content: [InvNameplateHistory!]!
+    totalPages: Int
+    totalElements: Int
+    number: Int
+    size: Int
+}
