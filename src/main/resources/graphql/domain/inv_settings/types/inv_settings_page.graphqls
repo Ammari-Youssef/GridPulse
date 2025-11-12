@@ -1,0 +1,15 @@
+﻿type InvSettingsPage {
+    content: [InvSettings!]!
+    totalPages: Int
+    totalElements: Int
+    number: Int
+    size: Int
+}
+
+type InvSettingsHistoryPage {
+    content: [InvSettingsHistory!]!
+    totalPages: Int
+    totalElements: Int
+    number: Int
+    size: Int
+}

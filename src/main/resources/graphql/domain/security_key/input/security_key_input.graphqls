@@ -1,0 +1,18 @@
+input SecurityKeyInput{
+
+    # Relations
+    deviceId: UUID!
+    ownerId: UUID!
+
+    # Core fields
+    name: String!
+    securityType: SecurityType!
+    serialNumber: String
+    publicKey: String!
+    keySource: KeySource!
+    status: KeyStatus!
+
+    # Optional lifecycle fields
+    revokedTimestamp: String
+
+}

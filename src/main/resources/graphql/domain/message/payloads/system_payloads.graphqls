@@ -1,0 +1,8 @@
+type SystemPayload {
+    cpuUsage: Int!
+    memoryUsage: Int!
+    diskUsage: Int!
+    temperature: Float!
+    latitude: Float!
+    longitude: Float!
+}

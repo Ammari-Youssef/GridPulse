@@ -1,0 +1,15 @@
+﻿type FleetPage {
+    content: [Fleet!]!
+    totalPages: Int
+    totalElements: Int
+    number: Int
+    size: Int
+}
+
+type FleetHistoryPage {
+    content: [FleetHistory!]!
+    totalPages: Int
+    totalElements: Int
+    number: Int
+    size: Int
+}

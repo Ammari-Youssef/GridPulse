@@ -1,0 +1,18 @@
+interface Auditable {
+    id: UUID!
+    # Auditing fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: DateTime!
+    updatedAt: DateTime
+    source: Source!
+}
+
+interface AuditableHistory {
+    originalId: UUID!
+    # History flags
+    createdRecord: Boolean!
+    updatedRecord: Boolean!
+    deletedRecord: Boolean!
+    synced: Boolean!
+}

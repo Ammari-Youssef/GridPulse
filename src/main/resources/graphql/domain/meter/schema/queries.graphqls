@@ -1,0 +1,13 @@
+﻿extend type Query {
+    # Non-paginated queries
+    getAllMeters: [Meter!]!
+    getAllMeterHistory: [MeterHistory!]!
+    getMeterById(id: UUID!): Meter!
+    getMeterHistoryById(historyId: UUID!): MeterHistory!
+    getMeterHistory(originalId: UUID!): [MeterHistory!]!
+
+    # Offset Pagination
+    getAllMeterPaged(pageRequest: PageRequestInput!): PageResponse_Meter!
+    getAllMeterHistoryPaged(pageRequest: PageRequestInput!): PageResponse_MeterHistory!
+    getMeterHistoryByOriginalIdPaged(originalId: UUID!, pageRequest: PageRequestInput!): PageResponse_MeterHistory!
+}

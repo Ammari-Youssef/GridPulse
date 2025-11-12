@@ -1,16 +1,18 @@
 package com.youssef.GridPulse.domain.inverter.service;
 
 import com.youssef.GridPulse.domain.base.BaseServiceTest;
-import com.youssef.GridPulse.domain.inverter.dto.InverterInput;
-import com.youssef.GridPulse.domain.inverter.entity.Inverter;
-import com.youssef.GridPulse.domain.inverter.entity.InverterHistory;
-import com.youssef.GridPulse.domain.inverter.mapper.InverterMapperImpl;
-import com.youssef.GridPulse.domain.inverter.repository.InverterHistoryRepository;
-import com.youssef.GridPulse.domain.inverter.repository.InverterRepository;
+import com.youssef.GridPulse.domain.inverter.inverter.dto.InverterInput;
+import com.youssef.GridPulse.domain.inverter.inverter.entity.Inverter;
+import com.youssef.GridPulse.domain.inverter.inverter.entity.InverterHistory;
+import com.youssef.GridPulse.domain.inverter.inverter.service.InverterService;
+import com.youssef.GridPulse.domain.inverter.inverter.mapper.InverterMapperImpl;
+import com.youssef.GridPulse.domain.inverter.inverter.repository.InverterHistoryRepository;
+import com.youssef.GridPulse.domain.inverter.inverter.repository.InverterRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mock;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.UUID;
 
 class InverterServiceTest extends BaseServiceTest<Inverter, InverterHistory, UUID, InverterInput, InverterService> {
@@ -61,7 +63,7 @@ class InverterServiceTest extends BaseServiceTest<Inverter, InverterHistory, UUI
                 .model("Test Model")
                 .version("Test Version")
                 .synced(false)
-                .createdAt(Instant.now())
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .build();
     }
 

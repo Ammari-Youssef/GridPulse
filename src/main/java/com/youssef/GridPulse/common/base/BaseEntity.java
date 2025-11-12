@@ -9,7 +9,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @MappedSuperclass
@@ -27,11 +27,11 @@ public abstract class BaseEntity {
 
     @CreatedDate
     @Column(updatable = false, nullable = false)
-    private Instant createdAt;
+    private OffsetDateTime createdAt;
 
     @LastModifiedDate
     @Column(insertable = false)
-    private Instant updatedAt;
+    private OffsetDateTime updatedAt;
 
     @CreatedBy
     @Builder.Default

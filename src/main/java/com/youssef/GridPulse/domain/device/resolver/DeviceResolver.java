@@ -1,6 +1,8 @@
 package com.youssef.GridPulse.domain.device.resolver;
 
 import com.youssef.GridPulse.common.base.BaseResolver;
+import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageRequestInput;
+import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageResponse;
 import com.youssef.GridPulse.domain.device.dto.DeviceInput;
 import com.youssef.GridPulse.domain.device.entity.Device;
 import com.youssef.GridPulse.domain.device.entity.DeviceHistory;
@@ -26,6 +28,31 @@ public class DeviceResolver extends BaseResolver<Device, DeviceHistory, UUID, De
         this.service = service;
     }
 
+    // Pagination Offset
+
+    @QueryMapping
+    public PageResponse<Device> getAllDevicePaged(@Argument PageRequestInput pageRequest) {
+        return super.getAllPaged(pageRequest);
+    }
+
+    @QueryMapping
+    public PageResponse<DeviceHistory> getAllDeviceHistoryPaged(@Argument PageRequestInput pageRequest) {
+        return super.getAllHistoryPaged(pageRequest);
+    }
+
+    @QueryMapping
+    public PageResponse<DeviceHistory> getDeviceHistoryByOriginalIdPaged(@Argument UUID originalId, @Argument PageRequestInput pageRequest) {
+        return super.getHistoryByOriginalIdPaged(originalId, pageRequest);
+    }
+
+    // Pagination Offset - by Fleet ID
+    @QueryMapping
+    public PageResponse<Device> getDeviceByFleetIdPaged(@Argument UUID fleetId, @Argument PageRequestInput pageRequest) {
+        return service.getByFleetIdOffsetBased(fleetId, pageRequest);
+    }
+
+
+    // CRUD
     @QueryMapping
     public List<Device> getDevicesByFleetId(@Argument UUID fleetId) {
         return service.getByFleetId(fleetId);

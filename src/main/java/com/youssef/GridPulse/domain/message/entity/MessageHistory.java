@@ -1,15 +1,25 @@
 package com.youssef.GridPulse.domain.message.entity;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.vladmihalcea.hibernate.type.json.JsonType;
 import com.youssef.GridPulse.common.base.BaseHistoryEntity;
 import com.youssef.GridPulse.domain.message.enums.*;
+import com.youssef.GridPulse.domain.message.parser.MessagePayloadParser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.Type;
+import org.hibernate.type.SqlTypes;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.util.LinkedHashMap;
 import java.util.UUID;
 
 @Getter
@@ -25,12 +35,14 @@ public class MessageHistory extends BaseHistoryEntity {
 
     private String cloudMessageId;
 
-    @Column(columnDefinition = "TEXT")
-    private String messageText;
+    @Type(JsonType.class)
+    @JdbcTypeCode(SqlTypes.JSON) // For Hibernate 6+
+    @Column(columnDefinition = "jsonb")
+    private Object messageText;
 
-    private Instant receivedAt;
+    private OffsetDateTime receivedAt;
 
-    private Instant sentAt;
+    private OffsetDateTime sentAt;
 
     @Enumerated(EnumType.STRING)
     private Severity severity;
@@ -48,4 +60,17 @@ public class MessageHistory extends BaseHistoryEntity {
     private MessagePriority priority;
 
     private String explanation;
+
+    @Transient
+    private static final ObjectMapper objectMapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+    @PostLoad
+    public void hydrateMessageText() {
+        if (messageText instanceof LinkedHashMap && messageType != null) {
+            JsonNode jsonNode = objectMapper.valueToTree(messageText);
+            this.messageText = MessagePayloadParser.parse(messageType, jsonNode);
+        }
+    }
 }

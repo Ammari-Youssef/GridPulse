@@ -11,7 +11,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static com.youssef.GridPulse.domain.identity.user.Role.USER;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -59,7 +60,7 @@ class UserMapperTest {
                 .lastname("lastName")
                 .role(USER)
                 .password("password")
-                .createdAt(Instant.now())
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .build();
         // When
         UserHistory history = mapper.toHistory(user);

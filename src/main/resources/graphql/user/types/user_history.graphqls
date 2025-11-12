@@ -1,0 +1,20 @@
+type UserHistory implements Auditable & AuditableHistory {
+    id: UUID!
+    originalId: UUID!
+    firstname: String
+    lastname: String
+    email: String
+    role: String
+    enabled: Boolean
+
+    createdBy: String!
+    updatedBy: String
+    createdAt: DateTime!
+    updatedAt: DateTime
+    source: Source!
+
+    createdRecord: Boolean!
+    updatedRecord: Boolean!
+    deletedRecord: Boolean!
+    synced: Boolean!
+}

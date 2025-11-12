@@ -1,0 +1,13 @@
+﻿extend type Query {
+    # Non-paginated queries
+    getAllInverters: [Inverter!]!
+    getAllInverterHistory: [InverterHistory!]!
+    getInverterById(id: UUID!): Inverter!
+    getInverterHistoryById(historyId: UUID!): InverterHistory!
+    getInverterHistory(originalId: UUID!): [InverterHistory!]!
+
+    # Offset Pagination
+    getAllInverterPaged(pageRequest: PageRequestInput!): PageResponse_Inverter!
+    getAllInverterHistoryPaged(pageRequest: PageRequestInput!): PageResponse_InverterHistory!
+    getInverterHistoryByOriginalIdPaged(originalId: UUID!, pageRequest: PageRequestInput!): PageResponse_InverterHistory!
+}

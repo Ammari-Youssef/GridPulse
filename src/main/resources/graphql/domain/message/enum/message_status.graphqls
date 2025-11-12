@@ -1,0 +1,7 @@
+enum MessageStatus{
+    NEW
+    READY
+    SENDING
+    COMPLETE
+    FAILED
+}

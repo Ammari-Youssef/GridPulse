@@ -1,0 +1,6 @@
+extend type Mutation {
+    createMeter(input: MeterInput!): Meter
+    updateMeter(id: UUID!, input: MeterInput!): Meter
+    deleteMeter(id: UUID!): Boolean
+    markMeterHistorySynced(id: UUID!): Boolean!
+}

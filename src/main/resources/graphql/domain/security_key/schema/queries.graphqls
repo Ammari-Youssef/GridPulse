@@ -1,0 +1,13 @@
+﻿extend type Query {
+    # Non-paginated queries
+    getAllSecurityKeys: [SecurityKey!]!
+    getAllSecurityKeyHistory: [SecurityKeyHistory!]!
+    getSecurityKeyById(id: UUID!): SecurityKey!
+    getSecurityKeyHistoryById(historyId: UUID!): SecurityKeyHistory!
+    getSecurityKeyHistory(originalId: UUID!): [SecurityKeyHistory!]!
+
+    # Offset Pagination
+    getAllSecurityKeyPaged(pageRequest: PageRequestInput!): PageResponse_SecurityKey!
+    getAllSecurityKeyHistoryPaged(pageRequest: PageRequestInput!): PageResponse_SecurityKeyHistory!
+    getSecurityKeyHistoryByOriginalIdPaged(originalId: UUID!, pageRequest: PageRequestInput!): PageResponse_SecurityKeyHistory!
+}

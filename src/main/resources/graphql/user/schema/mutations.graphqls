@@ -1,0 +1,6 @@
+extend type Mutation {
+    updateUser(id: UUID!, input: UpdateUserInput): User
+    deleteUser(id: UUID!): Boolean
+    toggleUserEnableStatus(id: UUID!): Boolean
+    markUserHistorySynced(id: UUID!): Boolean!
+}

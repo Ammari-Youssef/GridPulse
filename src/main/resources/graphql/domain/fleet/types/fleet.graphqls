@@ -1,0 +1,14 @@
+type Fleet implements Auditable {
+    id: UUID!
+    name: String!
+    location: String
+    owner: String
+    description: String
+
+    # Auditable fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: DateTime!
+    updatedAt: DateTime
+    source: Source!
+}

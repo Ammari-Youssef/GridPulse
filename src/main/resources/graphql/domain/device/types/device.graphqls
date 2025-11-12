@@ -1,0 +1,38 @@
+type Device implements Auditable {
+    id: UUID!
+    name: String!
+    serialNumber: String!
+    soc: Float!
+    soh: Float!
+    batteryChemistry: String!
+    cycles: Int!
+    gpsLat: Float
+    gpsLong: Float
+    lastSeen: DateTime!
+    status: DeviceStatus!
+    powerDispatched: Float!
+    temperature: Float!
+    voltage: Float!
+    model: String!
+    softwareVersion: String!
+    manufacturer: String!
+    swUpdateTime: DateTime
+    ip: String!
+
+    # Relations
+
+    fleet: Fleet!
+    inverter: Inverter!
+    operator: User!
+    user: User!
+    bms: Bms!
+    meter: Meter!
+
+    # Auditable fields
+
+    createdBy: String!
+    updatedBy: String
+    createdAt: DateTime!
+    updatedAt: DateTime
+    source: Source!
+}

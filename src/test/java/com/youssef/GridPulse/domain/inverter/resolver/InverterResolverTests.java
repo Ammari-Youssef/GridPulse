@@ -1,10 +1,11 @@
 package com.youssef.GridPulse.domain.inverter.resolver;
 
 import com.youssef.GridPulse.domain.base.BaseResolverTest;
-import com.youssef.GridPulse.domain.inverter.dto.InverterInput;
-import com.youssef.GridPulse.domain.inverter.entity.Inverter;
-import com.youssef.GridPulse.domain.inverter.entity.InverterHistory;
-import com.youssef.GridPulse.domain.inverter.service.InverterService;
+import com.youssef.GridPulse.domain.inverter.inverter.dto.InverterInput;
+import com.youssef.GridPulse.domain.inverter.inverter.entity.Inverter;
+import com.youssef.GridPulse.domain.inverter.inverter.entity.InverterHistory;
+import com.youssef.GridPulse.domain.inverter.inverter.resolver.InverterResolver;
+import com.youssef.GridPulse.domain.inverter.inverter.service.InverterService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
@@ -13,7 +14,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-import java.time.Instant;
+import java.time.ZoneId;
+import java.time.OffsetDateTime;
 import java.util.Map;
 import java.util.UUID;
 
@@ -45,7 +47,7 @@ class InverterResolverTests extends BaseResolverTest<InverterResolver, Inverter,
                 .manufacturer("Test Manufacturer")
                 .model("Test Model")
                 .version("Test Version")
-                .createdAt(Instant.now())
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .build();
     }
 
@@ -58,7 +60,7 @@ class InverterResolverTests extends BaseResolverTest<InverterResolver, Inverter,
                 .manufacturer("Test Manufacturer")
                 .model("Test Model")
                 .version("Test Version")
-                .createdAt(Instant.now())
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .build();
     }
 

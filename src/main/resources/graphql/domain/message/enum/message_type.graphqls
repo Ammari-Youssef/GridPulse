@@ -1,0 +1,9 @@
+enum MessageType{
+    IDS
+    HEARTBEAT
+    SYSTEM
+    SOFTWARE
+    BMS
+    METER
+    INVERTER
+}

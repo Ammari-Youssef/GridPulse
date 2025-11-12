@@ -1,0 +1,9 @@
+type IdsPayload {
+    attackType: AttackType!
+    sourceIp: String!
+    destinationIp: String!
+    sourcePort: Int!
+    destinationPort: Int!
+    protocol: String!
+    rawMessage: String
+}

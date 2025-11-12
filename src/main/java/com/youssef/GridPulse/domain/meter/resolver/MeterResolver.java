@@ -1,6 +1,8 @@
 package com.youssef.GridPulse.domain.meter.resolver;
 
 import com.youssef.GridPulse.common.base.BaseResolver;
+import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageRequestInput;
+import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageResponse;
 import com.youssef.GridPulse.domain.meter.dto.MeterInput;
 import com.youssef.GridPulse.domain.meter.entity.Meter;
 import com.youssef.GridPulse.domain.meter.entity.MeterHistory;
@@ -20,6 +22,23 @@ public class MeterResolver extends BaseResolver<Meter, MeterHistory, UUID, Meter
 
     public MeterResolver(MeterService service) { super(service); }
 
+    // Pagination Offset
+    @QueryMapping
+    public PageResponse<Meter> getAllMeterPaged(@Argument PageRequestInput pageRequest) {
+        return super.getAllPaged(pageRequest);
+    }
+
+    @QueryMapping
+    public PageResponse<MeterHistory> getAllMeterHistoryPaged(@Argument PageRequestInput pageRequest) {
+        return super.getAllHistoryPaged(pageRequest);
+    }
+
+    @QueryMapping
+    public PageResponse<MeterHistory> getMeterHistoryByOriginalIdPaged(@Argument UUID originalId, @Argument PageRequestInput pageRequest) {
+        return super.getHistoryByOriginalIdPaged(originalId, pageRequest);
+    }
+
+    // Common CRUD
     @QueryMapping
     @PreAuthorize("hasRole('ADMIN')")
     public List<Meter> getAllMeters() {

@@ -1,0 +1,24 @@
+type BmsHistory implements Auditable & AuditableHistory  {
+    id: UUID!
+    originalId: UUID!
+    name : String
+    model: String
+    manufacturer: String
+    version: String
+    soh: String
+    soc: Float
+    batteryChemistry: String
+
+    # Auditable fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: DateTime!
+    updatedAt: DateTime
+    source: Source!
+
+    # History flags
+    createdRecord: Boolean!
+    updatedRecord: Boolean!
+    deletedRecord: Boolean!
+    synced: Boolean!
+}

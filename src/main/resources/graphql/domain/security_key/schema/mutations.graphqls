@@ -1,0 +1,7 @@
+extend type Mutation {
+    importSecurityKey(input: ImportSecurityKeyInput!): SecurityKey!
+    createSecurityKey(input: SecurityKeyInput!): SecurityKey
+    updateSecurityKey(id: UUID!, input: SecurityKeyInput!): SecurityKey
+    deleteSecurityKey(id: UUID!): Boolean
+    markSecurityKeyHistorySynced(id: UUID!): Boolean!
+}

@@ -1,15 +1,12 @@
 package com.youssef.GridPulse.common.base;
 
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
-import org.mapstruct.BeanMapping;
-import org.mapstruct.NullValuePropertyMappingStrategy;
-
-public interface BaseMapper<E extends BaseEntity , H extends BaseHistoryEntity, INPUT> {
+public interface BaseMapper<E extends BaseEntity, H extends BaseHistoryEntity, INPUT> {
 
     /**
      * Convert entity to history record.
+     *
      * @param input DTO / Record
      * @return Entity instance
      */
@@ -18,15 +15,17 @@ public interface BaseMapper<E extends BaseEntity , H extends BaseHistoryEntity, 
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
-    @Mapping(target = "source", constant = "APP") // default value can be either 'app' or 'sync'
+    @Mapping(target = "source", constant = "APP")
+    // default value can be either 'app' or 'sync'
     E toEntity(INPUT input);
 
     /**
      * Convert history to entity record.
+     *
      * @param entity Entity instance
      * @return EntityHistory instance
      */
-    @Mapping(target = "id", ignore = true) // history has its own ID
+    @InheritConfiguration(name = "toEntity")
     @Mapping(target = "originalId", source = "id") // link to original inverter
     @Mapping(target = "createdRecord", constant = "false")
     @Mapping(target = "updatedRecord", constant = "false")
@@ -36,6 +35,12 @@ public interface BaseMapper<E extends BaseEntity , H extends BaseHistoryEntity, 
 
     // Optional hook if you want to update fields instead of overwriting
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "updatedBy", ignore = true)
+    @Mapping(target = "source", ignore = true)
     void updateEntity(INPUT input, @MappingTarget E entity);
 
 }

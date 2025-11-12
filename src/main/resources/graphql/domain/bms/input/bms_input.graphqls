@@ -1,0 +1,9 @@
+input BmsInput {
+    name: String
+    model: String
+    manufacturer: String
+    version: String
+    soh: String
+    soc: Float
+    batteryChemistry: String
+}

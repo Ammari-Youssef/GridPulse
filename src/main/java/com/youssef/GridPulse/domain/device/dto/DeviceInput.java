@@ -2,7 +2,7 @@ package com.youssef.GridPulse.domain.device.dto;
 
 import jakarta.validation.constraints.*;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 public record DeviceInput(
@@ -29,11 +29,14 @@ public record DeviceInput(
         Double gpsLong,
 
         @PastOrPresent(message = "Last seen timestamp must be in the past or present.")
-        Instant lastSeen,
+        OffsetDateTime lastSeen,
 
         @NotBlank(message = "Device name is mandatory.")
         @Size(min = 1, max = 255, message = "Device name must be between 1 and 255 characters.")
         String name,
+
+        @NotBlank(message = "Serial number is mandatory.")
+        String serialNumber,
 
         Float powerDispatched,
 
@@ -59,7 +62,7 @@ public record DeviceInput(
         String softwareVersion,
 
         @PastOrPresent(message = "Software update time must be in the past or present.")
-        Instant swUpdateTime,
+        OffsetDateTime swUpdateTime,
 
         @Pattern(regexp = "^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.(?!$)|$){4}$", message = "Invalid IP address format.")
         String ip,

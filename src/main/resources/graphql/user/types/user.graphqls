@@ -1,0 +1,15 @@
+type User implements Auditable {
+    id: UUID!
+    email: String!
+    firstname: String!
+    lastname: String!
+    password: String!
+    role: Role!
+    enabled: Boolean!
+
+    createdBy: String!
+    updatedBy: String
+    createdAt: DateTime!
+    updatedAt: DateTime
+    source: Source!
+}

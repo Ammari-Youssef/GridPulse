@@ -1,0 +1,6 @@
+input FleetInput {
+    name: String!
+    location: String
+    owner: String
+    description: String
+}

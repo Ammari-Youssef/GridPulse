@@ -1,5 +1,7 @@
 package com.youssef.GridPulse.domain.identity.user.service;
 
+import com.youssef.GridPulse.common.base.BaseService;
+import com.youssef.GridPulse.domain.identity.auth.dto.RegisterInput;
 import com.youssef.GridPulse.domain.identity.user.dto.UpdateUserInput;
 import com.youssef.GridPulse.domain.identity.user.entity.User;
 import com.youssef.GridPulse.domain.identity.user.entity.UserHistory;
@@ -7,93 +9,56 @@ import com.youssef.GridPulse.domain.identity.user.mapper.UserMapper;
 import com.youssef.GridPulse.domain.identity.user.repository.UserHistoryRepository;
 import com.youssef.GridPulse.domain.identity.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
-public class UserService {
+public class UserService extends BaseService<User, UserHistory, UUID, RegisterInput> {
 
-    private final UserRepository userRepository;
-    private final UserHistoryRepository userHistoryRepository;
+    private final UserMapper mapper2;
 
-    private final UserMapper userMapper;
+    public UserService(UserRepository repository, UserHistoryRepository historyRepository, UserMapper mapper, UserMapper mapper2) {
+        super(repository, historyRepository, mapper);
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+        this.mapper2 = mapper2;
     }
 
     public List<UserHistory> getUsersActivityHistory() {
-        return userHistoryRepository.findAll();
-    }
-
-    public Optional<User> getUserById(UUID userId) {
-        return userRepository.findById(userId);
+        return super.findAllHistory();
     }
 
     @Transactional
     public User updateUser(UUID id, UpdateUserInput input) {
-        User existingUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        // Save history before updating
-        UserHistory history = userMapper.toHistory(existingUser);
-        history.setUpdatedRecord(true);
-        userHistoryRepository.save(history);
+        UserHistory history = mapper.toHistory(user);
+        setUpdated(history, id);
+        historyRepository.save(history);
 
-        // Apply other updates
-        if (input.firstname() != null) {
-            existingUser.setFirstname(input.firstname());
-        }
-        if (input.lastname() != null) {
-            existingUser.setLastname(input.lastname());
-        }
-
-        return userRepository.save(existingUser);
+        mapper2.updateEntity(input, user); // uses MapStruct partial update
+        return repository.save(user);
     }
 
-    public boolean deleteUserById(UUID id) {
-        return userRepository.findById(id).map(user -> {
-            // Save history before deletion
-            UserHistory historyBeforeDelete = userMapper.toHistory(user);
-            historyBeforeDelete.setDeletedRecord(true);
-            userHistoryRepository.save(historyBeforeDelete);
-
-            userRepository.deleteById(id);
-
-            return true;
-        }).orElse(false); // If user not found
-    }
 
     @Transactional
     public boolean toggleUserEnableStatus(UUID userId) {
-        return userRepository.findById(userId).map(user -> {
+        return repository.findById(userId).map(user -> {
             // Save history BEFORE changing status
-            UserHistory history = userMapper.toHistory(user);
+            UserHistory history = mapper.toHistory(user);
 
             history.setEnabled(user.isEnabled()); // Record the state before toggle
 
-            userHistoryRepository.save(history);
+            historyRepository.save(history);
 
             // Toggle the actual user status
             user.setEnabled(!user.isEnabled());
-            userRepository.save(user);
+            repository.save(user);
 
             return true;
         }).orElse(false);
-    }
-
-    // History methods
-    @Transactional
-    public boolean markHistoryRecordAsSynced(UUID historyRecordId) {
-        int updatedRows = userHistoryRepository.markAsSynced(historyRecordId);
-        if (updatedRows == 0) {
-            throw new EntityNotFoundException("History record not found: " + historyRecordId);
-        }
-        return true;
     }
 }

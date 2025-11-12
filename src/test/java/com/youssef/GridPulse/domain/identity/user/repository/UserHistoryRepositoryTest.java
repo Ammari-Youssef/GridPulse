@@ -8,7 +8,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 
@@ -57,7 +58,7 @@ class UserHistoryRepositoryTest {
         UserHistory history = UserHistory.builder()
                 .originalId(UUID.randomUUID())
                 .synced(false)
-                .createdAt(Instant.now())
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .build();
 
         entityManager.persist(history);
@@ -94,19 +95,19 @@ class UserHistoryRepositoryTest {
         UserHistory history1 = UserHistory.builder()
                 .originalId(originalId)
                 .synced(true)
-                .createdAt(Instant.now())
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .build();
 
         UserHistory history2 = UserHistory.builder()
                 .originalId(originalId)  // Same originalId
                 .synced(false)
-                .createdAt(Instant.now())
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .build();
 
         UserHistory otherHistory = UserHistory.builder()
                 .originalId(UUID.randomUUID())  // Different originalId
                 .synced(true)
-                .createdAt(Instant.now())
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .build();
 
         entityManager.persist(history1);

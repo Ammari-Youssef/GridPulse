@@ -1,0 +1,4 @@
+input UpdateUserInput {
+    firstname: String
+    lastname: String
+}

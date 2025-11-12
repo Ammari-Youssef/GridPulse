@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -50,5 +50,5 @@ public class SecurityKeyHistory extends BaseHistoryEntity {
     @Column(length = 50)
     private KeyStatus status;
 
-    private Instant revokedTimestamp;
+    private OffsetDateTime revokedTimestamp;
 }
