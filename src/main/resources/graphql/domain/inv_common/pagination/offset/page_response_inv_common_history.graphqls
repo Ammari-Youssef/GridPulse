@@ -1,0 +1,8 @@
+type PageResponse_InvCommonHistory {
+    content: [InvCommonHistory!]!
+    pageNumber: Int!
+    pageSize: Int!
+    totalElements: Long!
+    totalPages: Int!
+    last: Boolean!
+}

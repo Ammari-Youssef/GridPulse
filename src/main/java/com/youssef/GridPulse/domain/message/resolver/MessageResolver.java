@@ -2,6 +2,8 @@ package com.youssef.GridPulse.domain.message.resolver;
 
 import com.youssef.GridPulse.common.base.BaseResolver;
 
+import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageRequestInput;
+import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageResponse;
 import com.youssef.GridPulse.domain.message.dto.*;
 import com.youssef.GridPulse.domain.message.entity.Message;
 import com.youssef.GridPulse.domain.message.entity.MessageHistory;
@@ -26,6 +28,30 @@ public class MessageResolver extends BaseResolver<Message, MessageHistory, UUID,
         this.service = service;
     }
 
+    // Pagination Offset
+    @QueryMapping
+    public PageResponse<Message> getAllMessagePaged(@Argument PageRequestInput pageRequest) {
+        return super.getAllPaged(pageRequest);
+    }
+
+    @QueryMapping
+    public PageResponse<MessageHistory> getAllMessageHistoryPaged(@Argument PageRequestInput pageRequest) {
+        return super.getAllHistoryPaged(pageRequest);
+    }
+
+    @QueryMapping
+    public PageResponse<MessageHistory> getMessageHistoryByOriginalIdPaged(@Argument UUID originalId, @Argument PageRequestInput pageRequest) {
+        return super.getHistoryByOriginalIdPaged(originalId, pageRequest);
+    }
+
+    // Pagination Offset - by Device ID
+    @QueryMapping
+    public PageResponse<Message> getMessageByDeviceIdPaged(@Argument UUID deviceId, @Argument PageRequestInput pageRequest) {
+        return service.getByDeviceIdOffsetBased(deviceId, pageRequest);
+    }
+
+    // Common CRUD
+    // Query messages - by Device ID
     @QueryMapping
     public List<Message> getMessagesByDevice(@Argument UUID deviceId) {
         return service.getMessagesByDevice(deviceId);

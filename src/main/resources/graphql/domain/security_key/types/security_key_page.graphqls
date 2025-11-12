@@ -1,0 +1,15 @@
+﻿type SecurityKeyPage {
+    content: [SecurityKey!]!
+    totalPages: Int
+    totalElements: Int
+    number: Int
+    size: Int
+}
+
+type SecurityKeyHistoryPage {
+    content: [SecurityKeyHistory!]!
+    totalPages: Int
+    totalElements: Int
+    number: Int
+    size: Int
+}

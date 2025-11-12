@@ -1,4 +1,5 @@
 extend type Query {
+    # Non-paginated queries
     getAllInvCommons: [InvCommon!]!
     getInvCommonsByInverterId(inverterId: UUID!): [InvCommon!]!
     getInvCommonById(id: UUID!): InvCommon
@@ -7,4 +8,12 @@ extend type Query {
     getInvCommonHistoryById(historyId: UUID!): InvCommonHistory!
     getInvCommonHistory(originalId: UUID!): [InvCommonHistory!]!
     getInvCommonHistoryByInverterId(inverterId: UUID!): [InvCommonHistory!]!
+
+    # Offset Pagination
+    getAllInvCommonPaged(pageRequest: PageRequestInput!): PageResponse_InvCommon!
+    getInvCommonByInverterIdPaged(inverterId: UUID!, pageRequest: PageRequestInput!): PageResponse_InvCommon!
+    getAllInvCommonHistoryPaged(pageRequest: PageRequestInput!): PageResponse_InvCommonHistory!
+
+    getInvCommonHistoryByOriginalIdPaged(originalId: UUID!, pageRequest: PageRequestInput!): PageResponse_InvCommonHistory!
+    getInvCommonHistoryByInverterIdPaged(inverterId: UUID!, pageRequest: PageRequestInput!): PageResponse_InvCommonHistory!
 }

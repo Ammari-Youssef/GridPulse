@@ -2,6 +2,8 @@ package com.youssef.GridPulse.domain.fleet.resolver;
 
 import com.youssef.GridPulse.common.base.BaseResolver;
 
+import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageRequestInput;
+import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageResponse;
 import com.youssef.GridPulse.domain.fleet.dto.FleetInput;
 import com.youssef.GridPulse.domain.fleet.entity.Fleet;
 import com.youssef.GridPulse.domain.fleet.entity.FleetHistory;
@@ -22,6 +24,24 @@ public class FleetResolver extends BaseResolver<Fleet, FleetHistory, UUID, Fleet
     public FleetResolver(FleetService service) {
         super(service);
     }
+
+    // Pagination Offset
+    @QueryMapping
+    public PageResponse<Fleet> getAllFleetPaged(@Argument PageRequestInput pageRequest) {
+        return super.getAllPaged(pageRequest);
+    }
+
+    @QueryMapping
+    public PageResponse<FleetHistory> getAllFleetHistoryPaged(@Argument PageRequestInput pageRequest) {
+        return super.getAllHistoryPaged(pageRequest);
+    }
+
+    @QueryMapping
+    public PageResponse<FleetHistory> getFleetHistoryByOriginalIdPaged(@Argument UUID originalId, @Argument PageRequestInput pageRequest) {
+        return super.getHistoryByOriginalIdPaged(originalId, pageRequest);
+    }
+
+    // Common CRUD
 
     @QueryMapping
     @PreAuthorize("hasRole('ADMIN')")

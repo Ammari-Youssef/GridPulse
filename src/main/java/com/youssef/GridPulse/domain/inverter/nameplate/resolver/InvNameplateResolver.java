@@ -1,5 +1,7 @@
 package com.youssef.GridPulse.domain.inverter.nameplate.resolver;
 
+import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageRequestInput;
+import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageResponse;
 import com.youssef.GridPulse.domain.inverter.base.SunSpecModelResolver;
 import com.youssef.GridPulse.domain.inverter.nameplate.dto.InvNameplateInput;
 import com.youssef.GridPulse.domain.inverter.nameplate.entity.InvNameplate;
@@ -22,6 +24,39 @@ public class InvNameplateResolver extends SunSpecModelResolver<InvNameplate, Inv
         super(service);
     }
 
+    //    Pagination Offset
+    @QueryMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public PageResponse<InvNameplate> getAllInvNameplatePaged(@Argument PageRequestInput pageRequest) {
+        return super.getAllPaged(pageRequest);
+    }
+
+    @QueryMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public PageResponse<InvNameplateHistory> getAllInvNameplateHistoryPaged(@Argument PageRequestInput pageRequest) {
+        return super.getAllHistoryPaged(pageRequest);
+    }
+
+    @QueryMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public PageResponse<InvNameplateHistory> getInvNameplateHistoryByOriginalIdPaged(@Argument UUID originalId, @Argument PageRequestInput pageRequest) {
+        return super.getHistoryByOriginalIdPaged(originalId, pageRequest);
+    }
+
+    @QueryMapping
+    @PreAuthorize("isAuthenticated()")
+    public PageResponse<InvNameplate> getInvNameplateByInverterIdPaged(@Argument UUID inverterId, @Argument PageRequestInput pageRequest) {
+        return super.getAllByInverterIdPaged(inverterId, pageRequest);
+    }
+
+    @QueryMapping
+    @PreAuthorize("isAuthenticated()")
+    public PageResponse<InvNameplateHistory> getInvNameplateHistoryByInverterIdPaged(@Argument UUID inverterId, @Argument PageRequestInput pageRequest) {
+        return super.getAllHistoryByInverterIdPaged(inverterId, pageRequest);
+    }
+
+    // CRUD
+
     @QueryMapping
     @PreAuthorize("hasRole('ADMIN')")
     public List<InvNameplate> getAllInvNameplates() {
@@ -30,7 +65,7 @@ public class InvNameplateResolver extends SunSpecModelResolver<InvNameplate, Inv
 
     @QueryMapping
     @PreAuthorize("isAuthenticated()")
-    public List<InvNameplate> getInvNameplatesByInverterId(@Argument UUID inverterId) {
+    public List<InvNameplate> getInvNameplateByInverterId(@Argument UUID inverterId) {
        return super.getAllByInverterId(inverterId);
     }
 

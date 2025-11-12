@@ -1,0 +1,8 @@
+﻿type PageResponse_Device {
+    content: [Device!]!
+    pageNumber: Int!
+    pageSize: Int!
+    totalElements: Long!
+    totalPages: Int!
+    last: Boolean!
+}
