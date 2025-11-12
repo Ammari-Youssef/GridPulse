@@ -38,6 +38,21 @@ public interface MessageMapper extends BaseMapper<Message, MessageHistory, Messa
     @Mapping(source = "device.id", target = "deviceId")
     MessageHistory toHistory(Message entity);
 
+    @Override
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "updatedBy", ignore = true)
+    @Mapping(target = "source", constant = "APP")
+
+    @Mapping(target = "device", ignore = true)
+    @Mapping(target = "messageText", ignore = true)
+    @Mapping(target = "explanation", ignore = true)
+    @Mapping(target = "severity", ignore = true)
+    @Mapping(target = "sentAt", ignore = true)
+    @Mapping(target = "receivedAt", ignore = true)
+    void updateEntity(MessageInput input, @MappingTarget Message entity);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
@@ -48,6 +63,7 @@ public interface MessageMapper extends BaseMapper<Message, MessageHistory, Messa
 
     @Mapping(target = "device", ignore = true)
     @Mapping(target = "messageText", ignore = true)
+    @Mapping(target = "messageType", ignore = true)
     @Mapping(target = "explanation", ignore = true)
     @Mapping(target = "severity", ignore = true)
     @Mapping(target = "sentAt", ignore = true)
