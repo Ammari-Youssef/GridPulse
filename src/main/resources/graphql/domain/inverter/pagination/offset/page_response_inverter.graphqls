@@ -1,0 +1,8 @@
+﻿type PageResponse_Inverter {
+    content: [Inverter!]!
+    pageNumber: Int!
+    pageSize: Int!
+    totalElements: Long!
+    totalPages: Int!
+    last: Boolean!
+}
