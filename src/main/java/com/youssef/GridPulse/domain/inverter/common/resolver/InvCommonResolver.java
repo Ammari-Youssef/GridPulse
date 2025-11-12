@@ -1,5 +1,7 @@
 package com.youssef.GridPulse.domain.inverter.common.resolver;
 
+import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageRequestInput;
+import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageResponse;
 import com.youssef.GridPulse.domain.inverter.base.SunSpecModelResolver;
 import com.youssef.GridPulse.domain.inverter.common.dto.InvCommonInput;
 import com.youssef.GridPulse.domain.inverter.common.entity.InvCommon;
@@ -22,6 +24,38 @@ public class InvCommonResolver extends SunSpecModelResolver<InvCommon, InvCommon
         super(service);
     }
 
+    //    Pagination Offset
+    @QueryMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public PageResponse<InvCommon> getAllInvCommonPaged(@Argument PageRequestInput pageRequest) {
+        return super.getAllPaged(pageRequest);
+    }
+
+    @QueryMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public PageResponse<InvCommonHistory> getAllInvCommonHistoryPaged(@Argument PageRequestInput pageRequest) {
+        return super.getAllHistoryPaged(pageRequest);
+    }
+
+    @QueryMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public PageResponse<InvCommonHistory> getInvCommonHistoryByOriginalIdPaged(@Argument UUID originalId, @Argument PageRequestInput pageRequest) {
+        return super.getHistoryByOriginalIdPaged(originalId, pageRequest);
+    }
+
+    @QueryMapping
+    @PreAuthorize("isAuthenticated()")
+    public PageResponse<InvCommon> getInvCommonByInverterIdPaged(@Argument UUID inverterId, @Argument PageRequestInput pageRequest) {
+        return super.getAllByInverterIdPaged(inverterId, pageRequest);
+    }
+
+    @QueryMapping
+    @PreAuthorize("isAuthenticated()")
+    public PageResponse<InvCommonHistory> getInvCommonHistoryByInverterIdPaged(@Argument UUID inverterId, @Argument PageRequestInput pageRequest) {
+        return super.getAllHistoryByInverterIdPaged(inverterId, pageRequest);
+    }
+
+    // CRUD
     @QueryMapping
     @PreAuthorize("hasRole('ADMIN')")
     public List<InvCommon> getAllInvCommons() {
@@ -31,13 +65,13 @@ public class InvCommonResolver extends SunSpecModelResolver<InvCommon, InvCommon
     @QueryMapping
     @PreAuthorize("isAuthenticated()")
     public List<InvCommon> getInvCommonsByInverterId(@Argument UUID inverterId) {
-       return super.getAllByInverterId(inverterId);
+        return super.getAllByInverterId(inverterId);
     }
 
     @QueryMapping
     @PreAuthorize("hasRole('ADMIN')")
     public List<InvCommonHistory> getInvCommonHistoryByInverterId(@Argument UUID inverterId) {
-       return super.getAllHistoryByInverterId(inverterId);
+        return super.getAllHistoryByInverterId(inverterId);
     }
 
     @QueryMapping

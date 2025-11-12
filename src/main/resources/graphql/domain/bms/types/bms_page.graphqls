@@ -1,0 +1,16 @@
+type BmsPage {
+    content: [Bms!]!
+    totalPages: Int
+    totalElements: Int
+    number: Int
+    size: Int
+}
+
+type BmsHistoryPage {
+    content: [BmsHistory!]!
+    totalPages: Int
+    totalElements: Int
+    number: Int
+    size: Int
+}
+
