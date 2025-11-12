@@ -2,6 +2,8 @@ package com.youssef.GridPulse.domain.message.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.youssef.GridPulse.common.base.BaseService;
+import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageRequestInput;
+import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageResponse;
 import com.youssef.GridPulse.domain.device.entity.Device;
 import com.youssef.GridPulse.domain.device.repository.DeviceRepository;
 import com.youssef.GridPulse.domain.message.dto.MessageInput;
@@ -16,6 +18,8 @@ import com.youssef.GridPulse.domain.message.repository.MessageHistoryRepository;
 import com.youssef.GridPulse.domain.message.repository.MessageRepository;
 import com.youssef.GridPulse.domain.message.util.SeverityInterpreter;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -170,6 +174,21 @@ public class MessageService extends BaseService<Message, MessageHistory, UUID, M
         setMessageValues(input, existing);
         mapper2.updateEntity(input, existing);
         return repository.save(existing);
+    }
+
+    // Pagination specials
+    public PageResponse<Message> getByDeviceIdOffsetBased(UUID deviceId, PageRequestInput pageRequest) {
+        Pageable pageable = setPageRequestFields(pageRequest);
+        Page<Message> result = ((MessageRepository) repository).findByDeviceId(deviceId, pageable);
+
+        return new PageResponse<>(
+                result.getContent(),
+                result.getNumber(),
+                result.getSize(),
+                result.getTotalElements(),
+                result.getTotalPages(),
+                result.isLast()
+        );
     }
 
 
