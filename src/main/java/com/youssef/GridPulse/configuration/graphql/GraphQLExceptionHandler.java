@@ -8,6 +8,7 @@ import jakarta.persistence.OptimisticLockException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.StaleObjectStateException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
@@ -62,6 +63,8 @@ public class GraphQLExceptionHandler extends DataFetcherExceptionResolverAdapter
             return "Cannot delete: resource does not exist.";
         if (ex instanceof InvalidDataAccessApiUsageException)
             return "Invalid operation. Please check your request.";
+        if (ex instanceof DataAccessException)
+            return "Database access error. Please try again later.";
 
         return "An unexpected error occurred";
     }
