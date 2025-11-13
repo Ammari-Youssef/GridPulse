@@ -104,7 +104,7 @@ class UserServiceTest {
         when(userRepository.findAll()).thenReturn(List.of(testUser, user2));
 
         // when
-        List<User> result = userService.getAllUsers();
+        List<User> result = userService.getAll();
 
         // then
         assertThat(result).hasSize(2);
@@ -138,10 +138,10 @@ class UserServiceTest {
         when(userRepository.findById(testUserId)).thenReturn(Optional.of(testUser));
 
         // when
-        Optional<User> result = userService.getUserById(testUserId);
+        User result = userService.getEntityById(testUserId);
 
         // then
-        assertThat(result).isPresent().contains(testUser);
+        assertThat(result).isEqualTo(testUser);
         verify(userRepository).findById(testUserId); // Verify it was retrieved once
     }
 
@@ -152,10 +152,10 @@ class UserServiceTest {
         when(userRepository.findById(nonExistentId)).thenReturn(Optional.empty());
 
         // when
-        Optional<User> result = userService.getUserById(nonExistentId);
+        User result = userService.getEntityById(nonExistentId);
 
         // then
-        assertThat(result).isEmpty();
+        assertThat(result).isNull();
         verify(userRepository).findById(nonExistentId);
     }
 
@@ -244,7 +244,7 @@ class UserServiceTest {
         doNothing().when(userRepository).deleteById(testUserId);
 
         // when
-        boolean result = userService.deleteUserById(testUserId);
+        boolean result = userService.delete(testUserId);
 
         // then
         assertThat(result).isTrue();
@@ -266,7 +266,7 @@ class UserServiceTest {
         when(userRepository.findById(nonExistentId)).thenReturn(Optional.empty());
 
         // when
-        boolean result = userService.deleteUserById(nonExistentId);
+        boolean result = userService.delete(nonExistentId);
 
         // then
         assertThat(result).isFalse();

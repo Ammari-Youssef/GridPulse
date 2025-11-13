@@ -153,7 +153,7 @@ class UserResolverTest {
         @WithMockUser(roles = "ADMIN")
         void getAllUsers_ShouldReturnAllUsersWithCorrectFields() {
             // given
-            when(userService.getAllUsers()).thenReturn(List.of(testUser1, testUser2));
+            when(userService.getAll()).thenReturn(List.of(testUser1, testUser2));
 
             // when & then
             graphQlTester.documentName("queries/user/getAllUsers")
@@ -188,7 +188,7 @@ class UserResolverTest {
                         assertThat(user2.isEnabled()).isEqualTo(testUser2.isEnabled());
                     });
 
-            verify(userService).getAllUsers();
+            verify(userService).getAll();
         }
 
         @Test
@@ -196,7 +196,7 @@ class UserResolverTest {
         @WithMockUser(roles = "ADMIN")
         void getAllUsers_WhenNoUsers_ShouldReturnEmptyList() {
             // given
-            when(userService.getAllUsers()).thenReturn(Collections.emptyList());
+            when(userService.getAll()).thenReturn(Collections.emptyList());
 
             // when & then
             graphQlTester.documentName("queries/user/getAllUsers")
@@ -205,7 +205,7 @@ class UserResolverTest {
                     .entityList(User.class)
                     .hasSize(0);
 
-            verify(userService).getAllUsers();
+            verify(userService).getAll();
         }
 
         @Test
@@ -213,7 +213,7 @@ class UserResolverTest {
         @WithMockUser(roles = "ADMIN")
         void getAllUsers_ShouldReturnCorrectFieldMapping() {
             // given
-            when(userService.getAllUsers()).thenReturn(List.of(testUser1));
+            when(userService.getAll()).thenReturn(List.of(testUser1));
             // when & then - Test specific field mapping
             graphQlTester.documentName("queries/user/getAllUsers")
                     .execute()
@@ -230,15 +230,15 @@ class UserResolverTest {
                         assertThat(user.getSource()).isEqualTo("APP");
                     });
 
-            verify(userService).getAllUsers();
+            verify(userService).getAll();
         }
 
         @Test
         @DisplayName("getAllUsers - Should return data when ADMIN accesses")
         @WithMockUser(roles = "ADMIN")
-        void getAllUsers_WhenAdminRole_ShouldReturnUsers() {
+        void getAllUsers_WhenAdminRole_ShouldReturn() {
             // given
-            when(userService.getAllUsers()).thenReturn(List.of(testUser1, testUser2));
+            when(userService.getAll()).thenReturn(List.of(testUser1, testUser2));
 
             // when & then
             graphQlTester.documentName("queries/user/getAllUsers")
@@ -248,7 +248,7 @@ class UserResolverTest {
                     .hasSize(2);
 
             // Verify the service WAS called for admin
-            verify(userService).getAllUsers();
+            verify(userService).getAll();
         }
 
         @Test
@@ -265,14 +265,14 @@ class UserResolverTest {
                     });
 
             // Verify the service was NEVER called for admin
-            verify(userService, never()).getAllUsers();
+            verify(userService, never()).getAll();
         }
 
         @Test
         @DisplayName("getAllUsers - Should handle service exceptions gracefully")
         void getAllUsers_ReturnGraphQLError() {
             // given - Simulate actual database exception
-            when(userService.getAllUsers()).thenThrow(
+            when(userService.getAll()).thenThrow(
                     new DataAccessException("Database connection failed") {
                     }
             );
@@ -289,7 +289,7 @@ class UserResolverTest {
                                 .contains("INTERNAL_ERROR for ");
                     });
 
-            verify(userService, never()).getAllUsers();
+            verify(userService, never()).getAll();
         }
 
     }
@@ -303,7 +303,7 @@ class UserResolverTest {
         @DisplayName("getUserById - Should return user with correct field values")
         void getUserById_Success() {
             // GIVEN
-            when(userService.getUserById(testUserId)).thenReturn(Optional.ofNullable(testUser1));
+            when(userService.getEntityById(testUserId)).thenReturn(testUser1);
 
             // WHEN & THEN
             graphQlTester.documentName("queries/user/getUserById")
@@ -321,7 +321,7 @@ class UserResolverTest {
                         assertThat(user.getSource()).isEqualTo("APP");
                     });
 
-            verify(userService).getUserById(testUserId);
+            verify(userService).getEntityById(testUserId);
         }
 
         @Test
@@ -338,7 +338,7 @@ class UserResolverTest {
                         assertThat(errors.get(0).getMessage()).contains("INTERNAL_ERROR");
                     });
 
-            verify(userService, never()).getUserById(any(UUID.class));
+            verify(userService, never()).getEntityById(any(UUID.class));
 
         }
 
@@ -362,14 +362,14 @@ class UserResolverTest {
                         assertThat(errors).hasSize(1);
                         assertThat(errors.get(0).getMessage()).contains("INTERNAL_ERROR");
                     });
-            verify(userService, never()).getUserById(any(UUID.class));
+            verify(userService, never()).getEntityById(any(UUID.class));
         }
 
         @Test
         @WithAnonymousUser
         void getUserById_WhenException_ShouldFail() {
             // GIVEN
-            when(userService.getUserById(testUserId)).thenThrow(
+            when(userService.getEntityById(testUserId)).thenThrow(
                     new DataAccessException("Database connection failed") {
                     }
             );
@@ -387,7 +387,7 @@ class UserResolverTest {
                                 .contains("INTERNAL_ERROR for ");
                     });
 
-            verify(userService, never()).getUserById(testUserId);
+            verify(userService, never()).getEntityById(testUserId);
         }
     }
 
@@ -599,7 +599,7 @@ class UserResolverTest {
         @Test
         @WithMockUser(roles = "ADMIN")
         void canDeleteUser() {
-            when(userService.deleteUserById(any(UUID.class))).thenReturn(true);
+            when(userService.delete(any(UUID.class))).thenReturn(true);
             graphQlTester.documentName("mutations/user/deleteUserById")
                     .variable("id", testUserId.toString())
                     .execute()
@@ -607,7 +607,7 @@ class UserResolverTest {
                     .entity(Boolean.class)
                     .isEqualTo(true);
 
-            verify(userService).deleteUserById(testUserId);
+            verify(userService).delete(testUserId);
         }
 
         // Negative tests - unauthorized access
@@ -624,7 +624,7 @@ class UserResolverTest {
 
                     });
 
-            verify(userService, never()).deleteUserById(any(UUID.class));
+            verify(userService, never()).delete(any(UUID.class));
         }
 
         @Test
@@ -637,7 +637,7 @@ class UserResolverTest {
                     .errors()
                     .satisfy(error -> error.get(0).getMessage().contains("INTERNAL_ERROR"));
 
-            verify(userService, never()).deleteUserById(any(UUID.class));
+            verify(userService, never()).delete(any(UUID.class));
         }
 
     }
