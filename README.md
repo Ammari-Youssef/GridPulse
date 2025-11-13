@@ -8,11 +8,10 @@ A full-stack IoT dashboard application for intelligent monitoring and management
 - **CI/CD:** GitHub Actions (build + test), Docker Compose for local setup
 
 ## 🧩 Features
-- Real-time monitoring of device data through GraphQL API
-- Energy cost optimization logic
-- Device and cloud APIs for IoT integration
-- JWT authentication and authorization
-- Modular microservice-ready backend architecture
+- Real-time monitoring of IoT device data via GraphQL API  
+- Data tracking with audit history for all entities (automatic CRUD operation logging through history tables)  
+- Secure JWT-based authentication and authorization implemented with Spring Security 6  
+- Modular, microservice-ready backend architecture designed for scalability and maintainability  
 
 ## ⚙️ Getting Started
 
