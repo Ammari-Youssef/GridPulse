@@ -1,5 +1,6 @@
 package com.youssef.GridPulse.domain.inverter.mapper;
 
+import com.youssef.GridPulse.common.base.Source;
 import com.youssef.GridPulse.domain.inverter.inverter.dto.InverterInput;
 import com.youssef.GridPulse.domain.inverter.inverter.entity.Inverter;
 import com.youssef.GridPulse.domain.inverter.inverter.mapper.InverterMapper;
@@ -75,7 +76,7 @@ class InverterMapperTest {
 
             // Then
             assertNotNull(history);
-            assertNull(history.getId()); // history has its own ID
+            assertNotNull(history.getId()); // history has its own ID
             assertEquals(inverter.getId(), history.getOriginalId());
             assertEquals(inverter.getModel(), history.getModel());
             assertEquals(inverter.getManufacturer(), history.getManufacturer());
@@ -125,7 +126,7 @@ class InverterMapperTest {
             assertEquals(input.model(), entity.getModel());
             assertEquals(input.version(), entity.getVersion());
             assertEquals(input.manufacturer(), entity.getManufacturer());
-            assertEquals("app", entity.getSource());
+            assertEquals(Source.APP, entity.getSource());
 
             System.out.println("✔️ should_map_toEntity passed");
         }
