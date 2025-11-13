@@ -20,10 +20,13 @@ A full-stack IoT dashboard application for intelligent monitoring and management
 
 # Clone repository
 git clone https://github.com/Ammari-Youssef/GridPulse.git
-cd gridpulse
+cd GridPule # Repository name is case-sensitive (`GridPulse`).
 
 # Build and test
 mvn clean verify
+
+# Run database migrations (Liquibase) ---> see db/changelog/README.md for details
+./mvnw liquibase:update
 
 # Run application
 mvn spring-boot:run
