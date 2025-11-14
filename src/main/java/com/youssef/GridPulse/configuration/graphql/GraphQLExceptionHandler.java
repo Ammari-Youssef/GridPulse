@@ -14,6 +14,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.graphql.execution.DataFetcherExceptionResolverAdapter;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -53,7 +54,8 @@ public class GraphQLExceptionHandler extends DataFetcherExceptionResolverAdapter
     private String getUserFriendlyMessage(Throwable ex) {
         if (ex instanceof ConstraintViolationException) return "Validation failed";
         if (ex instanceof EntityNotFoundException) return "Resource not found";
-        if (ex instanceof AccessDeniedException) return "Unauthorized: admin privileges required";
+        if (ex instanceof AuthenticationException) return "Unauthorized: authentication required"; // 401
+        if (ex instanceof AccessDeniedException) return "Forbidden: admin privileges required"; // 403
         if (ex instanceof IllegalArgumentException) return "Bad request";
         if (ex instanceof StaleObjectStateException || ex instanceof OptimisticLockException)
             return "Conflict occurred while updating the resource. Please retry.";
