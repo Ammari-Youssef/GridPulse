@@ -259,6 +259,19 @@ public class TestSuiteUtils {
                 .build();
     }
 
+    public static Inverter createTestInverterHibernate() {
+        // return inverter with no ID set (Hibernate handles it)
+        return Inverter.builder()
+                .name("Test Inverter")
+                .model("Test Model")
+                .version("Test Version")
+                .manufacturer("Test Manufacturer")
+                .source(Source.APP)
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
+                .updatedAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
+                .build();
+    }
+
     public Token createBearerToken(User user, String tokenValue) {
         return Token.builder()
                 .user(user)
