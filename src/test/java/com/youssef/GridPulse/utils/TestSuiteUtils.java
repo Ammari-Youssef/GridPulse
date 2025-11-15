@@ -143,6 +143,33 @@ public class TestSuiteUtils {
                 .build();
     }
 
+    public static User createTestUserHibernateA() { // For Repository testing, having id causes optimistic lock errors
+        return User.builder()
+                .firstname("John")
+                .lastname("Doe")
+                .email("john.doe@example.com")
+                .password("encodedPassword")
+                .role(Role.USER)
+                .enabled(true)
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
+                .updatedAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")).plusMonths(5))
+                .source(Source.APP)
+                .build();
+    }
+    public static User createTestUserHibernateB() { // For Repository testing, having id causes optimistic lock errors
+        return User.builder()
+                .firstname("Jane")
+                .lastname("Smith")
+                .email("jane.smith@example.com")
+                .password("encodedPassword")
+                .role(Role.ADMIN)
+                .enabled(true)
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
+                .updatedAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")).plusMonths(6))
+                .source(Source.APP)
+                .build();
+    }
+
     public UserHistory createTestUserHistoryA() {
         return UserHistory.builder()
                 .id(UUID.randomUUID())
@@ -291,4 +318,6 @@ public class TestSuiteUtils {
                 .revoked(false)
                 .build();
     }
+
+
 }
