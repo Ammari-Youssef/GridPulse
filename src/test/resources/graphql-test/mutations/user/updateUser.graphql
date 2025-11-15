@@ -5,6 +5,7 @@ mutation UpdateUser($id: UUID!, $input: UpdateUserInput) {
         firstname
         lastname
         email
+        role
         updatedAt
     }
 }

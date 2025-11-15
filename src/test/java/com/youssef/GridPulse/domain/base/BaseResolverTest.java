@@ -4,6 +4,7 @@ import com.youssef.GridPulse.common.base.BaseEntity;
 import com.youssef.GridPulse.common.base.BaseHistoryEntity;
 import com.youssef.GridPulse.common.base.BaseService;
 import com.youssef.GridPulse.domain.inverter.inverter.entity.Inverter;
+import com.youssef.GridPulse.utils.TestLogger;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.test.tester.GraphQlTester;
@@ -172,7 +173,7 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
                     .errors()
                     .satisfy(err -> {
                         assertThat(err).hasSize(1);
-                        assertThat(err.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(err.get(0).getMessage()).contains("Forbidden: admin privileges required");
                     });
         }
     }
@@ -213,7 +214,7 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
                     .errors()
                     .satisfy(err -> {
                         assertThat(err).hasSize(1);
-                        assertThat(err.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(err.get(0).getMessage()).contains("Forbidden: admin privileges required");
                     });
         }
     }
@@ -237,7 +238,7 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
                     .errors()
                     .satisfy(err -> {
                         assertThat(err).hasSize(1);
-                        assertThat(err.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(err.get(0).getMessage()).contains("Forbidden: admin privileges required");
                     });
         }
     }
@@ -261,7 +262,7 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
                     .errors()
                     .satisfy(err -> {
                         assertThat(err).hasSize(1);
-                        assertThat(err.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(err.get(0).getMessage()).contains("Forbidden: admin privileges required");
                     });
         }
 
@@ -274,7 +275,7 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
                     .errors()
                     .satisfy(err -> {
                         assertThat(err).hasSize(1);
-                        assertThat(err.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(err.get(0).getMessage()).contains("Forbidden: admin privileges required");
                     });
         }
 
@@ -316,7 +317,7 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
                         .errors()
                         .satisfy(errors -> {
                             assertThat(errors).hasSize(1);
-                            assertThat(errors.get(0).getMessage()).contains("INTERNAL_ERROR");
+                            assertThat(errors.get(0).getMessage()).contains("Forbidden: admin privileges required");
                         });
 
                 verify(service, never()).findHistoryByOriginalId(testEntityId);
@@ -338,7 +339,7 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
                             assertThat(errors).isNotNull();
                             assertThat(errors.size()).isEqualTo(1);
                             assertThat(errors.get(0).getMessage())
-                                    .contains("INTERNAL_ERROR for ");
+                                    .contains("Forbidden: admin privileges required");
                         });
 
                 verify(service, never()).findHistoryByOriginalId(testEntityId);
@@ -376,12 +377,24 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
                     .errors()
                     .satisfy(err -> {
                         assertThat(err).hasSize(1);
-                        assertThat(err.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(err.get(0).getMessage()).contains("Forbidden: admin privileges required");
                     });
         }
 
         @Test
         @WithAnonymousUser
+        void cannotMarkEntityHistorySynced_Anonymous() {
+            graphQlTester.documentName("mutations/" + getEntityClass().getSimpleName().toLowerCase() + "/markHistorySynced")
+                    .variable("id", testHistoryId.toString())
+                    .execute()
+                    .errors()
+                    .satisfy(err -> {
+                        assertThat(err).hasSize(1);
+                        assertThat(err.get(0).getMessage()).contains("Forbidden: admin privileges required");
+                    });
+        }
+
+        @Test
         void cannotMarkEntityHistorySynced_Unauthenticated() {
             graphQlTester.documentName("mutations/" + getEntityClass().getSimpleName().toLowerCase() + "/markHistorySynced")
                     .variable("id", testHistoryId.toString())
@@ -389,7 +402,7 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
                     .errors()
                     .satisfy(err -> {
                         assertThat(err).hasSize(1);
-                        assertThat(err.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(err.get(0).getMessage()).contains("Unauthorized: authentication required");
                     });
         }
     }
@@ -404,7 +417,7 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
                 .errors()
                 .satisfy(err -> {
                     assertThat(err).hasSize(1);
-                    assertThat(err.get(0).getMessage()).contains("INTERNAL_ERROR");
+                    assertThat(err.get(0).getMessage()).contains("Forbidden: admin privileges required");
                 });
 
         verify(service, never()).create(any());
