@@ -3,6 +3,8 @@ package com.youssef.GridPulse.utils;
 import com.youssef.GridPulse.common.base.Source;
 import com.youssef.GridPulse.domain.identity.auth.dto.AuthenticationResponse;
 import com.youssef.GridPulse.domain.identity.auth.dto.RegisterInput;
+import com.youssef.GridPulse.domain.identity.token.Token;
+import com.youssef.GridPulse.domain.identity.token.TokenType;
 import com.youssef.GridPulse.domain.identity.user.Role;
 import com.youssef.GridPulse.domain.identity.user.entity.User;
 import com.youssef.GridPulse.domain.identity.user.entity.UserHistory;
@@ -17,8 +19,15 @@ import java.util.UUID;
 
 @UtilityClass
 public class TestSuiteUtils {
-    public static final UUID testUserId = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
-    public static final UUID testUserId2 = UUID.fromString("012e4567-e89b-12d3-a456-426614174000");
+    // --- Common UUIDs for user tests ---
+    public static final UUID TEST_USER_ID_1 = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
+    public static final UUID TEST_USER_ID_2 = UUID.fromString("012e4567-e89b-12d3-a456-426614174000");
+
+    // --- Common UUIDs for inverter tests ---
+    public static final UUID TEST_INVERTER_ID = UUID.fromString("11111111-1111-1111-1111-111111111111");
+    public static final UUID TEST_INVERTER_ID2 = UUID.fromString("12121212-1212-1212-1212-121212121212");
+    public static final UUID TEST_INVERTER_HISTORY_ID = UUID.fromString("22222222-2222-2222-2222-222222222222");
+    public static final UUID TEST_INVERTER_HISTORY_ID2 = UUID.fromString("21212121-2121-2121-2121-212121212121");
 
     public AuthenticationResponse createAuthenticationResponse() {
         return AuthenticationResponse.builder()
@@ -106,7 +115,7 @@ public class TestSuiteUtils {
 
     public User createTestUserA() {
         return User.builder()
-                .id(testUserId)
+                .id(TEST_USER_ID_1)
                 .firstname("John")
                 .lastname("Doe")
                 .email("john.doe@example.com")
@@ -121,7 +130,7 @@ public class TestSuiteUtils {
 
     public User createTestUserB() {
         return User.builder()
-                .id(testUserId2)
+                .id(TEST_USER_ID_2)
                 .firstname("Jane")
                 .lastname("Smith")
                 .email("jane.smith@example.com")
@@ -137,7 +146,7 @@ public class TestSuiteUtils {
     public UserHistory createTestUserHistoryA() {
         return UserHistory.builder()
                 .id(UUID.randomUUID())
-                .originalId(testUserId)
+                .originalId(TEST_USER_ID_1)
                 .firstname("John")
                 .lastname("Doe")
                 .email("john.doe@example.com")
@@ -153,13 +162,13 @@ public class TestSuiteUtils {
     public UserHistory createTestUserHistoryB() {
         return UserHistory.builder()
                 .id(UUID.randomUUID())
-                .originalId(testUserId2)
+                .originalId(TEST_USER_ID_2)
                 .firstname("Jane")
                 .lastname("Smith")
                 .email("jane.smith@example.com")
                 .password("encoded password")
                 .role("USER")
-                .createdBy(testUserId.toString())
+                .createdBy(TEST_USER_ID_1.toString())
                 .enabled(true)
                 .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")).plusMonths(6))
                 .source(Source.APP)
@@ -168,7 +177,7 @@ public class TestSuiteUtils {
 
     public static User createTestAuthUserA() {
         return User.builder()
-                .id(testUserId)
+                .id(TEST_USER_ID_1)
                 .email("test@example.com")
                 .password("encodedPassword")
                 .firstname("John")
@@ -180,7 +189,7 @@ public class TestSuiteUtils {
     }
 
     public static Inverter createTestInverter(Inverter entity) {
-       return  Inverter.builder()
+        return Inverter.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .model(entity.getModel())
@@ -193,35 +202,80 @@ public class TestSuiteUtils {
     }
 
     public static InverterInput createTestInverterInput() {
-        return new InverterInput(
-                "Test Inverter",
-                "TX5000",
-                "v2.1",
-                "SolarEdge"
-        );
+        return new InverterInput("Test Inverter", "TX5000", "v2.1", "Test Manufacturer");
+    }
+
+    public static InverterInput createTestInverterInput(InverterInput input) {
+        return new InverterInput(input.name(), input.model(), input.version(), input.manufacturer());
     }
 
     public static Inverter createTestInverterA() {
         return Inverter.builder()
-                .id(UUID.randomUUID())
+                .id(TEST_INVERTER_ID)
                 .name("Test Inverter")
-                .model("TX5000")
-                .version("v2.1")
-                .manufacturer("SolarEdge")
+                .model("Test Model")
+                .version("Test Version")
+                .manufacturer("Test Manufacturer")
                 .source(Source.APP)
                 .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .updatedAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .build();
     }
 
-    public static InverterHistory createTestHistoryEntityA() {
+    public static Inverter createTestInverterB() {
+        return Inverter.builder()
+                .id(TEST_INVERTER_ID2)
+                .name("Test Inverter 2")
+                .model("Test Model")
+                .version("Test Version")
+                .manufacturer("SolarEclipse")
+                .source(Source.APP)
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
+                .updatedAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
+                .build();
+    }
+
+    public static InverterHistory createTestInverterHistoryA() {
         return InverterHistory.builder()
-                .id(UUID.randomUUID())
-                .originalId(UUID.randomUUID())
+                .id(TEST_INVERTER_HISTORY_ID)
+                .originalId(TEST_INVERTER_ID)
                 .name("Test Inverter")
-                .model("TX5000")
-                .version("v2.1")
-                .manufacturer("SolarEdge")
+                .model("Test Model")
+                .version("Test Version")
+                .manufacturer("Test Manufacturer")
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
+                .build();
+    }
+
+    public static InverterHistory createTestInverterHistoryB() {
+        return InverterHistory.builder()
+                .id(TEST_INVERTER_HISTORY_ID2)
+                .originalId(TEST_INVERTER_ID2)
+                .name("Test Inverter")
+                .model("Test Model")
+                .version("Test Version")
+                .manufacturer("Test Manufacturer")
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
+                .build();
+    }
+
+    public Token createBearerToken(User user, String tokenValue) {
+        return Token.builder()
+                .user(user)
+                .token(tokenValue)
+                .tokenType(TokenType.BEARER)
+                .expired(false)
+                .revoked(false)
+                .build();
+    }
+
+    public Token createRefreshToken(User user, String tokenValue) {
+        return Token.builder()
+                .user(user)
+                .token(tokenValue)
+                .tokenType(TokenType.REFRESH)
+                .expired(false)
+                .revoked(false)
                 .build();
     }
 }
