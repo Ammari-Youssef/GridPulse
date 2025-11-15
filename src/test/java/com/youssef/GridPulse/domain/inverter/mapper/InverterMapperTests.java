@@ -31,7 +31,7 @@ public class InverterMapperTests extends BaseMapperTest<Inverter, InverterHistor
 
     @Override
     protected InverterHistory createTestHistoryEntity() {
-        return TestSuiteUtils.createTestHistoryEntityA();
+        return TestSuiteUtils.createTestInverterHistoryA();
     }
 
     @Override
