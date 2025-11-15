@@ -51,8 +51,8 @@ class UserResolverTest {
 //    }
 
     // Test data
-    UUID testUserId = TestSuiteUtils.testUserId;
-    UUID testUserId2 = TestSuiteUtils.testUserId2;
+    UUID testUserId = TestSuiteUtils.TEST_USER_ID_1;
+
     private User testUser1;
     private User testUser2;
     private UserHistory testUserHistory1;
