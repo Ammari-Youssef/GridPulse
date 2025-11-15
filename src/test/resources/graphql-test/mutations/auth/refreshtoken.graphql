@@ -1,6 +1,6 @@
-mutation RefreshToken ($token: String!){
+mutation RefreshToken ($refreshToken: String!){
     refreshToken(
-        refreshToken: $token
+        refreshToken: $refreshToken
     ) {
         __typename
         accessToken
