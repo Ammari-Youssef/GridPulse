@@ -167,7 +167,7 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
         @Test
         @WithAnonymousUser
         void anonymousCannotGetEntityById() {
-            graphQlTester.documentName("queries/" + getEntityClass().getSimpleName() + "/getById")
+            graphQlTester.documentName("queries/" + getEntityClass().getSimpleName().toLowerCase() + "/getById")
                     .variable("id", testEntityId)
                     .execute()
                     .errors()
@@ -207,7 +207,7 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
         @Test
         @WithMockUser(roles = "USER")
         void userCannotUpdateEntity() {
-            graphQlTester.documentName("mutations/" + getEntityClass().getSimpleName() + "/update")
+            graphQlTester.documentName("mutations/" + getEntityClass().getSimpleName().toLowerCase() + "/update")
                     .variable("id", testEntityId.toString())
                     .variable("input", inputMap)
                     .execute()
@@ -232,7 +232,7 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
         @Test
         @WithMockUser(roles = "USER")
         void userCannotDeleteEntity() {
-            graphQlTester.documentName("mutations/" + getEntityClass().getSimpleName() + "/deleteById")
+            graphQlTester.documentName("mutations/" + getEntityClass().getSimpleName().toLowerCase() + "/deleteById")
                     .variable("id", testEntityId.toString())
                     .execute()
                     .errors()
@@ -311,7 +311,7 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
             @Test
             @WithMockUser
             void findHistoryByOriginalId_UserFail() {
-                graphQlTester.documentName("queries/" + Inverter.class.getSimpleName() + "/getHistoryByOriginalId")
+                graphQlTester.documentName("queries/" + Inverter.class.getSimpleName().toLowerCase() + "/getHistoryByOriginalId")
                         .variable("originalId", testEntityId)
                         .execute()
                         .errors()
@@ -331,7 +331,7 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
 //                        .thenThrow(new BadCredentialsException("Authentication failed"));  // ✅ Concrete exception
 
                 // when & then
-                graphQlTester.documentName("queries/" + Inverter.class.getSimpleName() + "/getHistoryByOriginalId")
+                graphQlTester.documentName("queries/" + Inverter.class.getSimpleName().toLowerCase() + "/getHistoryByOriginalId")
                         .variable("originalId", testEntityId)
                         .execute()
                         .errors()
@@ -483,7 +483,7 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
     protected void testDelete_AdminSuccess(ID id) {
         when(service.delete(id)).thenReturn(true);
 
-        graphQlTester.documentName("mutations/" + getEntityClass().getSimpleName() + "/deleteById")
+        graphQlTester.documentName("mutations/" + getEntityClass().getSimpleName().toLowerCase() + "/deleteById")
                 .variable("id", id.toString())
                 .execute()
                 .path("delete" + getEntityClass().getSimpleName())
