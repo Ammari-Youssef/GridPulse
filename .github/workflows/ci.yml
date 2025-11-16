@@ -2,7 +2,7 @@ name: GridPulse CI/CD Pipeline
 
 on:
   push:
-    branches: [ "master", "development", "ci/ci-docker" ]
+    branches: [ "master", "development" ]
   pull_request:
     branches: [ "master", "development" ]
 
