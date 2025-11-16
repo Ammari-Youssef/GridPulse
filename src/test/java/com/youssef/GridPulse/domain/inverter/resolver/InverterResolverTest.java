@@ -176,7 +176,7 @@ class InverterResolverTest {
             when(service.getAll()).thenReturn(List.of(testInverter1, testInverter2));
 
             // when & then
-            graphQlTester.documentName("queries/Inverter/getAll")
+            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName().toLowerCase() + "/getAll")
                     .execute()
                     .path("getAll" + Inverter.class.getSimpleName() + "s")
                     .entityList(Inverter.class)
@@ -217,7 +217,7 @@ class InverterResolverTest {
             when(service.getAll()).thenReturn(Collections.emptyList());
 
             // when & then
-            graphQlTester.documentName("queries/Inverter/getAll")
+            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName().toLowerCase() + "/getAll")
                     .execute()
                     .path("getAll" + Inverter.class.getSimpleName() + "s")
                     .entityList(Inverter.class)
@@ -233,7 +233,7 @@ class InverterResolverTest {
             // given
             when(service.getAll()).thenReturn(List.of(testInverter1));
             // when & then - Test specific field mapping
-            graphQlTester.documentName("queries/Inverter/getAll")
+            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName().toLowerCase() + "/getAll")
                     .execute()
                     .path("getAll" + Inverter.class.getSimpleName() + "s")
                     .entityList(Inverter.class)
@@ -258,7 +258,7 @@ class InverterResolverTest {
             when(service.getAll()).thenReturn(List.of(testInverter1, testInverter2));
 
             // when & then
-            graphQlTester.documentName("queries/Inverter/getAll")
+            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName().toLowerCase() + "/getAll")
                     .execute()
                     .path("getAll" + Inverter.class.getSimpleName() + "s")
                     .entityList(Inverter.class)
@@ -273,7 +273,7 @@ class InverterResolverTest {
         @WithMockUser(roles = "User")
         void getAll_WhenUserRole_ShouldFail() {
             // when & then
-            graphQlTester.documentName("queries/Inverter/getAll")
+            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName().toLowerCase() + "/getAll")
                     .execute()
                     .errors()
                     .satisfy(errors -> {
@@ -291,11 +291,12 @@ class InverterResolverTest {
         void getAll_ReturnGraphQLError() {
             // given - Simulate actual database exception
             when(service.getAll()).thenThrow(
-                    new DataAccessException("Database connection failed") {}
+                    new DataAccessException("Database connection failed") {
+                    }
             );
 
             // when & then
-            graphQlTester.documentName("queries/Inverter/getAll")
+            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName().toLowerCase() + "/getAll")
                     .execute()
                     .errors()
                     .satisfy(errors -> {
@@ -394,7 +395,8 @@ class InverterResolverTest {
         void getEntityById_WhenException_ShouldFail() {
             // GIVEN
             when(service.getEntityById(any(UUID.class))).thenThrow(
-                    new DataAccessException("Database connection failed") {}
+                    new DataAccessException("Database connection failed") {
+                    }
             );
 
             // WHEN & THEN
@@ -449,7 +451,8 @@ class InverterResolverTest {
         void findAllHistory_Fail() {
             // given
             when(service.findAllHistory()).thenThrow(
-                    new DataAccessException("Database connection failed") {}
+                    new DataAccessException("Database connection failed") {
+                    }
             );
 
             // when & then
