@@ -564,7 +564,7 @@ class InverterResolverTest {
             when(service.findHistoryByOriginalId(testInverterId)).thenReturn(List.of(testInverterHistory1));
 
             // when & then
-            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName() + "/getHistoryByOriginalId")
+            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName().toLowerCase() + "/getHistoryByOriginalId")
                     .variable("originalId", testInverterId)
                     .execute()
                     .path("get" + Inverter.class.getSimpleName() + "History")
@@ -586,7 +586,7 @@ class InverterResolverTest {
         @Test
         @WithMockUser
         void findHistoryByOriginalId_UserFail() {
-            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName() + "/getHistoryByOriginalId")
+            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName().toLowerCase() + "/getHistoryByOriginalId")
                     .variable("originalId", testInverterId)
                     .execute()
                     .errors()
@@ -607,7 +607,7 @@ class InverterResolverTest {
             );
 
             // when & then
-            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName() + "/getHistoryByOriginalId")
+            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName().toLowerCase() + "/getHistoryByOriginalId")
                     .variable("originalId", testInverterId)
                     .execute()
                     .errors()
