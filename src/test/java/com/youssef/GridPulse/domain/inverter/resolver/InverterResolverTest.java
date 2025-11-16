@@ -325,7 +325,7 @@ class InverterResolverTest {
             when(service.getEntityById(testInverterId)).thenReturn(testInverter1);
 
             // WHEN & THEN
-            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName() + "/getById")
+            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName().toLowerCase() + "/getById")
                     .variable("id", testInverterId)
                     .execute()
                     .path("get" + Inverter.class.getSimpleName() + "ById")
@@ -349,7 +349,7 @@ class InverterResolverTest {
             when(service.getEntityById(testInverterId)).thenReturn(testInverter1);
 
             // WHEN & THEN
-            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName() + "/getById")
+            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName().toLowerCase() + "/getById")
                     .variable("id", testInverterId)
                     .execute()
                     .path("get" + Inverter.class.getSimpleName() + "ById")
@@ -379,7 +379,7 @@ class InverterResolverTest {
 //            System.out.println("Authenticated user: " + auth.getName());
 //            System.out.println("User roles: " + auth.getAuthorities());
             // when & then
-            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName() + "/getById")
+            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName().toLowerCase() + "/getById")
                     .variable("id", testInverterId)
                     .execute()
                     .errors()
@@ -400,7 +400,7 @@ class InverterResolverTest {
             );
 
             // WHEN & THEN
-            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName() + "/getById")
+            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName().toLowerCase() + "/getById")
                     .variable("id", UUID.randomUUID())
                     .execute()
                     .errors()
@@ -429,7 +429,7 @@ class InverterResolverTest {
             when(service.findAllHistory()).thenReturn(List.of(testInverterHistory1, testInverterHistory2));
 
             // when & then
-            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName() + "/getAllHistory")
+            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName().toLowerCase() + "/getAllHistory")
                     .execute()
                     .path("getAll" + Inverter.class.getSimpleName() + "History")
                     .entityList(InverterHistory.class)
@@ -456,7 +456,7 @@ class InverterResolverTest {
             );
 
             // when & then
-            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName() + "/getAllHistory")
+            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName().toLowerCase() + "/getAllHistory")
                     .execute()
                     .errors()
                     .satisfy(errors -> {
@@ -476,7 +476,7 @@ class InverterResolverTest {
         @DisplayName("findAllHistory - Should deny access when USER tries to access admin endpoint")
         void findAllHistory_Unauthorized() {
             // when & then - Security should block before reaching service
-            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName() + "/getAllHistory")
+            graphQlTester.documentName("queries/" + Inverter.class.getSimpleName().toLowerCase() + "/getAllHistory")
                     .execute()
                     .errors()
                     .satisfy(errors -> {
