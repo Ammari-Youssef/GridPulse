@@ -66,5 +66,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .                # path to Dockerfile
+          file: /Dockerfile       # Dockerfile location
           push: true
           tags: ammysf/gridpulse-cloud-backend:v1.0.0
