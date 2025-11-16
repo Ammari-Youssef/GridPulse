@@ -664,7 +664,7 @@ class InverterResolverTest {
             // Test no authentication
             UUID differentUserId = UUID.randomUUID(); // Different from principal.id
 
-            graphQlTester.documentName("mutations/" + Inverter.class.getSimpleName() + "/update")
+            graphQlTester.documentName("mutations/" + Inverter.class.getSimpleName().toLowerCase() + "/update")
                     .variable("id", differentUserId.toString())
                     .variable("input", Map.of("name", "NewName"))
                     .execute()
@@ -686,7 +686,7 @@ class InverterResolverTest {
         @WithMockUser(roles = "ADMIN")
         void canDeleteEntity() {
             when(service.delete(any(UUID.class))).thenReturn(true);
-            graphQlTester.documentName("mutations/" + Inverter.class.getSimpleName() + "/deleteById")
+            graphQlTester.documentName("mutations/" + Inverter.class.getSimpleName().toLowerCase() + "/deleteById")
                     .variable("id", testInverterId.toString())
                     .execute()
                     .path("deleteInverter")
@@ -700,7 +700,7 @@ class InverterResolverTest {
         @Test
         @WithMockUser(roles = "USER")
         void userCannotDeleteUser() {
-            graphQlTester.documentName("mutations/" + Inverter.class.getSimpleName() + "/deleteById")
+            graphQlTester.documentName("mutations/" + Inverter.class.getSimpleName().toLowerCase() + "/deleteById")
                     .variable("id", testInverterId.toString())
                     .execute()
                     .errors()
@@ -717,7 +717,7 @@ class InverterResolverTest {
         void anonymousCannotDeleteUser() {
             SecurityContextHolder.clearContext();
 
-            graphQlTester.documentName("mutations/" + Inverter.class.getSimpleName() + "/deleteById")
+            graphQlTester.documentName("mutations/" + Inverter.class.getSimpleName().toLowerCase() + "/deleteById")
                     .variable("id", testInverterId.toString())
                     .execute()
                     .errors()
@@ -737,7 +737,7 @@ class InverterResolverTest {
         void canMarkInverterHistorySynced() {
             when(service.markHistoryRecordAsSynced(testInverterHistory1.getId())).thenReturn(true);
 
-            graphQlTester.documentName("mutations/" + Inverter.class.getSimpleName() + "/markHistorySynced")
+            graphQlTester.documentName("mutations/" + Inverter.class.getSimpleName().toLowerCase() + "/markHistorySynced")
                     .variable("id", testInverterHistory1.getId())
                     .execute()
                     .path("mark" + Inverter.class.getSimpleName() + "HistorySynced")
@@ -750,7 +750,7 @@ class InverterResolverTest {
         @Test
         @WithMockUser
         void cannotMarkHistorySynced_UnauthorizedUser() {
-            graphQlTester.documentName("mutations/" + Inverter.class.getSimpleName() + "/markHistorySynced")
+            graphQlTester.documentName("mutations/" + Inverter.class.getSimpleName().toLowerCase() + "/markHistorySynced")
                     .variable("id", testInverterHistory1.getId())
                     .execute()
                     .errors()
@@ -765,7 +765,7 @@ class InverterResolverTest {
         @Test
         @WithAnonymousUser
         void cannotMarkInverterHistorySynced_Guest() {
-            graphQlTester.documentName("mutations/" + Inverter.class.getSimpleName() + "/markHistorySynced")
+            graphQlTester.documentName("mutations/" + Inverter.class.getSimpleName().toLowerCase() + "/markHistorySynced")
                     .variable("id", testInverterHistory1.getId())
                     .execute()
                     .errors()
@@ -781,7 +781,7 @@ class InverterResolverTest {
         void cannotMarkInverterHistorySynced_Unauthenticated() {
 
             SecurityContextHolder.clearContext();
-            graphQlTester.documentName("mutations/" + Inverter.class.getSimpleName() + "/markHistorySynced")
+            graphQlTester.documentName("mutations/" + Inverter.class.getSimpleName().toLowerCase() + "/markHistorySynced")
                     .variable("id", testInverterHistory1.getId())
                     .execute()
                     .errors()
