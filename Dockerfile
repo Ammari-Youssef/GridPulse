@@ -5,6 +5,7 @@ WORKDIR /app
 
 # Copy only the files needed for dependency resolution first (better layer caching)
 COPY mvnw .
+RUN chmod +x mvnw # Make mvnw executable
 COPY .mvn .mvn
 COPY pom.xml .
 
