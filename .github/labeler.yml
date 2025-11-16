@@ -1,0 +1,71 @@
+# Auto-label rules for PRs
+
+# Backend & core
+backend:
+  - src/**
+  - pom.xml
+  - Dockerfile
+  - docker-compose.yml
+
+db:
+  - src/main/resources/db/**
+
+liquibase:
+  - src/main/resources/db/**
+
+auth:
+  - src/main/java/**/auth/**
+  - src/**/security/**
+
+graphql:
+  - src/main/graphql/**
+  - src/**/*.graphql
+
+test:
+  - src/test/**
+  - src/**/*Test.java
+  - frontend/**/*.spec.ts
+  - frontend/e2e/**
+
+# Frontend (Angular v19)
+frontend:
+  - frontend/**
+  - frontend/**/*
+  - frontend/Dockerfile
+
+angular:
+  - frontend/**
+  - frontend/**/*
+  - frontend/Dockerfile
+
+# CI/CD & infra
+ci/cd:
+  - .github/workflows/**
+  - .github/labeler.yml
+
+github-actions:
+  - .github/workflows/**
+  - .github/labeler.yml
+
+docker:
+  - docker-compose.yml
+  - Dockerfile
+
+infra:
+  - .github/workflows/**
+  - .github/labeler.yml
+  - gitHub-actions/**
+
+# Documentation
+documentation:
+  - docs/**
+  - README.md
+
+foundation:
+  - foundation/**
+
+# Miscellaneous
+
+enhancement:
+  - src/**/feature/**
+  - frontend/**
