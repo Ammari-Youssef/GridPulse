@@ -1,15 +1,19 @@
 package com.youssef.GridPulse.domain.inverter.repository;
 
+import com.youssef.GridPulse.domain.inverter.inverter.entity.Inverter;
 import com.youssef.GridPulse.domain.inverter.inverter.repository.InverterRepository;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import com.youssef.GridPulse.utils.TestSuiteUtils;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 /**
  * Test class for {@link InverterRepository}.
@@ -31,6 +35,7 @@ class InverterRepositoryTest {
 
     private static Instant suiteStartTime;
     private static int testCounter = 1;
+
 
     @BeforeAll
     static void beginTestExecution() {
@@ -62,4 +67,50 @@ class InverterRepositoryTest {
         System.out.println("✅ Test " + testCounter + " - Completed");
         testCounter += 1;
     }
+
+    @Test
+    void saveAndFindById_ShouldPersistEntity() {
+        // Given: use utility method
+        Inverter inverter = TestSuiteUtils.createTestInverterHibernate();
+
+        // When
+        Inverter saved = repository.save(inverter);
+
+        // Then
+        Optional<Inverter> found = repository.findById(saved.getId());
+        assertThat(found).isPresent();
+        assertThat(found.get().getName()).isEqualTo("Test Inverter");
+        assertThat(found.get().getManufacturer()).isEqualTo("Test Manufacturer");
+    }
+
+    @Test
+    void findTopNOrderByCreatedAtDesc_ShouldReturnLatestEntities() {
+        // Given: two inverters with different timestamps
+        Inverter inv1 = Inverter.builder()
+                .name("Test Inverter A")
+                .manufacturer("Manufacturer A")
+                .model("Model A")
+                .version("1.0")
+                .createdAt(OffsetDateTime.now().minusDays(2))
+                .build();
+
+        repository.saveAndFlush(inv1);
+
+        Inverter inv2 = Inverter.builder()
+                .name("Test Inverter B")
+                .manufacturer("Manufacturer B")
+                .model("Model B")
+                .version("1.0")
+                .createdAt(OffsetDateTime.now().minusDays(1))
+                .build();
+        repository.saveAndFlush(inv2);
+
+        // When
+        List<Inverter> result = repository.findTopNOrderByCreatedAtDesc(1);
+
+        // Then
+        assertThat(result.size()).isEqualTo(1);
+
+        }
+
 }

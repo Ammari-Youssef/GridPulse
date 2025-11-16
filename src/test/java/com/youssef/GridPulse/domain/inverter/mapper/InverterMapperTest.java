@@ -1,9 +1,11 @@
 package com.youssef.GridPulse.domain.inverter.mapper;
 
+import com.youssef.GridPulse.common.base.Source;
 import com.youssef.GridPulse.domain.inverter.inverter.dto.InverterInput;
 import com.youssef.GridPulse.domain.inverter.inverter.entity.Inverter;
 import com.youssef.GridPulse.domain.inverter.inverter.mapper.InverterMapper;
 import com.youssef.GridPulse.domain.inverter.inverter.mapper.InverterMapperImpl;
+import com.youssef.GridPulse.utils.TestLogger;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -24,33 +26,24 @@ class InverterMapperTest {
     @BeforeAll
     static void beginTestExecution() {
         suiteStartTime = Instant.now();
-        System.out.println("\n⭐ InverterMapper Test Execution Started");
-        System.out.println("⏰ Start Time: " + suiteStartTime);
-        System.out.println("-".repeat(50));
+        TestLogger.logSuiteStart(InverterMapperTest.class);
     }
 
     @AfterAll
     static void endTestExecution() {
-        Instant suiteEndTime = Instant.now();
-        long duration = Duration.between(suiteStartTime, suiteEndTime).toMillis();
-
-        System.out.println("-".repeat(50));
-        System.out.println("🏁 InverterMapper Test Execution Completed");
-        System.out.println("⏰ End Time: " + suiteEndTime);
-        System.out.println("⏱️  Total Duration: " + duration + "ms");
-        System.out.println("=".repeat(50));
+        TestLogger.logSuiteEnd(InverterMapperTest.class, suiteStartTime);
     }
 
     @BeforeEach
     void setUp() {
-        System.out.println("📋 Test " + testCounter + " - Setting up...");
+        TestLogger.logTestStart(testCounter);
         mapper = new InverterMapperImpl();
 
     }
 
     @AfterEach
     void tearDown() {
-        System.out.println("✅ Test " + testCounter + " - Completed");
+        TestLogger.logTestEnd(testCounter);
         testCounter += 1;
     }
 
@@ -62,12 +55,10 @@ class InverterMapperTest {
 
             // Given
             Inverter inverter = Inverter.builder()
-                    .id(UUID.randomUUID())
                     .name("Main Inverter")
                     .model("ModelX")
                     .manufacturer("InverterCo")
                     .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
-                    .updatedAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                     .build();
 
             // When
@@ -125,7 +116,7 @@ class InverterMapperTest {
             assertEquals(input.model(), entity.getModel());
             assertEquals(input.version(), entity.getVersion());
             assertEquals(input.manufacturer(), entity.getManufacturer());
-            assertEquals("app", entity.getSource());
+            assertEquals(Source.APP, entity.getSource());
 
             System.out.println("✔️ should_map_toEntity passed");
         }

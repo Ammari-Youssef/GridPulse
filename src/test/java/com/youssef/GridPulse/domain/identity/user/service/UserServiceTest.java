@@ -6,6 +6,7 @@ import com.youssef.GridPulse.domain.identity.user.mapper.UserMapper;
 import com.youssef.GridPulse.domain.identity.user.repository.UserHistoryRepository;
 import com.youssef.GridPulse.domain.identity.user.repository.UserRepository;
 import com.youssef.GridPulse.domain.identity.user.dto.UpdateUserInput;
+import com.youssef.GridPulse.utils.TestSuiteUtils;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,12 +24,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 @DisplayName("User Service Test Suite")
+@ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
     @Mock
@@ -83,7 +85,7 @@ class UserServiceTest {
     void setUp() {
         System.out.println("📋 Test " + testCounter + " - Setting up...");
 
-        testUserId = UUID.randomUUID();
+        testUserId = TestSuiteUtils.TEST_USER_ID_1;
         testUser = User.builder()
                 .id(testUserId)
                 .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
@@ -104,7 +106,7 @@ class UserServiceTest {
         when(userRepository.findAll()).thenReturn(List.of(testUser, user2));
 
         // when
-        List<User> result = userService.getAllUsers();
+        List<User> result = userService.getAll();
 
         // then
         assertThat(result).hasSize(2);
@@ -138,10 +140,10 @@ class UserServiceTest {
         when(userRepository.findById(testUserId)).thenReturn(Optional.of(testUser));
 
         // when
-        Optional<User> result = userService.getUserById(testUserId);
+        User result = userService.getEntityById(testUserId);
 
         // then
-        assertThat(result).isPresent().contains(testUser);
+        assertThat(result).isNotNull().isEqualTo(testUser);
         verify(userRepository).findById(testUserId); // Verify it was retrieved once
     }
 
@@ -151,11 +153,11 @@ class UserServiceTest {
         UUID nonExistentId = UUID.randomUUID();
         when(userRepository.findById(nonExistentId)).thenReturn(Optional.empty());
 
-        // when
-        Optional<User> result = userService.getUserById(nonExistentId);
+        // when + then
+        assertThatThrownBy(() -> userService.getEntityById(nonExistentId))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessageContaining("Entity not found");
 
-        // then
-        assertThat(result).isEmpty();
         verify(userRepository).findById(nonExistentId);
     }
 
@@ -164,7 +166,7 @@ class UserServiceTest {
     @Test
     void updateUser_WhenUserExists_ShouldUpdateAndSaveHistory() {
         // given
-        UpdateUserInput input = new UpdateUserInput("Jane", "Smith");
+        UpdateUserInput input = new UpdateUserInput("John", "Doe");
         UserHistory history = UserHistory.builder().id(UUID.randomUUID()).build();
 
         when(userRepository.findById(testUserId)).thenReturn(Optional.of(testUser));
@@ -185,10 +187,10 @@ class UserServiceTest {
         // Verify user was saved with updated fields
         verify(userRepository).save(userCaptor.capture());
         User savedUser = userCaptor.getValue();
-        assertThat(savedUser.getFirstname()).isEqualTo("Jane");
-        assertThat(savedUser.getLastname()).isEqualTo("Smith");
+        assertThat(savedUser.getFirstname()).isEqualTo("John");
+        assertThat(savedUser.getLastname()).isEqualTo("Doe");
 
-        verify(userRepository).findById(testUserId);
+        verify(userRepository, times(2)).findById(testUserId);
         verify(userMapper).toHistory(testUser);
     }
 
@@ -228,7 +230,7 @@ class UserServiceTest {
 
         // Only lastname should be changed, firstname should remain unchanged
         assertThat(savedUser.getFirstname()).isEqualTo("John"); // Original value
-        assertThat(savedUser.getLastname()).isEqualTo("Smith"); // New value
+        assertThat(savedUser.getLastname()).isEqualTo("Doe"); // New value
         assertThat(result).isEqualTo(testUser);
     }
 
@@ -236,27 +238,24 @@ class UserServiceTest {
 
     @Test
     void deleteUserById_WhenUserExists_ShouldDeleteAndSaveHistory() {
-        // given
-        UserHistory history = UserHistory.builder().id(UUID.randomUUID()).build();
+        UserHistory history = UserHistory.builder()
+                .id(UUID.randomUUID())
+                .originalId(testUserId)
+                .deletedRecord(false)
+                .build();
 
         when(userRepository.findById(testUserId)).thenReturn(Optional.of(testUser));
         when(userMapper.toHistory(testUser)).thenReturn(history);
-        doNothing().when(userRepository).deleteById(testUserId);
 
-        // when
-        boolean result = userService.deleteUserById(testUserId);
+        boolean result = userService.delete(testUserId);
 
-        // then
         assertThat(result).isTrue();
 
-        // Verify history was saved with deletedRecord = true
-        verify(userHistoryRepository).save(historyCaptor.capture());
-        UserHistory savedHistory = historyCaptor.getValue();
-        assertThat(savedHistory.isDeletedRecord()).isTrue();
-
-        verify(userRepository).findById(testUserId);
+        verify(userRepository, times(2)).findById(testUserId);
         verify(userMapper).toHistory(testUser);
-        verify(userRepository).deleteById(testUserId);
+        verify(userHistoryRepository).save(historyCaptor.capture());
+        assertThat(historyCaptor.getValue().isDeletedRecord()).isTrue();
+        verify(userRepository).delete(testUser);
     }
 
     @Test
@@ -266,12 +265,13 @@ class UserServiceTest {
         when(userRepository.findById(nonExistentId)).thenReturn(Optional.empty());
 
         // when
-        boolean result = userService.deleteUserById(nonExistentId);
+        // when + then
+        assertThatThrownBy(() -> userService.delete(nonExistentId))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessageContaining("Entity not found"); // adapt to your exception message
 
-        // then
-        assertThat(result).isFalse();
         verify(userRepository).findById(nonExistentId);
-        verify(userHistoryRepository, never()).save(any());
+        verifyNoInteractions(userHistoryRepository);
         verify(userRepository, never()).deleteById(any());
     }
 

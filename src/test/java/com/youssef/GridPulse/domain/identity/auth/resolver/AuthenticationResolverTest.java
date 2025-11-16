@@ -1,17 +1,20 @@
 package com.youssef.GridPulse.domain.identity.auth.resolver;
 
+import com.youssef.GridPulse.configuration.graphql.GraphQLConfig;
 import com.youssef.GridPulse.domain.identity.auth.dto.AuthenticationResponse;
 import com.youssef.GridPulse.domain.identity.auth.dto.LoginInput;
 import com.youssef.GridPulse.domain.identity.auth.dto.RegisterInput;
 import com.youssef.GridPulse.domain.identity.auth.service.AuthenticationService;
-import com.youssef.GridPulse.domain.identity.user.Role;
 import com.youssef.GridPulse.domain.identity.user.entity.User;
+import com.youssef.GridPulse.utils.TestLogger;
+import com.youssef.GridPulse.utils.TestSuiteUtils;
 import org.junit.jupiter.api.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
 
 import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureGraphQlTester;
+import org.springframework.context.annotation.Import;
 import org.springframework.graphql.test.tester.GraphQlTester;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,10 +23,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
 import java.util.Map;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -32,6 +32,7 @@ import static org.mockito.Mockito.*;
 @GraphQlTest(AuthenticationResolver.class)
 @EnableMethodSecurity
 @AutoConfigureGraphQlTester
+@Import(GraphQLConfig.class)
 class AuthenticationResolverTest {
 
     @Autowired
@@ -40,8 +41,8 @@ class AuthenticationResolverTest {
     @MockitoBean
     AuthenticationService service;
 
-    private static Instant suiteStartTime;
     private static int testCounter = 1;
+    private static Instant suiteStartTime;
 
     private RegisterInput registerInput;
 
@@ -50,42 +51,25 @@ class AuthenticationResolverTest {
     @BeforeAll
     static void beginTestExecution() {
         suiteStartTime = Instant.now();
-        System.out.println("\n⭐ Authenticationservice Test Execution Started");
-        System.out.println("⏰ Start Time: " + suiteStartTime);
-        System.out.println("-".repeat(50));
+        TestLogger.logSuiteStart(AuthenticationResolverTest.class);
     }
 
     @AfterAll
     static void endTestExecution() {
-        Instant suiteEndTime = Instant.now();
-        long duration = java.time.Duration.between(suiteStartTime, suiteEndTime).toMillis();
-
-        System.out.println("-".repeat(50));
-        System.out.println("🏁 Authenticationservice Test Execution Completed");
-        System.out.println("⏰ End Time: " + suiteEndTime);
-        System.out.println("⏱️  Total Duration: " + duration + "ms");
-        System.out.println("=".repeat(50));
+        TestLogger.logSuiteEnd(AuthenticationResolverTest.class, suiteStartTime);
     }
 
     @BeforeEach
     void setUp() {
-        System.out.println("📋 Test " + testCounter + " - Setting up...");
-        authResponse = AuthenticationResponse.builder()
-                .accessToken("access-token")
-                .refreshToken("refresh-token")
-                .build();
-        registerInput = RegisterInput.builder()
-                .email("john.doe@example.com")
-                .password("password123")
-                .firstname("John")
-                .lastname("Doe")
-                .build();
-
+        TestLogger.logTestStart(testCounter);
+        authResponse = TestSuiteUtils.createAuthenticationResponse();
+        registerInput = TestSuiteUtils.createRegisterInput();
     }
 
     @AfterEach
     void tearDown() {
-        System.out.println("✅ Test " + testCounter + " - Completed");
+        registerInput = null;
+        TestLogger.logTestEnd(testCounter);
         testCounter += 1;
     }
 
@@ -137,7 +121,7 @@ class AuthenticationResolverTest {
                     .satisfy(errors -> {
                         assertThat(errors).hasSize(1);
                         assertThat(errors.get(0).getMessage())
-                                .contains("INTERNAL_ERROR");
+                                .contains("An unexpected error occurred");
                     });
 
             verify(service).register(any(RegisterInput.class));
@@ -203,7 +187,7 @@ class AuthenticationResolverTest {
                     .errors()
                     .satisfy(error -> {
                         assertThat(error).hasSize(1);
-                        assertThat(error.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(error.get(0).getMessage()).contains("Unauthorized: authentication required");
                     });
 
             // Verify the service was NEVER called since authentication fails first
@@ -219,23 +203,20 @@ class AuthenticationResolverTest {
 
         @Test
         void refreshToken_success() {
-            // given
-            String newAccessToken = "new-access-token";
-            authResponse.setAccessToken(newAccessToken);
-            // when
-            when(service.refreshToken(authResponse.getRefreshToken())).thenReturn(authResponse);
-            // then
-            graphQlTest.documentName("mutations/auth/refreshToken")
-                    .variable("token", authResponse.getRefreshToken())
-                    .execute()
-                    .path("refreshToken.accessToken")
-                    .entity(String.class)
-                    .isEqualTo(newAccessToken)
-                    .path("refreshToken.refreshToken")
-                    .entity(String.class)
-                    .isEqualTo("refresh-token");
+            AuthenticationResponse authResponse = AuthenticationResponse.builder()
+                    .accessToken("new-access-token")
+                    .refreshToken("refresh-token")
+                    .build();
 
-            verify(service).refreshToken(authResponse.getRefreshToken());
+            when(service.refreshToken("refresh-token")).thenReturn(authResponse);
+
+            graphQlTest.documentName("mutations/auth/refreshToken")
+                    .variable("refreshToken", "refresh-token")
+                    .execute()
+                    .path("refreshToken.accessToken").entity(String.class).isEqualTo("new-access-token")
+                    .path("refreshToken.refreshToken").entity(String.class).isEqualTo("refresh-token");
+
+            verify(service).refreshToken("refresh-token");
         }
 
         @Test
@@ -246,13 +227,13 @@ class AuthenticationResolverTest {
 
             // when & then
             graphQlTest.documentName("mutations/auth/refreshToken")
-                    .variable("token", authResponse.getRefreshToken())
+                    .variable("refreshToken", authResponse.getRefreshToken())
                     .execute()
                     .errors()
                     .satisfy(errors -> {
                         assertThat(errors).hasSize(1);
                         assertThat(errors.get(0).getMessage())
-                                .contains("INTERNAL_ERROR");
+                                .contains("An unexpected error occurred");
                     });
             verify(service).refreshToken(authResponse.getRefreshToken());
         }
@@ -305,7 +286,7 @@ class AuthenticationResolverTest {
                     .errors()
                     .satisfy(errors -> {
                         assertThat(errors).hasSize(1);
-                        assertThat(errors.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(errors.get(0).getMessage()).contains("Forbidden: admin privileges required");
 
                     });
 
@@ -329,7 +310,7 @@ class AuthenticationResolverTest {
                     .errors()
                     .satisfy(errors -> {
                         assertThat(errors).hasSize(1);
-                        assertThat(errors.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(errors.get(0).getMessage()).contains("Forbidden: admin privileges required");
 
                     });
 
@@ -353,7 +334,7 @@ class AuthenticationResolverTest {
                     .satisfy(errors -> {
                         assertThat(errors).hasSize(1);
                         assertThat(errors.get(0).getMessage())
-                                .contains("INTERNAL_ERROR");
+                                .contains("Forbidden: admin privileges required");
                     });
 
             verify(service, never()).getCurrentUser();
@@ -363,16 +344,7 @@ class AuthenticationResolverTest {
         @WithMockUser
         void getCurrentUser_Success() {
             // given
-            var user = User.builder()
-                    .id(UUID.randomUUID())
-                    .email("test@example.com")
-                    .password("encodedPassword")
-                    .firstname("John")
-                    .lastname("Doe")
-                    .role(Role.USER)
-                    .enabled(true)
-                    .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
-                    .build();
+            var user = TestSuiteUtils.createTestUserA();
 
             when(service.getCurrentUser()).thenReturn(user);
 

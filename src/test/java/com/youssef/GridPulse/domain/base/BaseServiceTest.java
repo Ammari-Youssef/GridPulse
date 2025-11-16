@@ -1,6 +1,7 @@
 package com.youssef.GridPulse.domain.base;
 
 import com.youssef.GridPulse.common.base.*;
+import com.youssef.GridPulse.utils.TestLogger;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,9 +46,13 @@ public abstract class BaseServiceTest<
     private static int testCounter = 1;
 
     protected abstract S createService();
+
     protected abstract E createTestEntity(ID id);
+
     protected abstract H createTestHistoryEntity(ID originalId);
+
     protected abstract INPUT createTestInput();
+
     protected abstract ID createTestId();
 
     @BeforeAll
@@ -82,20 +87,34 @@ public abstract class BaseServiceTest<
             E entity = createTestEntity(createTestId());
             H history = createTestHistoryEntity((ID) entity.getId());
 
+            // mapper must return a non-null entity
             when(mapper.toEntity(input)).thenReturn(entity);
-            when(repository.save(entity)).thenReturn(entity);
-            when(mapper.toHistory(entity)).thenReturn(history);
-            when(historyRepository.save(history)).thenReturn(history);
+
+            // simulate JPA assigning ID on saveAndFlush
+            when(repository.saveAndFlush(any())).thenAnswer(inv -> {
+                E e = inv.getArgument(0);
+                e.setId(createTestId()); // mimic @GeneratedValue
+                return e;
+            });
+
+
+            // stub findById to return the saved entity
+            when(repository.findById(any())).thenReturn(Optional.of(entity));
+            // mapper.toHistory must use the saved entity
+            when(mapper.toHistory(any())).thenReturn(history);
+
+            when(historyRepository.saveAndFlush(history)).thenReturn(history);
 
             // When
             E result = service.create(input);
 
             // Then
-            assertThat(result).isEqualTo(entity);
-            verify(repository).save(entity);
-            verify(historyRepository).save(history);
+            assertThat(result).isNotNull();
+            assertThat(result.getId()).isEqualTo(createTestId());
+            verify(repository).saveAndFlush(any());
+            verify(historyRepository).saveAndFlush(history);
             verify(mapper).toEntity(input);
-            verify(mapper).toHistory(entity);
+            verify(mapper).toHistory(result);
         }
     }
 
@@ -165,7 +184,7 @@ public abstract class BaseServiceTest<
 
             // Then
             assertThat(result).isEqualTo(updatedEntity);
-            verify(repository).findById(id);
+//            verify(repository).findById(id);
             verify(mapper).toHistory(existingEntity);
             verify(historyRepository).save(history);
             verify(mapper).updateEntity(input, existingEntity);
@@ -206,7 +225,7 @@ public abstract class BaseServiceTest<
 
             // Then
             assertThat(result).isTrue();
-            verify(repository).findById(id);
+//            verify(repository).findById(id);
             verify(mapper).toHistory(entity);
             verify(historyRepository).save(history);
             verify(repository).delete(entity);

@@ -1,13 +1,18 @@
 package com.youssef.GridPulse.domain.identity.user.repository;
 
+import com.youssef.GridPulse.configuration.graphql.GraphQLConfig;
+import com.youssef.GridPulse.domain.base.BaseHistoryRepositoryTest;
 import com.youssef.GridPulse.domain.identity.user.entity.UserHistory;
+import com.youssef.GridPulse.utils.TestLogger;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
+import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.List;
@@ -17,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
+@Import(GraphQLConfig.class)
 class UserHistoryRepositoryTest {
 
     @Autowired
@@ -24,31 +30,34 @@ class UserHistoryRepositoryTest {
 
     // Test counter
     private static int testCounter = 1;
+    private static Instant suiteStartTime;
 
     @Autowired
     private TestEntityManager entityManager; // Better for setup
 
     @BeforeAll
-    static void start() {
-        System.out.println("\n--------------------------- UserHistoryRepositoryTest start ---------------------------------------\n");
+    static void beginTestExecution() {
+        suiteStartTime = Instant.now();
+        TestLogger.logSuiteStart(BaseHistoryRepositoryTest.class);
     }
 
     @AfterAll
-    static void finish() {
-        System.out.println("\n ------------------------------ UserHistoryRepositoryTest end ---------------------------------------\n");
+    static void endTestExecution() {
+        TestLogger.logSuiteEnd(BaseHistoryRepositoryTest.class, suiteStartTime);
     }
 
     @BeforeEach
     void setUp() {
-        System.out.println("\n******************************* UserHistoryRepository TEST " + testCounter + " SETUP **********************************\n");
+        TestLogger.logTestStart(testCounter);
     }
 
     @AfterEach
     void tearDown() {
+        TestLogger.logTestEnd(testCounter);
         userHistoryRepository.deleteAll();
-        System.out.println("\n******************************* UserHistoryRepository TEST " + testCounter + " TEARDOWN *************************************\n");
         testCounter++;
     }
+
 
     @Test
     @Transactional
@@ -133,6 +142,4 @@ class UserHistoryRepositoryTest {
         // Then
         assertThat(result).isEmpty();
     }
-
-
 }

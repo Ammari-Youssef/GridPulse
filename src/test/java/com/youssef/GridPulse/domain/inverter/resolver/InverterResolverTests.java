@@ -1,5 +1,7 @@
 package com.youssef.GridPulse.domain.inverter.resolver;
 
+import com.youssef.GridPulse.common.base.Source;
+import com.youssef.GridPulse.configuration.graphql.GraphQLConfig;
 import com.youssef.GridPulse.domain.base.BaseResolverTest;
 import com.youssef.GridPulse.domain.inverter.inverter.dto.InverterInput;
 import com.youssef.GridPulse.domain.inverter.inverter.entity.Inverter;
@@ -10,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
 import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureGraphQlTester;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -24,6 +27,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 @GraphQlTest(InverterResolver.class)
 @EnableMethodSecurity
 @AutoConfigureGraphQlTester
+@Import(GraphQLConfig.class)
 class InverterResolverTests extends BaseResolverTest<InverterResolver, Inverter, InverterHistory, UUID, InverterInput, InverterService> {
 
     @MockitoBean
@@ -90,7 +94,7 @@ class InverterResolverTests extends BaseResolverTest<InverterResolver, Inverter,
         assertThat(inverter.getModel()).isEqualTo("Test Model");
         assertThat(inverter.getVersion()).isEqualTo("Test Version");
         assertThat(inverter.getManufacturer()).isEqualTo("Test Manufacturer");
-        assertThat(inverter.getSource()).isEqualTo("app");
+        assertThat(inverter.getSource()).isEqualTo(Source.APP);
     }
 
     @Override
@@ -99,7 +103,7 @@ class InverterResolverTests extends BaseResolverTest<InverterResolver, Inverter,
         assertThat(history.getModel()).isEqualTo("Test Model");
         assertThat(history.getVersion()).isEqualTo("Test Version");
         assertThat(history.getManufacturer()).isEqualTo("Test Manufacturer");
-        assertThat(history.getSource()).isEqualTo("app");
+        assertThat(history.getSource()).isEqualTo(Source.APP);
     }
 
     @Override
@@ -112,7 +116,7 @@ class InverterResolverTests extends BaseResolverTest<InverterResolver, Inverter,
         );
     }
 
-    // Now you can use the inherited test methods or override them
+    // You can use the inherited test methods or override them
     @Test
     @WithMockUser(roles = "ADMIN")
     void canCreateEntity() {

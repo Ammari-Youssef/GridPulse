@@ -1,17 +1,23 @@
 package com.youssef.GridPulse.domain.identity.user.resolver;
 
 import com.youssef.GridPulse.common.base.Source;
+import com.youssef.GridPulse.configuration.graphql.GraphQLConfig;
 import com.youssef.GridPulse.domain.identity.user.Role;
 import com.youssef.GridPulse.domain.identity.user.dto.UpdateUserInput;
 import com.youssef.GridPulse.domain.identity.user.entity.User;
 import com.youssef.GridPulse.domain.identity.user.entity.UserHistory;
 import com.youssef.GridPulse.domain.identity.user.service.UserService;
+import com.youssef.GridPulse.utils.TestLogger;
+import com.youssef.GridPulse.utils.TestSuiteUtils;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
 import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureGraphQlTester;
+import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataAccessException;
 import org.springframework.graphql.test.tester.GraphQlTester;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.Authentication;
@@ -21,16 +27,15 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @GraphQlTest(UserResolver.class)
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity
 @AutoConfigureGraphQlTester
+@Import(GraphQLConfig.class)
 class UserResolverTest {
 
     @Autowired
@@ -46,8 +51,8 @@ class UserResolverTest {
 //    }
 
     // Test data
-    UUID testUserId = UUID.randomUUID();
-    UUID testUserId2 = UUID.randomUUID();
+    UUID testUserId = TestSuiteUtils.TEST_USER_ID_1;
+
     private User testUser1;
     private User testUser2;
     private UserHistory testUserHistory1;
@@ -60,87 +65,34 @@ class UserResolverTest {
     @BeforeAll
     static void beginTestExecution() {
         suiteStartTime = Instant.now();
-        System.out.println("\n⭐ UserResolver Test Execution Started");
-        System.out.println("⏰ Start Time: " + suiteStartTime);
-        System.out.println("-".repeat(50));
+        TestLogger.logSuiteStart(UserResolverTest.class);
     }
 
     @AfterAll
     static void endTestExecution() {
-        Instant suiteEndTime = Instant.now();
-        long duration = java.time.Duration.between(suiteStartTime, suiteEndTime).toMillis();
-
-        System.out.println("-".repeat(50));
-        System.out.println("🏁 UserResolver Test Execution Completed");
-        System.out.println("⏰ End Time: " + suiteEndTime);
-        System.out.println("⏱️  Total Duration: " + duration + "ms");
-        System.out.println("=".repeat(50));
+        TestLogger.logSuiteEnd(UserResolverTest.class, suiteStartTime);
     }
 
     @BeforeEach
     void setUp() {
-        System.out.println("📋 Test " + testCounter + " - Setting up...");
+        TestLogger.logTestStart(testCounter);
 
-        testUser1 = User.builder()
-                .id(testUserId)
-                .firstname("John")
-                .lastname("Doe")
-                .email("john.doe@example.com")
-                .password("encoded password")
-                .role(Role.USER)
-                .enabled(true)
-                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
-                .updatedAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
-                .source(Source.APP)
-                .build();
+        testUser1 = TestSuiteUtils.createTestUserA();
+        testUser2 = TestSuiteUtils.createTestUserB();
 
-        testUser2 = User.builder()
-                .id(testUserId2)
-                .firstname("Jane")
-                .lastname("Smith")
-                .email("jane.smith@example.com")
-                .role(Role.ADMIN)
-                .enabled(true)
-                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
-                .updatedAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
-                .source(Source.APP)
-                .build();
-
-        testUserHistory1 = UserHistory.builder()
-                .id(UUID.randomUUID())
-                .originalId(testUserId)
-                .firstname("John")
-                .lastname("Doe")
-                .email("john.doe@example.com")
-                .password("encoded password")
-                .createdBy("SYSTEM")
-                .role("ADMIN")
-                .enabled(true)
-                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
-                .updatedAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
-                .source(Source.APP)
-                .build();
-
-        testUserHistory2 = UserHistory.builder()
-                .id(UUID.randomUUID())
-                .originalId(testUserId2)
-                .firstname("Jane")
-                .lastname("Smith")
-                .email("jane.smith@example.com")
-                .role("USER")
-                .createdBy(testUserId.toString())
-                .enabled(true)
-                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
-                .updatedAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
-                .source(Source.APP)
-                .build();
+        testUserHistory1 = TestSuiteUtils.createTestUserHistoryA();
+        testUserHistory2 = TestSuiteUtils.createTestUserHistoryB();
     }
 
     @AfterEach
     void tearDown() {
-        System.out.println("✅ Test " + testCounter + " - Completed");
+        TestLogger.logTestEnd(testCounter);
+        testCounter++;
         reset(userService); // Reset mock between tests to avoid interference between tests when running class
-        testCounter += 1;
+        testUser1 = null;
+        testUser2 = null;
+        testUserHistory1 = null;
+        testUserHistory2 = null;
     }
 
 
@@ -153,7 +105,7 @@ class UserResolverTest {
         @WithMockUser(roles = "ADMIN")
         void getAllUsers_ShouldReturnAllUsersWithCorrectFields() {
             // given
-            when(userService.getAllUsers()).thenReturn(List.of(testUser1, testUser2));
+            when(userService.getAll()).thenReturn(List.of(testUser1, testUser2));
 
             // when & then
             graphQlTester.documentName("queries/user/getAllUsers")
@@ -188,7 +140,7 @@ class UserResolverTest {
                         assertThat(user2.isEnabled()).isEqualTo(testUser2.isEnabled());
                     });
 
-            verify(userService).getAllUsers();
+            verify(userService).getAll();
         }
 
         @Test
@@ -196,7 +148,7 @@ class UserResolverTest {
         @WithMockUser(roles = "ADMIN")
         void getAllUsers_WhenNoUsers_ShouldReturnEmptyList() {
             // given
-            when(userService.getAllUsers()).thenReturn(Collections.emptyList());
+            when(userService.getAll()).thenReturn(Collections.emptyList());
 
             // when & then
             graphQlTester.documentName("queries/user/getAllUsers")
@@ -205,7 +157,7 @@ class UserResolverTest {
                     .entityList(User.class)
                     .hasSize(0);
 
-            verify(userService).getAllUsers();
+            verify(userService).getAll();
         }
 
         @Test
@@ -213,7 +165,7 @@ class UserResolverTest {
         @WithMockUser(roles = "ADMIN")
         void getAllUsers_ShouldReturnCorrectFieldMapping() {
             // given
-            when(userService.getAllUsers()).thenReturn(List.of(testUser1));
+            when(userService.getAll()).thenReturn(List.of(testUser1));
             // when & then - Test specific field mapping
             graphQlTester.documentName("queries/user/getAllUsers")
                     .execute()
@@ -227,10 +179,10 @@ class UserResolverTest {
                         assertThat(user.getEmail()).isEqualTo("john.doe@example.com");
                         assertThat(user.getRole()).isEqualTo(Role.USER);
                         assertThat(user.isEnabled()).isTrue();
-                        assertThat(user.getSource()).isEqualTo("APP");
+                        assertThat(user.getSource()).isEqualTo(Source.APP);
                     });
 
-            verify(userService).getAllUsers();
+            verify(userService).getAll();
         }
 
         @Test
@@ -238,7 +190,7 @@ class UserResolverTest {
         @WithMockUser(roles = "ADMIN")
         void getAllUsers_WhenAdminRole_ShouldReturnUsers() {
             // given
-            when(userService.getAllUsers()).thenReturn(List.of(testUser1, testUser2));
+            when(userService.getAll()).thenReturn(List.of(testUser1, testUser2));
 
             // when & then
             graphQlTester.documentName("queries/user/getAllUsers")
@@ -248,7 +200,7 @@ class UserResolverTest {
                     .hasSize(2);
 
             // Verify the service WAS called for admin
-            verify(userService).getAllUsers();
+            verify(userService).getAll();
         }
 
         @Test
@@ -261,18 +213,19 @@ class UserResolverTest {
                     .errors()
                     .satisfy(errors -> {
                         assertThat(errors).hasSize(1);
-                        assertThat(errors.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(errors.get(0).getMessage()).contains("Forbidden: admin privileges required");
                     });
 
             // Verify the service was NEVER called for admin
-            verify(userService, never()).getAllUsers();
+            verify(userService, never()).getAll();
         }
 
         @Test
         @DisplayName("getAllUsers - Should handle service exceptions gracefully")
+        @WithMockUser(roles = "ADMIN")
         void getAllUsers_ReturnGraphQLError() {
             // given - Simulate actual database exception
-            when(userService.getAllUsers()).thenThrow(
+            when(userService.getAll()).thenThrow(
                     new DataAccessException("Database connection failed") {
                     }
             );
@@ -286,10 +239,10 @@ class UserResolverTest {
                         assertThat(errors.size()).isEqualTo(1);
                         // GraphQL might wrap the exception message
                         assertThat(errors.get(0).getMessage())
-                                .contains("INTERNAL_ERROR for ");
+                                .contains("Database access error. Please try again later.");
                     });
 
-            verify(userService, never()).getAllUsers();
+            verify(userService).getAll();
         }
 
     }
@@ -303,7 +256,7 @@ class UserResolverTest {
         @DisplayName("getUserById - Should return user with correct field values")
         void getUserById_Success() {
             // GIVEN
-            when(userService.getUserById(testUserId)).thenReturn(Optional.ofNullable(testUser1));
+            when(userService.getEntityById(testUserId)).thenReturn(testUser1);
 
             // WHEN & THEN
             graphQlTester.documentName("queries/user/getUserById")
@@ -318,16 +271,15 @@ class UserResolverTest {
                         assertThat(user.getEmail()).isEqualTo("john.doe@example.com");
                         assertThat(user.getRole()).isEqualTo(Role.USER);
                         assertThat(user.isEnabled()).isTrue();
-                        assertThat(user.getSource()).isEqualTo("APP");
+                        assertThat(user.getSource()).isEqualTo(Source.APP);
                     });
 
-            verify(userService).getUserById(testUserId);
+            verify(userService).getEntityById(testUserId);
         }
 
         @Test
-        @WithMockUser(roles = "USER")
+        @WithMockUser
         void getUserById_WhenUserRole_ShouldFail() {
-
             // when & then
             graphQlTester.documentName("queries/user/getUserById")
                     .variable("id", testUserId)
@@ -335,10 +287,10 @@ class UserResolverTest {
                     .errors()
                     .satisfy(errors -> {
                         assertThat(errors).hasSize(1);
-                        assertThat(errors.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(errors.get(0).getMessage()).contains("Forbidden: admin privileges required");
                     });
 
-            verify(userService, never()).getUserById(any(UUID.class));
+            verify(userService, never()).getEntityById(any(UUID.class));
 
         }
 
@@ -360,19 +312,16 @@ class UserResolverTest {
                     .errors()
                     .satisfy(errors -> {
                         assertThat(errors).hasSize(1);
-                        assertThat(errors.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(errors.get(0).getMessage()).contains("Forbidden: admin privileges required");
                     });
-            verify(userService, never()).getUserById(any(UUID.class));
+            verify(userService, never()).getEntityById(any(UUID.class));
         }
 
         @Test
         @WithAnonymousUser
         void getUserById_WhenException_ShouldFail() {
             // GIVEN
-            when(userService.getUserById(testUserId)).thenThrow(
-                    new DataAccessException("Database connection failed") {
-                    }
-            );
+            when(userService.getEntityById(testUserId)).thenThrow(AccessDeniedException.class);
 
             // WHEN & THEN
             graphQlTester.documentName("queries/user/getUserById")
@@ -384,10 +333,10 @@ class UserResolverTest {
                         assertThat(errors.size()).isEqualTo(1);
                         // GraphQL might wrap the exception message
                         assertThat(errors.get(0).getMessage())
-                                .contains("INTERNAL_ERROR for ");
+                                .contains("Forbidden: admin privileges required");
                     });
 
-            verify(userService, never()).getUserById(testUserId);
+            verify(userService, never()).getEntityById(testUserId);
         }
     }
 
@@ -401,7 +350,8 @@ class UserResolverTest {
         @DisplayName("getAllUsersActivityHistory - Should return all user activity history records")
         void getUsersActivityHistory() {
             // given
-            when(userService.getUsersActivityHistory()).thenReturn(List.of(testUserHistory1, testUserHistory2));
+            List<UserHistory> histories = List.of(testUserHistory1, testUserHistory2);
+            when(userService.findAllHistory()).thenReturn(histories);
 
             // when & then
             graphQlTester.documentName("queries/user/getUsersActivityHistory")
@@ -409,6 +359,7 @@ class UserResolverTest {
                     .path("getUsersActivityHistory")
                     .entityList(UserHistory.class)
                     .satisfies(userHistories -> {
+                        assertThat(userHistories).isNotEmpty();
                         UserHistory userHistory = userHistories.get(0);
                         assertThat(userHistory.getOriginalId()).isEqualTo(testUserId);
                         assertThat(userHistory.getFirstname()).isEqualTo("John");
@@ -416,17 +367,18 @@ class UserResolverTest {
                         assertThat(userHistory.getEmail()).isEqualTo("john.doe@example.com");
                         assertThat(userHistory.getRole()).isEqualTo(Role.ADMIN.name());
                         assertThat(userHistory.isEnabled()).isTrue();
-                        assertThat(userHistory.getSource()).isEqualTo("APP");
-                    });
+                        assertThat(userHistory.getSource()).isEqualTo(Source.APP);
+                    }).hasSize(2);
 
             // Verify the service was called
-            verify(userService).getUsersActivityHistory();
+            verify(userService).findAllHistory();
         }
 
         @Test
+        @DisplayName("getUsersActivityHistory - Should throw Error when exception in the database is triggered")
         void getUsersActivityHistory_Fail() {
             // given
-            when(userService.getUsersActivityHistory()).thenThrow(
+            when(userService.findAllHistory()).thenThrow(
                     new DataAccessException("Database connection failed") {
                     }
             );
@@ -440,16 +392,16 @@ class UserResolverTest {
                         assertThat(errors.size()).isEqualTo(1);
                         // GraphQL might wrap the exception message
                         assertThat(errors.get(0).getMessage())
-                                .contains("INTERNAL_ERROR for ");
+                                .contains("Database access error. Please try again later.");
                     });
 
             // Verify the service was called
-            verify(userService).getUsersActivityHistory();
+            verify(userService).findAllHistory();
         }
 
         @Test
-        @WithMockUser(roles = "USER", username = "youssef.ammari.795@gmail.com")
-        @DisplayName("getUsersActivityHistory - Should deny access when USER tries to access admin endpoint")
+        @WithMockUser(roles = "USER", username = "kamal@gridpulse.io")
+        @DisplayName("getUsersActivityHistory - Should deny access when regular USER tries to access admin endpoint")
         void getUsersActivityHistory_Unauthorized() {
             // Debug
             /*
@@ -471,7 +423,7 @@ class UserResolverTest {
                     .satisfy(errors -> {
                         assertThat(errors).hasSize(1);
                         // Your custom AuthenticationEntryPoint returns this message
-                        assertThat(errors.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(errors.get(0).getMessage()).contains("Forbidden: admin privileges required");
                     });
 
             // Verify the service was NEVER called due to security block
@@ -488,12 +440,12 @@ class UserResolverTest {
         void adminCanUpdateAnyUsers_firstname() {
             UUID anyUserId = UUID.randomUUID();
             User updatedUser = User.builder()
-                    .email("john@doe.com")
+                    .id(anyUserId)
+                    .email("john.doe@example.com")
                     .firstname("NewName")
-                    .lastname("doe")
+                    .lastname("Doe")
                     .role(Role.USER)
                     .enabled(true)
-                    .id(anyUserId)
                     .build();
             when(userService.updateUser(any(), any())).thenReturn(updatedUser);
 
@@ -501,20 +453,24 @@ class UserResolverTest {
                     .variable("id", anyUserId.toString())
                     .variable("input", Map.of("firstname", "NewName"))
                     .execute()
-                    .path("updateUser.id")
-                    .entity(UUID.class)
-                    .isEqualTo(anyUserId)
-                    .path("updateUser.firstname")
-                    .entity(String.class)
-                    .isEqualTo("NewName");
+                    .path("updateUser")
+                    .entity(User.class)
+                    .satisfies(user -> {
+                        assertThat(user.getId()).isEqualTo(anyUserId);
+                        assertThat(user.getFirstname()).isEqualTo("NewName");
+                        assertThat(user.getLastname()).isEqualTo("Doe");
+                        assertThat(user.getEmail()).isEqualTo("john.doe@example.com");
+                        assertThat(user.getRole()).isEqualTo(Role.USER);
+                        assertThat(user.isEnabled()).isTrue();
+                    });
 
             verify(userService).updateUser(eq(anyUserId), any(UpdateUserInput.class));
         }
 
         @Test
-        @WithMockUser(username = "youssef.ammari.795@gmail.com", roles = "USER")
+        @WithMockUser(roles = "USER")
+        @DisplayName("User can update own account: Test self-access")
         void userCanUpdateOwnAccount() {
-            // Test self-access
             // Given
             UUID ownUserId = UUID.randomUUID();
             User user = User.builder()
@@ -539,6 +495,7 @@ class UserResolverTest {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
+
             when(userService.updateUser(eq(ownUserId), any(UpdateUserInput.class))).thenReturn(updatedUser);
             // when & then
             graphQlTester.documentName("mutations/user/updateUser")
@@ -554,11 +511,54 @@ class UserResolverTest {
         }
 
         @Test
-        @WithMockUser(username = "youssef.ammari.795@gmail.com", roles = "USER")
-        void userCannotUpdateOtherAccount() {
-            // Test unauthorized access
-            UUID differentUserId = UUID.randomUUID(); // Different from principal.id
+        @WithMockUser(roles = "ADMIN")
+        @DisplayName("Admin enters a wrong id → Resource not found")
+        void adminCannotUpdateAccountWithWrongId() {
+            UUID wrongUserId = UUID.randomUUID();
 
+            // GIVEN: service throws not found
+            when(userService.updateUser(eq(wrongUserId), any(UpdateUserInput.class)))
+                    .thenThrow(new EntityNotFoundException("User not found"));
+
+            // WHEN & THEN
+            graphQlTester.documentName("mutations/user/updateUser")
+                    .variable("id", wrongUserId.toString())
+                    .variable("input", Map.of("firstname", "NewName"))
+                    .execute()
+                    .errors()
+                    .satisfy(errors -> {
+                        assertThat(errors).hasSize(1);
+                        assertThat(errors.get(0).getMessage())
+                                .contains("Resource not found");
+                    });
+
+            verify(userService).updateUser(eq(wrongUserId), any(UpdateUserInput.class));
+        }
+
+        @Test
+        @WithMockUser(username = "johnny.doe@example.com")
+        @DisplayName("USER role cannot update another user's account")
+        void userCannotUpdateOtherAccount() {
+            // GIVEN: a different user ID than the authenticated principal
+            UUID principalId = UUID.randomUUID();
+            UUID differentUserId = UUID.randomUUID(); // different from principalId
+
+            var user = TestSuiteUtils.createTestUser(
+                    User.builder()
+                            .id(principalId) // 👈 principal id
+                            .firstname("Johnny")
+                            .lastname("Doe")
+                            .email("johnny.doe@example.com")
+                            .role(Role.USER)
+                            .build());
+
+            Authentication authentication = new TestingAuthenticationToken(
+                    user, user.getPassword(), user.getAuthorities());
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+
+            // WHEN & THEN: executing the mutation should fail with forbidden access
             graphQlTester.documentName("mutations/user/updateUser")
                     .variable("id", differentUserId.toString())
                     .variable("input", Map.of("firstname", "NewName"))
@@ -566,15 +566,17 @@ class UserResolverTest {
                     .errors()
                     .satisfy(errors -> {
                         assertThat(errors).hasSize(1);
-                        assertThat(errors.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(errors.get(0).getMessage())
+                                .contains("Forbidden: admin privileges required");
                     });
 
+            // Ensure the service method was never called
             verify(userService, never()).updateUser(any(UUID.class), any());
         }
 
         @Test
         @WithAnonymousUser
-        void unauthenticatedCannotUpdate() {
+        void anonymousCannotUpdate() { // Anonymous = Authenticated but no credentials
             // Test no authentication
             UUID differentUserId = UUID.randomUUID(); // Different from principal.id
 
@@ -585,7 +587,7 @@ class UserResolverTest {
                     .errors()
                     .satisfy(errors -> {
                         assertThat(errors).hasSize(1);
-                        assertThat(errors.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(errors.get(0).getMessage()).contains("Bad request");
                     });
 
             verify(userService, never()).updateUser(any(UUID.class), any());
@@ -599,7 +601,7 @@ class UserResolverTest {
         @Test
         @WithMockUser(roles = "ADMIN")
         void canDeleteUser() {
-            when(userService.deleteUserById(any(UUID.class))).thenReturn(true);
+            when(userService.delete(any(UUID.class))).thenReturn(true);
             graphQlTester.documentName("mutations/user/deleteUserById")
                     .variable("id", testUserId.toString())
                     .execute()
@@ -607,7 +609,7 @@ class UserResolverTest {
                     .entity(Boolean.class)
                     .isEqualTo(true);
 
-            verify(userService).deleteUserById(testUserId);
+            verify(userService).delete(testUserId);
         }
 
         // Negative tests - unauthorized access
@@ -620,11 +622,11 @@ class UserResolverTest {
                     .errors()
                     .satisfy(error -> {
                         assertThat(error).hasSize(1);
-                        assertThat(error.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(error.get(0).getMessage()).contains("Forbidden: admin privileges required");
 
                     });
 
-            verify(userService, never()).deleteUserById(any(UUID.class));
+            verify(userService, never()).delete(any(UUID.class));
         }
 
         @Test
@@ -635,9 +637,9 @@ class UserResolverTest {
                     .variable("id", testUserId.toString())
                     .execute()
                     .errors()
-                    .satisfy(error -> error.get(0).getMessage().contains("INTERNAL_ERROR"));
+                    .satisfy(error -> error.get(0).getMessage().contains("Forbidden: admin privileges required"));
 
-            verify(userService, never()).deleteUserById(any(UUID.class));
+            verify(userService, never()).delete(any(UUID.class));
         }
 
     }
@@ -670,7 +672,7 @@ class UserResolverTest {
                     .errors()
                     .satisfy(errors -> {
                         assertThat(errors).hasSize(1);
-                        assertThat(errors.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(errors.get(0).getMessage()).contains("Forbidden: admin privileges required");
                     });
 
             verify(userService, never()).markHistoryRecordAsSynced(any(UUID.class));
@@ -679,7 +681,6 @@ class UserResolverTest {
         @Test
         @WithAnonymousUser
         void cannotMarkUserHistorySynced_Unauthenticated() {
-            SecurityContextHolder.clearContext();
 
             graphQlTester.documentName("mutations/user/markUserHistorySynced")
                     .variable("id", testUserHistory1.getId())
@@ -687,7 +688,7 @@ class UserResolverTest {
                     .errors()
                     .satisfy(errors -> {
                         assertThat(errors).hasSize(1);
-                        assertThat(errors.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(errors.get(0).getMessage()).contains("Forbidden: admin privileges required");
                     });
 
             verify(userService, never()).markHistoryRecordAsSynced(any(UUID.class));
@@ -700,6 +701,7 @@ class UserResolverTest {
 
         @Test
         @WithMockUser(roles = "ADMIN")
+        @DisplayName("Can toggle user enable status - ADMIN only")
         void canToggleUserEnableStatus() {
             when(userService.toggleUserEnableStatus(testUserId)).thenReturn(true);
 
@@ -715,6 +717,7 @@ class UserResolverTest {
 
         @Test
         @WithMockUser(roles = "USER")
+        @DisplayName("Cannot toggle user enable status - User limitation")
         void cannotToggleUserEnableStatus_User() {
             graphQlTester.documentName("mutations/user/toggleUserEnableStatus")
                     .variable("id", testUserId)
@@ -722,7 +725,7 @@ class UserResolverTest {
                     .errors()
                     .satisfy(errors -> {
                         assertThat(errors).hasSize(1);
-                        assertThat(errors.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(errors.get(0).getMessage()).contains("Forbidden: admin privileges required");
                     });
 
             verify(userService, never()).toggleUserEnableStatus(any(UUID.class));
@@ -730,8 +733,23 @@ class UserResolverTest {
 
         @Test
         @WithAnonymousUser
+        @DisplayName("Cannot toggle user enable status - Anonymous limitation: authenticated but unknown (guest)")
+        void cannotToggleUserEnableStatus_AnonymousUser() {
+            graphQlTester.documentName("mutations/user/toggleUserEnableStatus")
+                    .variable("id", testUserId)
+                    .execute()
+                    .errors()
+                    .satisfy(errors -> {
+                        assertThat(errors).hasSize(1);
+                        assertThat(errors.get(0).getMessage()).contains("Forbidden: admin privileges required");
+                    });
+
+            verify(userService, never()).toggleUserEnableStatus(any(UUID.class));
+        }
+
+        @Test
+        @DisplayName("Cannot toggle user enable status - Unauthenticated limitation")
         void cannotToggleUserEnableStatus_Unauthenticated() {
-            SecurityContextHolder.clearContext();
 
             graphQlTester.documentName("mutations/user/toggleUserEnableStatus")
                     .variable("id", testUserId)
@@ -739,7 +757,7 @@ class UserResolverTest {
                     .errors()
                     .satisfy(errors -> {
                         assertThat(errors).hasSize(1);
-                        assertThat(errors.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(errors.get(0).getMessage()).contains("Unauthorized: authentication required");
                     });
 
             verify(userService, never()).toggleUserEnableStatus(any(UUID.class));

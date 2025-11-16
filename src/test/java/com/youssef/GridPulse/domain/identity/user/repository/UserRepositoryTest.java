@@ -1,85 +1,92 @@
 package com.youssef.GridPulse.domain.identity.user.repository;
 
+import com.youssef.GridPulse.configuration.graphql.GraphQLConfig;
+import com.youssef.GridPulse.domain.base.BaseHistoryRepositoryTest;
 import com.youssef.GridPulse.domain.identity.user.entity.User;
+import com.youssef.GridPulse.utils.TestLogger;
+import com.youssef.GridPulse.utils.TestSuiteUtils;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.context.annotation.Import;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
+import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@Import(GraphQLConfig.class)
 class UserRepositoryTest {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository repository;
 
-    // Test counter
     private static int testCounter = 1;
-
-    @Autowired
-    private TestEntityManager entityManager; // Better for setup
+    private static Instant suiteStartTime;
 
     @BeforeAll
-    static void start() {
-        System.out.println("--------------------------- UserRepositoryTest start ---------------------------------------\n");
+    static void beginTestExecution() {
+        suiteStartTime = Instant.now();
+        TestLogger.logSuiteStart(BaseHistoryRepositoryTest.class);
     }
 
     @AfterAll
-    static void finish() {
-        System.out.println("\n ------------------------------ UserRepositoryTest end ---------------------------------------");
+    static void endTestExecution() {
+        TestLogger.logSuiteEnd(BaseHistoryRepositoryTest.class, suiteStartTime);
     }
 
     @BeforeEach
     void setUp() {
-        System.out.println("******************************* UserRepository TEST " + testCounter + " SETUP **********************************");
+        TestLogger.logTestStart(testCounter);
     }
 
     @AfterEach
     void tearDown() {
-        userRepository.deleteAll();
-        System.out.println("******************************* UserRepository TEST " + testCounter + " TEARDOWN *************************************");
+        TestLogger.logTestEnd(testCounter);
         testCounter++;
     }
 
     @Test
     void findByEmail_WhenUserExists_ReturnsUser() {
         // given
-        User user = User.builder()
-                .email("test@example.com")
-                .firstname("John")
-                .lastname("Doe")
-                .password("encodedPassword")
-                .enabled(true)
-                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
-                .build();
-
-        entityManager.persist(user); // Better than repository.save() for setup
-        entityManager.flush();
+        User user = TestSuiteUtils.createTestUserHibernateA();
+        repository.save(user);
 
         // when
-        Optional<User> result = userRepository.findByEmail("test@example.com");
+        Optional<User> result = repository.findByEmail("john.doe@example.com");
 
         // then
-        assertThat(result)
-                .isPresent()
-                .hasValueSatisfying(foundUser -> {
-                    assertThat(foundUser.getEmail()).isEqualTo("test@example.com");
-                    assertThat(foundUser.getFirstname()).isEqualTo("John");
-                    assertThat(foundUser.getLastname()).isEqualTo("Doe");
-                });
+        assertThat(result).isPresent();
+        assertThat(result.get().getEmail()).isEqualTo("john.doe@example.com");
+        assertThat(result.get().getFirstname()).isEqualTo("John");
+        assertThat(result.get().getLastname()).isEqualTo("Doe");
     }
 
     @Test
     void findByEmail_WhenUserNotExists_ReturnsEmpty() {
         // when
-        Optional<User> result = userRepository.findByEmail("nonexistent@example.com");
+        Optional<User> result = repository.findByEmail("nonexistent@example.com");
 
         // then
         assertThat(result).isEmpty();
+    }
+
+    @Test
+    void findTopNOrderByCreatedAtDesc_ShouldReturnLatestEntities() {
+        // Given: two users with different timestamps
+        User user1 = TestSuiteUtils.createTestUserHibernateA();
+        repository.saveAndFlush(user1);
+
+        User user2 = TestSuiteUtils.createTestUserHibernateB();
+        repository.saveAndFlush(user2);
+
+        // When
+        List<User> result = repository.findTopNOrderByCreatedAtDesc(1);
+
+        // Then
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0).getEmail()).isEqualTo("jane.smith@example.com");
     }
 }

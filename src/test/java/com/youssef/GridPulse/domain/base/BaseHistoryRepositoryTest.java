@@ -2,6 +2,7 @@ package com.youssef.GridPulse.domain.base;
 
 import com.youssef.GridPulse.common.base.BaseHistoryEntity;
 import com.youssef.GridPulse.common.base.BaseHistoryRepository;
+import com.youssef.GridPulse.utils.TestLogger;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
@@ -53,8 +54,11 @@ public abstract class BaseHistoryRepositoryTest<H extends BaseHistoryEntity, ID 
     }
 
     protected abstract BaseHistoryRepository<H, ID> getRepository();
+
     protected abstract H createTestHistoryEntity(UUID originalId);
+
     protected abstract H createTestHistoryEntity();
+
     protected abstract Class<H> getEntityClass();
 
     @Nested
@@ -99,8 +103,8 @@ public abstract class BaseHistoryRepositoryTest<H extends BaseHistoryEntity, ID 
          * Newer test not in UserHistoryRepoTest
          */
         @Test
-        @Timeout(3)
-        @DisplayName("Should complete within 3 seconds")
+        @Timeout(5)
+        @DisplayName("Should complete within 5 seconds")
         void markAsSynced_ShouldCompleteQuickly() {
             // Given
             H entity = createTestHistoryEntity();

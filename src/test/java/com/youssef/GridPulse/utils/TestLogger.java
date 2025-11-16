@@ -1,4 +1,4 @@
-package com.youssef.GridPulse.domain.base;
+package com.youssef.GridPulse.utils;
 
 import java.time.Duration;
 import java.time.Instant;
