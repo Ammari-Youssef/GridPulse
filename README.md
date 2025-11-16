@@ -56,4 +56,4 @@ docker-compose up --build
 * This project uses GitHub Actions for continuous integration:
 * Runs mvn clean verify on each push and pull request
 * Uploads test reports as artifacts
-* **Future steps:** automated Docker image build and deployment
+* Automated Docker image build and deployment
