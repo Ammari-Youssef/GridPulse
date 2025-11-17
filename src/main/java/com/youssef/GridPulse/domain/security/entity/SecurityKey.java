@@ -8,13 +8,10 @@ import com.youssef.GridPulse.domain.security.enums.KeySource;
 import com.youssef.GridPulse.domain.security.enums.KeyStatus;
 import com.youssef.GridPulse.domain.security.enums.SecurityType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 /**
  * Represents a cryptographic key pair used for secure communication,
@@ -62,9 +59,10 @@ public class SecurityKey extends BaseEntity {
     @Column(nullable = false, length = 50)
     private KeySource keySource; // CLOUD, DEVICE, GATEWAY
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 50)
     private KeyStatus status = KeyStatus.ACTIVE;
 
-    private Instant revokedTimestamp;
+    private OffsetDateTime revokedTimestamp;
 }

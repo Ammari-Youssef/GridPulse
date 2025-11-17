@@ -1,0 +1,15 @@
+﻿type MessagePage {
+    content: [Message!]!
+    totalPages: Int
+    totalElements: Int
+    number: Int
+    size: Int
+}
+
+type MessageHistoryPage {
+    content: [MessageHistory!]!
+    totalPages: Int
+    totalElements: Int
+    number: Int
+    size: Int
+}

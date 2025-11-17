@@ -1,0 +1,7 @@
+type SoftwarePayload {
+    startTime: DateTime!
+    endTime: DateTime
+    packageType: SoftwarePackageType!
+    version: String!
+    status: SoftwareMessageUpdateStatus!
+}

@@ -1,0 +1,9 @@
+enum SoftwarePackageType {
+    OS
+    COMMS
+    IDS
+    BMS
+    INV
+    METER
+    API
+}

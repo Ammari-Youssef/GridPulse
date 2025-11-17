@@ -1,0 +1,12 @@
+enum AttackType {
+    BACKDOOR
+    EXPLOIT
+    DOS_DDOS
+    WORMS
+    SHELLCODE
+    FUZZERS
+    GENERIC
+    NORMAL
+    ANALYSIS
+    RECONNAISSANCE
+}

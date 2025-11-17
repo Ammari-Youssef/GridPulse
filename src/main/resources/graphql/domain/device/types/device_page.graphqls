@@ -1,0 +1,15 @@
+﻿type DevicePage {
+    content: [Device!]!
+    totalPages: Int
+    totalElements: Int
+    number: Int
+    size: Int
+}
+
+type DeviceHistoryPage {
+    content: [DeviceHistory!]!
+    totalPages: Int
+    totalElements: Int
+    number: Int
+    size: Int
+}

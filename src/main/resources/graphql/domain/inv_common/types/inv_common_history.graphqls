@@ -1,0 +1,31 @@
+type InvCommonHistory implements Auditable & AuditableHistory & SunSpecModelAuditableHistory {
+    id: UUID!
+    originalId: UUID!
+    inverterId: UUID! # Track inverter id
+
+    # SunSpec fields
+    modelId: Int!         # Constant value (e.g., 1)
+    modelLength: Int!    # L in SunSpec
+
+    # Metadata fields
+    manufacturer: String!
+    model: String!
+    options: String
+    version: String
+    serialNumber: String
+    deviceAddress: Int!
+    pad: Int
+
+    # Auditing fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: DateTime!
+    updatedAt: DateTime
+    source: Source!
+
+    #  History Flags
+    createdRecord: Boolean!
+    updatedRecord: Boolean!
+    deletedRecord: Boolean!
+    synced: Boolean!
+}

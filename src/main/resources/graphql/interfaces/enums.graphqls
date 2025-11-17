@@ -1,0 +1,7 @@
+enum Source {
+    APP # internal
+    SYNC # from external system
+    CLOUD # from Cloud API
+    DEVICE # from Device API
+    GATEWAY # from Gateway API
+}

@@ -1,0 +1,12 @@
+extend type Query {
+    # Non-paginated queries
+    getAllUsers: [User!]!
+    getCurrentUser:  User!
+    getUserById(id: UUID!): User!
+    getUsersActivityHistory: [UserHistory!]!
+
+    # Offset Pagination
+    getAllUserPaged(pageRequest: PageRequestInput!): PageResponse_User!
+    getAllUserHistoryPaged(pageRequest: PageRequestInput!): PageResponse_UserHistory!
+    getUserHistoryByOriginalIdPaged(originalId: UUID!, pageRequest: PageRequestInput!): PageResponse_UserHistory!
+}

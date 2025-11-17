@@ -4,6 +4,7 @@ import com.youssef.GridPulse.common.base.BaseEntity;
 import com.youssef.GridPulse.common.base.BaseHistoryEntity;
 import com.youssef.GridPulse.common.base.BaseService;
 import com.youssef.GridPulse.domain.inverter.inverter.entity.Inverter;
+import com.youssef.GridPulse.utils.TestLogger;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.test.tester.GraphQlTester;
@@ -166,13 +167,13 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
         @Test
         @WithAnonymousUser
         void anonymousCannotGetEntityById() {
-            graphQlTester.documentName("queries/" + getEntityClass().getSimpleName() + "/getById")
+            graphQlTester.documentName("queries/" + getEntityClass().getSimpleName().toLowerCase() + "/getById")
                     .variable("id", testEntityId)
                     .execute()
                     .errors()
                     .satisfy(err -> {
                         assertThat(err).hasSize(1);
-                        assertThat(err.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(err.get(0).getMessage()).contains("Forbidden: admin privileges required");
                     });
         }
     }
@@ -206,14 +207,14 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
         @Test
         @WithMockUser(roles = "USER")
         void userCannotUpdateEntity() {
-            graphQlTester.documentName("mutations/" + getEntityClass().getSimpleName() + "/update")
+            graphQlTester.documentName("mutations/" + getEntityClass().getSimpleName().toLowerCase() + "/update")
                     .variable("id", testEntityId.toString())
                     .variable("input", inputMap)
                     .execute()
                     .errors()
                     .satisfy(err -> {
                         assertThat(err).hasSize(1);
-                        assertThat(err.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(err.get(0).getMessage()).contains("Forbidden: admin privileges required");
                     });
         }
     }
@@ -231,13 +232,13 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
         @Test
         @WithMockUser(roles = "USER")
         void userCannotDeleteEntity() {
-            graphQlTester.documentName("mutations/" + getEntityClass().getSimpleName() + "/deleteById")
+            graphQlTester.documentName("mutations/" + getEntityClass().getSimpleName().toLowerCase() + "/deleteById")
                     .variable("id", testEntityId.toString())
                     .execute()
                     .errors()
                     .satisfy(err -> {
                         assertThat(err).hasSize(1);
-                        assertThat(err.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(err.get(0).getMessage()).contains("Forbidden: admin privileges required");
                     });
         }
     }
@@ -261,7 +262,7 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
                     .errors()
                     .satisfy(err -> {
                         assertThat(err).hasSize(1);
-                        assertThat(err.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(err.get(0).getMessage()).contains("Forbidden: admin privileges required");
                     });
         }
 
@@ -274,7 +275,7 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
                     .errors()
                     .satisfy(err -> {
                         assertThat(err).hasSize(1);
-                        assertThat(err.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(err.get(0).getMessage()).contains("Forbidden: admin privileges required");
                     });
         }
 
@@ -310,13 +311,13 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
             @Test
             @WithMockUser
             void findHistoryByOriginalId_UserFail() {
-                graphQlTester.documentName("queries/" + Inverter.class.getSimpleName() + "/getHistoryByOriginalId")
+                graphQlTester.documentName("queries/" + Inverter.class.getSimpleName().toLowerCase() + "/getHistoryByOriginalId")
                         .variable("originalId", testEntityId)
                         .execute()
                         .errors()
                         .satisfy(errors -> {
                             assertThat(errors).hasSize(1);
-                            assertThat(errors.get(0).getMessage()).contains("INTERNAL_ERROR");
+                            assertThat(errors.get(0).getMessage()).contains("Forbidden: admin privileges required");
                         });
 
                 verify(service, never()).findHistoryByOriginalId(testEntityId);
@@ -330,7 +331,7 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
 //                        .thenThrow(new BadCredentialsException("Authentication failed"));  // ✅ Concrete exception
 
                 // when & then
-                graphQlTester.documentName("queries/" + Inverter.class.getSimpleName() + "/getHistoryByOriginalId")
+                graphQlTester.documentName("queries/" + Inverter.class.getSimpleName().toLowerCase() + "/getHistoryByOriginalId")
                         .variable("originalId", testEntityId)
                         .execute()
                         .errors()
@@ -338,7 +339,7 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
                             assertThat(errors).isNotNull();
                             assertThat(errors.size()).isEqualTo(1);
                             assertThat(errors.get(0).getMessage())
-                                    .contains("INTERNAL_ERROR for ");
+                                    .contains("Forbidden: admin privileges required");
                         });
 
                 verify(service, never()).findHistoryByOriginalId(testEntityId);
@@ -376,12 +377,24 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
                     .errors()
                     .satisfy(err -> {
                         assertThat(err).hasSize(1);
-                        assertThat(err.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(err.get(0).getMessage()).contains("Forbidden: admin privileges required");
                     });
         }
 
         @Test
         @WithAnonymousUser
+        void cannotMarkEntityHistorySynced_Anonymous() {
+            graphQlTester.documentName("mutations/" + getEntityClass().getSimpleName().toLowerCase() + "/markHistorySynced")
+                    .variable("id", testHistoryId.toString())
+                    .execute()
+                    .errors()
+                    .satisfy(err -> {
+                        assertThat(err).hasSize(1);
+                        assertThat(err.get(0).getMessage()).contains("Forbidden: admin privileges required");
+                    });
+        }
+
+        @Test
         void cannotMarkEntityHistorySynced_Unauthenticated() {
             graphQlTester.documentName("mutations/" + getEntityClass().getSimpleName().toLowerCase() + "/markHistorySynced")
                     .variable("id", testHistoryId.toString())
@@ -389,7 +402,7 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
                     .errors()
                     .satisfy(err -> {
                         assertThat(err).hasSize(1);
-                        assertThat(err.get(0).getMessage()).contains("INTERNAL_ERROR");
+                        assertThat(err.get(0).getMessage()).contains("Unauthorized: authentication required");
                     });
         }
     }
@@ -404,7 +417,7 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
                 .errors()
                 .satisfy(err -> {
                     assertThat(err).hasSize(1);
-                    assertThat(err.get(0).getMessage()).contains("INTERNAL_ERROR");
+                    assertThat(err.get(0).getMessage()).contains("Forbidden: admin privileges required");
                 });
 
         verify(service, never()).create(any());
@@ -470,7 +483,7 @@ public abstract class BaseResolverTest<R, E extends BaseEntity, H extends BaseHi
     protected void testDelete_AdminSuccess(ID id) {
         when(service.delete(id)).thenReturn(true);
 
-        graphQlTester.documentName("mutations/" + getEntityClass().getSimpleName() + "/deleteById")
+        graphQlTester.documentName("mutations/" + getEntityClass().getSimpleName().toLowerCase() + "/deleteById")
                 .variable("id", id.toString())
                 .execute()
                 .path("delete" + getEntityClass().getSimpleName())

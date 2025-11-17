@@ -5,13 +5,13 @@ import com.youssef.GridPulse.domain.inverter.inverter.dto.InverterInput;
 import com.youssef.GridPulse.domain.inverter.inverter.entity.Inverter;
 import com.youssef.GridPulse.domain.inverter.inverter.entity.InverterHistory;
 import com.youssef.GridPulse.domain.inverter.inverter.service.InverterService;
-import com.youssef.GridPulse.domain.inverter.mapper.InverterMapperImpl;
+import com.youssef.GridPulse.domain.inverter.inverter.mapper.InverterMapperImpl;
 import com.youssef.GridPulse.domain.inverter.inverter.repository.InverterHistoryRepository;
 import com.youssef.GridPulse.domain.inverter.inverter.repository.InverterRepository;
+import com.youssef.GridPulse.utils.TestSuiteUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mock;
 
-import java.time.Instant;
 import java.util.UUID;
 
 class InverterServiceTest extends BaseServiceTest<Inverter, InverterHistory, UUID, InverterInput, InverterService> {
@@ -44,35 +44,21 @@ class InverterServiceTest extends BaseServiceTest<Inverter, InverterHistory, UUI
 
     @Override
     protected Inverter createTestEntity(UUID originalId) {
-        return Inverter.builder()
-                .id(originalId)
-                .name("Test Inverter")
-                .model("TX5000")
-                .manufacturer("SolarEdge")
-                .version("v2.1")
-                .build();
+        return TestSuiteUtils.createTestInverterA();
     }
 
     @Override
     protected InverterHistory createTestHistoryEntity(UUID originalId) {
-        return InverterHistory.builder()
-                .originalId(originalId)
-                .name("Test Inverter")
-                .manufacturer("Test Manufacturer")
-                .model("Test Model")
-                .version("Test Version")
-                .synced(false)
-                .createdAt(Instant.now())
-                .build();
+        return TestSuiteUtils.createTestInverterHistoryA();
     }
 
     @Override
     protected InverterInput createTestInput() {
-        return  new InverterInput("Test Inverter", "TX5000", "v2.1", "SolarEdge");
+        return  TestSuiteUtils.createTestInverterInput();
     }
 
     @Override
     protected UUID createTestId() {
-        return UUID.randomUUID();
+        return TestSuiteUtils.TEST_INVERTER_ID;
     }
 }

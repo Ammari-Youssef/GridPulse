@@ -1,0 +1,14 @@
+type Meter implements Auditable {
+    id: UUID!
+    name : String
+    model: String
+    manufacturer: String
+    version: String
+
+    # Auditable fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: DateTime!
+    updatedAt: DateTime
+    source: Source!
+}

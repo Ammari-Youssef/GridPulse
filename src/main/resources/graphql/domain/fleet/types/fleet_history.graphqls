@@ -1,0 +1,19 @@
+type FleetHistory implements Auditable & AuditableHistory{
+    id: UUID!
+    originalId: UUID!
+    name: String!
+    location: String
+    owner: String
+    description: String
+
+    # Auditable fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: DateTime!
+    updatedAt: DateTime
+    source: Source!
+    createdRecord: Boolean!
+    updatedRecord: Boolean!
+    deletedRecord: Boolean!
+    synced: Boolean!
+}

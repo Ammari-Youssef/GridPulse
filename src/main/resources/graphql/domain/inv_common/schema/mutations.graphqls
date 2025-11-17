@@ -1,0 +1,6 @@
+extend type Mutation {
+    createInvCommon(input: InvCommonInput!): InvCommon
+    updateInvCommon(id: UUID!, input: InvCommonInput!): InvCommon
+    deleteInvCommon(id: UUID!): Boolean
+    markInvCommonHistorySynced(id: UUID!): Boolean!
+}

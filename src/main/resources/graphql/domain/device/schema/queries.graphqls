@@ -1,0 +1,16 @@
+﻿extend type Query {
+    # Non-paginated queries
+    getAllDevices: [Device!]!
+    getDeviceById(id: UUID!): Device!
+    getAllDeviceHistory: [DeviceHistory!]!
+    getDeviceHistoryById(historyId: UUID!): DeviceHistory!
+    getDeviceHistory(originalId: UUID!): [DeviceHistory!]!
+    getHealthStatus(deviceId: UUID ): BatteryHealthStatus!
+    getDevicesByFleetId(fleetId: UUID!): [Device!]!
+
+    # Offset Pagination
+    getAllDevicePaged(pageRequest: PageRequestInput!): PageResponse_Device!
+    getDeviceByFleetIdPaged(fleetId: UUID!, pageRequest: PageRequestInput!): PageResponse_Device!
+    getAllDeviceHistoryPaged(pageRequest: PageRequestInput!): PageResponse_DeviceHistory!
+    getDeviceHistoryByOriginalIdPaged(originalId: UUID!, pageRequest: PageRequestInput!): PageResponse_DeviceHistory!
+}

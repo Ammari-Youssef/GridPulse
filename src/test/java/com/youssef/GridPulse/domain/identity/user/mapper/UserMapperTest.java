@@ -1,8 +1,11 @@
 package com.youssef.GridPulse.domain.identity.user.mapper;
 
+import com.youssef.GridPulse.common.base.Source;
+import com.youssef.GridPulse.domain.base.BaseHistoryRepositoryTest;
 import com.youssef.GridPulse.domain.identity.auth.dto.RegisterInput;
 import com.youssef.GridPulse.domain.identity.user.entity.User;
 import com.youssef.GridPulse.domain.identity.user.entity.UserHistory;
+import com.youssef.GridPulse.utils.TestLogger;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -12,6 +15,8 @@ import static com.youssef.GridPulse.domain.identity.user.Role.USER;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -21,28 +26,28 @@ class UserMapperTest {
 
     // Counter
     private static int testCounter = 1;
+    private static Instant suiteStartTime;
 
     @BeforeAll
-    static void start() {
-        System.out.println("--------------------------- UserMapperTest start ---------------------------------------\n");
+    static void beginTestExecution() {
+        suiteStartTime = Instant.now();
+        TestLogger.logSuiteStart(BaseHistoryRepositoryTest.class);
     }
 
     @AfterAll
-    static void finish() {
-        System.out.println("\n ------------------------------ UserMapperTest end ---------------------------------------");
+    static void endTestExecution() {
+        TestLogger.logSuiteEnd(BaseHistoryRepositoryTest.class, suiteStartTime);
     }
 
     @BeforeEach
     void setUp() {
-        System.out.println("******************************* UserMapper Test No." + testCounter + " SETUP **********************************\n");
+        TestLogger.logTestStart(testCounter);
         mapper = new UserMapperImpl();
-
-
     }
 
     @AfterEach
     void tearDown() {
-        System.out.println("******************************* UserMapper Test No." + testCounter + " TEARDOWN **********************************\n");
+        TestLogger.logTestEnd(testCounter);
         mapper = null;
         testCounter++;
     }
@@ -59,7 +64,7 @@ class UserMapperTest {
                 .lastname("lastName")
                 .role(USER)
                 .password("password")
-                .createdAt(Instant.now())
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .build();
         // When
         UserHistory history = mapper.toHistory(user);
@@ -114,7 +119,7 @@ class UserMapperTest {
 
         // Assert that constants are applied
         assertThat(user.getRole()).isEqualTo(USER); // From @Mapping constant
-        assertThat(user.getSource()).isEqualTo("app"); // From @Mapping constant
+        assertThat(user.getSource()).isEqualTo(Source.APP); // From @Mapping constant
 
         // Assert that ignored fields are null & not set by the mapper
         assertThat(user.getId()).isNull();

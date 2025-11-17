@@ -81,6 +81,8 @@ public class LiquibaseMigrationTest {
 
             assertThat(tableExists(conn, "_user")).isFalse();
             assertThat(tableExists(conn, "token")).isFalse();
+            assertThat(tableExists(conn, "device")).isFalse();
+            assertThat(tableExists(conn, "fleet")).isFalse();
             assertThat(tableExists(conn, "inverter")).isFalse();
             assertThat(tableExists(conn, "user_history")).isFalse();
             assertThat(tableExists(conn, "inverter_history")).isFalse();
@@ -94,6 +96,8 @@ public class LiquibaseMigrationTest {
             assertThat(tableExists(conn, "databasechangelog")).isTrue();
             assertThat(tableExists(conn, "_user")).isTrue();
             assertThat(tableExists(conn, "token")).isTrue();
+            assertThat(tableExists(conn, "device")).isTrue();
+            assertThat(tableExists(conn, "fleet")).isTrue();
             assertThat(tableExists(conn, "inverter")).isTrue();
             assertThat(tableExists(conn, "user_history")).isTrue();
             assertThat(tableExists(conn, "inverter_history")).isTrue();
@@ -140,18 +144,9 @@ public class LiquibaseMigrationTest {
 
     private void cleanupDatabase(Connection conn) throws SQLException {
         try (Statement stmt = conn.createStatement()) {
-            // Disable foreign key constraints temporarily
-            stmt.execute("SET CONSTRAINTS ALL DEFERRED");
-
-            // Drop tables in reverse order of dependencies
-            stmt.execute("DROP TABLE IF EXISTS token CASCADE");
-            stmt.execute("DROP TABLE IF EXISTS user_history CASCADE");
-            stmt.execute("DROP TABLE IF EXISTS inverter_history CASCADE");
-            stmt.execute("DROP TABLE IF EXISTS security_keys CASCADE");
-            stmt.execute("DROP TABLE IF EXISTS inverter CASCADE");
-            stmt.execute("DROP TABLE IF EXISTS _user CASCADE");
-            stmt.execute("DROP TABLE IF EXISTS databasechangelog CASCADE");
-            stmt.execute("DROP TABLE IF EXISTS databasechangeloglock CASCADE");
+            // Delete all objects in the public schema
+            stmt.execute("DROP SCHEMA public CASCADE");
+            stmt.execute("CREATE SCHEMA public");
         }
     }
 

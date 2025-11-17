@@ -3,6 +3,7 @@ package com.youssef.GridPulse.domain.base;
 import com.youssef.GridPulse.common.base.BaseEntity;
 import com.youssef.GridPulse.common.base.BaseHistoryEntity;
 import com.youssef.GridPulse.common.base.BaseMapper;
+import com.youssef.GridPulse.utils.TestLogger;
 import org.junit.jupiter.api.*;
 
 import java.time.Instant;

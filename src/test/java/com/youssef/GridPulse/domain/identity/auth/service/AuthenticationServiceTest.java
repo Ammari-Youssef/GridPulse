@@ -13,6 +13,8 @@ import com.youssef.GridPulse.domain.identity.user.entity.UserHistory;
 import com.youssef.GridPulse.domain.identity.user.mapper.UserMapper;
 import com.youssef.GridPulse.domain.identity.user.repository.UserHistoryRepository;
 import com.youssef.GridPulse.domain.identity.user.repository.UserRepository;
+import com.youssef.GridPulse.utils.TestLogger;
+import com.youssef.GridPulse.utils.TestSuiteUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -66,45 +68,36 @@ class AuthenticationServiceTest {
     private ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
     @Captor
     private ArgumentCaptor<Token> tokenCaptor = ArgumentCaptor.forClass(Token.class);
-//    @Captor
-//    private ArgumentCaptor<UserHistory> historyCaptor; // removing this breaks the tests
 
     private User testUser;
-    private final UUID testUserId = UUID.randomUUID();
+    private final UUID testUserId = TestSuiteUtils.TEST_USER_ID_1;
 
-    // Test counter
+    // Test counter / Timer
     private static int testCounter = 1;
+    private static Instant suiteStartTime;
 
     @BeforeAll
-    static void start() {
-        System.out.println("--------------------------- AuthenticationService start ---------------------------------------\n");
+    static void beginTestExecution() {
+        suiteStartTime = Instant.now();
+        TestLogger.logSuiteStart(AuthenticationServiceTest.class);
     }
 
     @AfterAll
-    static void finish() {
-        System.out.println("\n ------------------------------ AuthenticationService end ---------------------------------------");
-    }
-
-    @AfterEach
-    void tearDown() {
-        System.out.println("******************************* AuthenticationService TEST " + testCounter + " TEARDOWN *************************************");
-        testCounter++;
+    static void endTestExecution() {
+        TestLogger.logSuiteEnd(AuthenticationServiceTest.class, suiteStartTime);
     }
 
     @BeforeEach
     void setUp() {
-        System.out.println("******************************* AuthenticationService TEST " + testCounter + " SETUP **********************************");
-        testUser = User.builder()
-                .id(testUserId)
-                .email("test@example.com")
-                .password("encodedPassword")
-                .firstname("John")
-                .lastname("Doe")
-                .role(Role.USER)
-                .enabled(true)
-                .createdAt(Instant.now())
-                .build();
+        TestLogger.logTestStart(testCounter);
+        testUser = TestSuiteUtils.createTestAuthUserA();
+    }
 
+    @AfterEach
+    void tearDown() {
+        TestLogger.logTestEnd(testCounter);
+        testUser = null;
+        testCounter += 1;
     }
 
     // ========== REGISTER TESTS ==========
@@ -114,41 +107,19 @@ class AuthenticationServiceTest {
         @Test
         void register_ValidRequest_ShouldSaveUserCreateHistoryAndReturnTokens() {
             // GIVEN
-            RegisterInput registerInput = RegisterInput.builder()
-                    .email("new@example.com")
-                    .password("plainPassword")
-                    .firstname("Jane")
-                    .lastname("Smith")
-                    .build();
+            RegisterInput registerInput = TestSuiteUtils.createRegisterInput(
+                    "new@example.com", "plainPassword", "Jane", "Smith");
 
-            User savedUser = User.builder()
-                    .id(UUID.randomUUID())
-                    .email("new@example.com")
-                    .password("encodedPassword")
-                    .firstname("Jane")
-                    .lastname("Smith")
-                    .role(Role.USER)
-                    .enabled(true)
-                    .build();
+            User savedUser = TestSuiteUtils.createUser(
+                    UUID.randomUUID(), "new@example.com", "encodedPassword", "Jane", "Smith", Role.USER);
 
-            UserHistory userHistory = UserHistory.builder()
-                    .originalId(savedUser.getId())
-                    .email("new@example.com")
-                    .password("encodedPassword")
-                    .firstname("Jane")
-                    .lastname("Smith")
-                    .role("USER")
-                    .enabled(true)
-                    .createdRecord(true)
-                    .build();
+            UserHistory userHistory = TestSuiteUtils.createUserHistoryFromUser(savedUser, true);
 
             when(userMapper.toHistory(savedUser)).thenReturn(userHistory);
             when(userMapper.toEntity(registerInput)).thenReturn(savedUser);
             when(passwordEncoder.encode("plainPassword")).thenReturn("encodedPassword");
             when(jwtService.generateToken(savedUser)).thenReturn("access-token");
             when(jwtService.generateRefreshToken(savedUser)).thenReturn("refresh-token");
-
-
             when(userRepository.save(savedUser)).thenReturn(savedUser);
             when(userHistoryRepository.save(userHistory)).thenReturn(userHistory);
             when(tokenRepository.save(any(Token.class))).thenAnswer(inv -> inv.getArgument(0));
@@ -162,15 +133,10 @@ class AuthenticationServiceTest {
 
             verify(userMapper).toEntity(registerInput);
             verify(passwordEncoder).encode("plainPassword");
-
             verify(userRepository).save(userCaptor.capture());
-            User capturedUser = userCaptor.getValue();
-            assertThat(capturedUser.getPassword()).isEqualTo("encodedPassword");
-            assertThat(capturedUser.isEnabled()).isTrue();
-
+            assertThat(userCaptor.getValue().getPassword()).isEqualTo("encodedPassword");
             verify(userMapper).toHistory(savedUser);
             verify(userHistoryRepository).save(userHistory);
-
             verify(jwtService).generateToken(savedUser);
             verify(jwtService).generateRefreshToken(savedUser);
             verify(tokenRepository, times(2)).save(any(Token.class));
@@ -366,32 +332,13 @@ class AuthenticationServiceTest {
         @Test
         void createUserWithRole_ValidRequest_ShouldCreateUserWithSpecifiedRole() {
             // GIVEN
-            RegisterInput registerInput = RegisterInput.builder()
-                    .email("admin@example.com")
-                    .password("adminPass")
-                    .firstname("Admin")
-                    .lastname("User")
-                    .build();
+            RegisterInput registerInput = TestSuiteUtils.createRegisterInput(
+                    "admin@example.com", "adminPass", "Admin", "User");
 
-            User savedUser = User.builder()
-                    .id(UUID.randomUUID())
-                    .email("admin@example.com")
-                    .password("encodedPassword")
-                    .firstname("Admin")
-                    .lastname("User")
-                    .role(Role.ADMIN)
-                    .enabled(true)
-                    .build();
+            User savedUser = TestSuiteUtils.createUser(
+                    UUID.randomUUID(), "admin@example.com", "encodedPassword", "Admin", "User", Role.ADMIN);
 
-            UserHistory userHistory = UserHistory.builder()
-                    .originalId(savedUser.getId())
-                    .email("admin@example.com")
-                    .firstname("Admin")
-                    .lastname("User")
-                    .role("ADMIN")
-                    .enabled(true)
-                    .createdRecord(true)
-                    .build();
+            UserHistory userHistory = TestSuiteUtils.createUserHistoryFromUser(savedUser, true);
 
             when(userMapper.toEntity(registerInput)).thenReturn(savedUser);
             when(passwordEncoder.encode(any(String.class))).thenReturn("encodedPassword");
@@ -501,33 +448,13 @@ class AuthenticationServiceTest {
 
     @Test
     void register_ShouldCallSaveUserToken() {
-        // GIVEN
-        RegisterInput registerInput = RegisterInput.builder()
-                .email("test@example.com")
-                .password("plainPassword")
-                .firstname("Test")
-                .lastname("User")
-                .build();
+        RegisterInput registerInput = TestSuiteUtils.createRegisterInput(
+                "test@example.com", "plainPassword", "Test", "User");
 
-        User savedUser = User.builder()
-                .id(UUID.randomUUID())
-                .email("test@example.com")
-                .password("encodedPassword")
-                .firstname("Test")
-                .lastname("User")
-                .role(Role.USER)
-                .enabled(true)
-                .build();
+        User savedUser = TestSuiteUtils.createUser(
+                UUID.randomUUID(), "test@example.com", "encodedPassword", "Test", "User", Role.USER);
 
-        UserHistory history = UserHistory.builder()
-                .originalId(savedUser.getId())
-                .email("test@example.com")
-                .password("encodedPassword")
-                .firstname("Test")
-                .lastname("User")
-                .role("USER")
-                .enabled(true)
-                .build();
+        UserHistory history = TestSuiteUtils.createUserHistoryFromUser(savedUser, true);
 
         when(userMapper.toEntity(registerInput)).thenReturn(savedUser);
         when(passwordEncoder.encode("plainPassword")).thenReturn("encodedPassword");

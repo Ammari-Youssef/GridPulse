@@ -1,15 +1,14 @@
 package com.youssef.GridPulse.domain.inverter.mapper;
 
 import com.youssef.GridPulse.common.base.BaseMapper;
-import com.youssef.GridPulse.common.base.Source;
 import com.youssef.GridPulse.domain.base.BaseMapperTest;
 import com.youssef.GridPulse.domain.inverter.inverter.dto.InverterInput;
 import com.youssef.GridPulse.domain.inverter.inverter.entity.Inverter;
 import com.youssef.GridPulse.domain.inverter.inverter.entity.InverterHistory;
 import com.youssef.GridPulse.domain.inverter.inverter.mapper.InverterMapper;
+import com.youssef.GridPulse.domain.inverter.inverter.mapper.InverterMapperImpl;
+import com.youssef.GridPulse.utils.TestSuiteUtils;
 
-import java.time.Instant;
-import java.util.UUID;
 
 public class InverterMapperTests extends BaseMapperTest<Inverter, InverterHistory, InverterInput> {
 
@@ -22,52 +21,22 @@ public class InverterMapperTests extends BaseMapperTest<Inverter, InverterHistor
 
     @Override
     protected InverterInput createTestInput() {
-        return new InverterInput(
-                "Test Inverter",
-                "TX5000",
-                "v2.1",
-                "SolarEdge"
-        );
+        return TestSuiteUtils.createTestInverterInput();
     }
 
     @Override
     protected Inverter createTestEntity() {
-        return Inverter.builder()
-                .id(UUID.randomUUID())
-                .name("Test Inverter")
-                .model("TX5000")
-                .version("v2.1")
-                .manufacturer("SolarEdge")
-                .source(Source.APP)
-                .createdAt(Instant.now())
-                .updatedAt(Instant.now())
-                .build();
+        return TestSuiteUtils.createTestInverterA();
     }
 
     @Override
     protected InverterHistory createTestHistoryEntity() {
-        return InverterHistory.builder()
-                .id(UUID.randomUUID())
-                .originalId(UUID.randomUUID())
-                .name("Test Inverter")
-                .model("TX5000")
-                .version("v2.1")
-                .manufacturer("SolarEdge")
-                .build();
+        return TestSuiteUtils.createTestInverterHistoryA();
     }
 
     @Override
     protected Inverter cloneEntity(Inverter entity) {
-        return Inverter.builder()
-                .id(entity.getId())
-                .name(entity.getName())
-                .model(entity.getModel())
-                .version(entity.getVersion())
-                .manufacturer(entity.getManufacturer())
-                .source(entity.getSource())
-                .createdAt(entity.getCreatedAt())
-                .updatedAt(entity.getUpdatedAt())
-                .build();
+        return TestSuiteUtils.createTestInverter(entity);
     }
 
 }

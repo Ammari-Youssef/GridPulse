@@ -1,3 +1,3 @@
-mutation DeleteInverter($id: ID!) {
+mutation DeleteInverter($id: UUID!) {
     deleteInverter(id: $id)
 }

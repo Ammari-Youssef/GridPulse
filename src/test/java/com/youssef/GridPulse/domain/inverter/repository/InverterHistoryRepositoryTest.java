@@ -5,10 +5,17 @@ import com.youssef.GridPulse.domain.base.BaseHistoryRepositoryTest;
 import com.youssef.GridPulse.domain.inverter.inverter.entity.InverterHistory;
 import com.youssef.GridPulse.domain.inverter.inverter.repository.InverterHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.UUID;
 
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Transactional
 class InverterHistoryRepositoryTest extends BaseHistoryRepositoryTest<InverterHistory, UUID> {
 
     @Autowired
@@ -28,7 +35,7 @@ class InverterHistoryRepositoryTest extends BaseHistoryRepositoryTest<InverterHi
                 .model("Test Model")
                 .version("Test Version")
                 .synced(false)
-                .createdAt(Instant.now())
+                .createdAt(OffsetDateTime.now(ZoneId.of("Africa/Casablanca")))
                 .build();
     }
 

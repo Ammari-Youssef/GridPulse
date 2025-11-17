@@ -1,0 +1,16 @@
+type Bms implements Auditable {
+    id: UUID!
+    name: String
+    model: String
+    manufacturer: String
+    version: String
+    soh: String
+    soc: Float
+    batteryChemistry: String
+
+    createdBy: String!
+    updatedBy: String
+    createdAt: DateTime!
+    updatedAt: DateTime
+    source: Source!
+}

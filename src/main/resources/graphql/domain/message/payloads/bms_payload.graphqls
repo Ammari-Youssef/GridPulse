@@ -1,0 +1,8 @@
+type BmsPayload {
+    batteryId: Int!
+    batteryVolt: Float!
+    batterySoc: Float!
+    batteryCycle: Int!
+    batterySoh: Float!
+    batteryTemperature: Float!
+}

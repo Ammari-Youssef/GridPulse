@@ -1,0 +1,6 @@
+extend type Mutation {
+    createDevice(input: DeviceInput!): Device
+    updateDevice(id: UUID!, input: DeviceInput!): Device
+    deleteDevice(id: UUID!): Boolean
+    markDeviceHistorySynced(id: UUID!): Boolean!
+}

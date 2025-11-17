@@ -1,0 +1,8 @@
+input UpdateMessageInput {
+    cloudMessageId: String
+    messageText: JSON
+    format: MessageFormat
+    status: MessageStatus
+    priority: MessagePriority
+}
+

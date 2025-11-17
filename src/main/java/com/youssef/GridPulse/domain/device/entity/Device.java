@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import com.youssef.GridPulse.domain.enums.BatteryHealthStatus;
@@ -49,7 +49,7 @@ public class Device extends BaseEntity {
     @Column(nullable = false, length = 50)
     private DeviceStatus status;
 
-    private Instant lastSeen;
+    private OffsetDateTime lastSeen;
 
     // --- Battery & Power ---
     private Float soc; // State of Charge (0.0 - 100.0)
@@ -62,7 +62,7 @@ public class Device extends BaseEntity {
 
     // --- Software & Connectivity ---
     private String softwareVersion;
-    private Instant swUpdateTime; // Last software update
+    private OffsetDateTime swUpdateTime; // Last software update
     private String ip; // IPv4 or IPv6
 
     // --- Location ---

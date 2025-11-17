@@ -1,0 +1,26 @@
+type InvCommon implements SunSpecModelAuditable & Auditable {
+    id: UUID!
+
+    # SunSpec fields
+    modelId: Int!         # Constant value (e.g., 1)
+    modelLength: Int!    # L in SunSpec
+
+    # Metadata fields
+    manufacturer: String!
+    model: String!
+    options: String
+    version: String
+    serialNumber: String
+    deviceAddress: Int!
+    pad: Int
+
+    # Relationship
+    inverter: Inverter!
+
+    # Auditing fields
+    createdBy: String!
+    updatedBy: String
+    createdAt: DateTime!
+    updatedAt: DateTime
+    source: Source!
+}

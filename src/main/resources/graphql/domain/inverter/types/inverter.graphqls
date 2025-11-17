@@ -1,0 +1,13 @@
+type Inverter implements Auditable {
+    id: UUID!
+    name: String!
+    model: String!
+    version: String!
+    manufacturer: String!
+
+    createdBy: String!
+    updatedBy: String
+    createdAt: DateTime!
+    updatedAt: DateTime
+    source: Source!
+}

@@ -1,0 +1,15 @@
+﻿type MeterPage {
+    content: [Meter!]!
+    totalPages: Int
+    totalElements: Int
+    number: Int
+    size: Int
+}
+
+type MeterHistoryPage {
+    content: [MeterHistory!]!
+    totalPages: Int
+    totalElements: Int
+    number: Int
+    size: Int
+}

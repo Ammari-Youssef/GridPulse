@@ -1,0 +1,13 @@
+﻿extend type Query {
+    # Non-paginated queries
+    getAllFleets: [Fleet!]!
+    getAllFleetHistory: [FleetHistory!]!
+    getFleetById(id: UUID!): Fleet!
+    getFleetHistoryById(historyId: UUID!): FleetHistory!
+    getFleetHistory(originalId: UUID!): [FleetHistory!]!
+
+    # Offset Pagination
+    getAllFleetPaged(pageRequest: PageRequestInput!): PageResponse_Fleet!
+    getAllFleetHistoryPaged(pageRequest: PageRequestInput!): PageResponse_FleetHistory!
+    getFleetHistoryByOriginalIdPaged(originalId: UUID!, pageRequest: PageRequestInput!): PageResponse_FleetHistory!
+}

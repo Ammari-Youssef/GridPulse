@@ -1,0 +1,6 @@
+input PageRequestInput {
+    page: Int = 0
+    size: Int = 10
+    sortBy: String = "createdAt"
+    desc: Boolean = true
+}
