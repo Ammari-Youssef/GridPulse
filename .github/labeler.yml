@@ -1,71 +1,94 @@
 # Auto-label rules for PRs
-
-# Backend & core
 backend:
-  - src/**
-  - pom.xml
-  - Dockerfile
-  - docker-compose.yml
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/**"
+          - "pom.xml"
+          - "Dockerfile"
+          - "docker-compose.yml"
 
 db:
-  - src/main/resources/db/**
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/main/resources/db/**"
 
 liquibase:
-  - src/main/resources/db/**
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/main/resources/db/**"
 
 auth:
-  - src/main/java/**/auth/**
-  - src/**/security/**
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/main/java/**/auth/**"
+          - "src/**/security/**"
 
 graphql:
-  - src/main/graphql/**
-  - src/**/*.graphql
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/main/graphql/**"
+          - "src/**/*.graphql"
 
 test:
-  - src/test/**
-  - src/**/*Test.java
-  - frontend/**/*.spec.ts
-  - frontend/e2e/**
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/test/**"
+          - "src/**/*Test.java"
+          - "frontend/**/*.spec.ts"
+          - "frontend/e2e/**"
 
-# Frontend (Angular v19)
 frontend:
-  - frontend/**
-  - frontend/**/*
-  - frontend/Dockerfile
+  - changed-files:
+      - any-glob-to-any-file:
+          - "frontend/**"
+          - "frontend/**/*"
+          - "frontend/Dockerfile"
 
 angular:
-  - frontend/**
-  - frontend/**/*
-  - frontend/Dockerfile
+  - changed-files:
+      - any-glob-to-any-file:
+          - "frontend/**"
+          - "frontend/**/*"
+          - "frontend/Dockerfile"
 
-# CI/CD & infra
 ci/cd:
-  - .github/workflows/**
-  - .github/labeler.yml
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/workflows/**"
+          - ".github/labeler.yml"
 
 github-actions:
-  - .github/workflows/**
-  - .github/labeler.yml
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/workflows/**"
+          - ".github/labeler.yml"
 
 docker:
-  - docker-compose.yml
-  - Dockerfile
+  - changed-files:
+      - any-glob-to-any-file:
+          - "docker-compose.yml"
+          - "Dockerfile"
 
 infra:
-  - .github/workflows/**
-  - .github/labeler.yml
-  - gitHub-actions/**
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/workflows/**"
+          - ".github/labeler.yml"
+          - "gitHub-actions/**"
 
-# Documentation
 documentation:
-  - docs/**
-  - README.md
+  - changed-files:
+      - any-glob-to-any-file:
+          - "docs/**"
+          - "README.md"
 
 foundation:
-  - foundation/**
-
-# Miscellaneous
+  - changed-files:
+      - any-glob-to-any-file:
+          - "foundation/**"
 
 enhancement:
-  - src/**/feature/**
-  - frontend/**
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/**/feature/**"
+          - "frontend/**"
