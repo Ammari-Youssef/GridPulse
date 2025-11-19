@@ -1,0 +1,60 @@
+# Auto-label rules for PRs
+backend:
+  - changed-files:
+      - any-glob-to-any-file: ["src/**", "pom.xml", "Dockerfile", "docker-compose.yml"]
+
+db:
+  - changed-files:
+      - any-glob-to-any-file: ["src/main/resources/db/**"]
+
+liquibase:
+  - changed-files:
+      - any-glob-to-any-file: ["src/main/resources/db/**"]
+
+auth:
+  - changed-files:
+      - any-glob-to-any-file: ["src/main/java/**/auth/**", "src/**/security/**"]
+
+graphql:
+  - changed-files:
+      - any-glob-to-any-file: ["src/main/graphql/**", "src/**/*.graphql"]
+
+test:
+  - changed-files:
+      - any-glob-to-any-file: ["src/test/**", "src/**/*Test.java", "frontend/**/*.spec.ts", "frontend/e2e/**"]
+
+frontend:
+  - changed-files:
+      - any-glob-to-any-file: ["frontend/**", "frontend/**/*", "frontend/Dockerfile"]
+
+angular:
+  - changed-files:
+      - any-glob-to-any-file: ["frontend/**", "frontend/**/*", "frontend/Dockerfile"]
+
+ci/cd:
+  - changed-files:
+      - any-glob-to-any-file: [".github/workflows/**", ".github/labeler.yml"]
+
+github-actions:
+  - changed-files:
+      - any-glob-to-any-file: [".github/workflows/**", ".github/labeler.yml"]
+
+docker:
+  - changed-files:
+      - any-glob-to-any-file: ["docker-compose.yml", "Dockerfile"]
+
+infra:
+  - changed-files:
+      - any-glob-to-any-file: [".github/workflows/**", ".github/labeler.yml", "gitHub-actions/**"]
+
+documentation:
+  - changed-files:
+      - any-glob-to-any-file: ["docs/**", "README.md"]
+
+foundation:
+  - changed-files:
+      - any-glob-to-any-file: ["foundation/**"]
+
+enhancement:
+  - changed-files:
+      - any-glob-to-any-file: ["src/**/feature/**", "frontend/**"]
