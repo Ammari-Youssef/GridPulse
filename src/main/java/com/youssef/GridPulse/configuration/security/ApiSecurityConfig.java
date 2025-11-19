@@ -1,6 +1,5 @@
 package com.youssef.GridPulse.configuration.security;
 
-import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,29 +16,40 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity // Enable Spring Security @configuration & @EnableWebSecurity are mandatory in spring boot 3.0
 @EnableMethodSecurity // Enable method security annotations like @PreAuthorize, @PostAuthorize, etc.
 @RequiredArgsConstructor
-public class SecurityConfig {
+public class ApiSecurityConfig {
 
-    private final Filter jwtAuthFilter;
+    private final JwtAuthFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final AuthenticationCustomEntryPoint authEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-            return http
-                    .csrf(AbstractHttpConfigurer::disable) // Disable CSRF protection
-                    .authorizeHttpRequests(req -> req
-                            .requestMatchers("/graphiql","/graphql").permitAll() // Require authentication for all requests to /graphql
-                            .anyRequest().authenticated())
+        return http
+                .csrf(AbstractHttpConfigurer::disable)
+                .securityMatcher("/**") // matches all API endpoints except those handled by ActuatorSecurity
+                .authorizeHttpRequests(req -> req
+                        // PUBLIC ENDPOINTS
+                        .requestMatchers(
+                                "/graphiql",
+                                "/graphiql/**",
+                                "/graphql",
+                                "/graphql/**"
+                        ).permitAll()
 
-                    .sessionManagement(ss -> ss.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Set session management to stateless
-                    .authenticationProvider(authenticationProvider)
-                    .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // Add JWT filter before the UsernamePasswordAuthenticationFilter
-//                    .httpBasic(AbstractHttpConfigurer::disable);// Disable basic authentication
+                        // EVERYTHING ELSE IS SECURED
+                        .anyRequest().authenticated())
 
-                    .exceptionHandling(ex -> ex
-                            .authenticationEntryPoint(authEntryPoint)
-                    ) // Set custom authentication entry point to handle unauthorized access
-                    .build();
+                .sessionManagement(ss -> ss.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
+                .authenticationProvider(authenticationProvider)
+
+                // ADD JWT FILTER
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(authEntryPoint))
+                .httpBasic(AbstractHttpConfigurer::disable)
+
+                .build();
     }
+
 }
