@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,82 +17,86 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 /**
- *
- This class is responsible for filtering JWT tokens from incoming requests.
+ * This class is responsible for filtering JWT tokens from incoming requests.
  * It extends OncePerRequestFilter to ensure that the filter is executed once per request.
  * It is used to validate the JWT token and set the authentication in the security context.
  */
-
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
     private final TokenRepository tokenRepository;
 
+    /**
+     * Skip filtering for public endpoints
+     */
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request,
-                                    @NonNull HttpServletResponse response,
-                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        String method = request.getMethod();
 
-        // Wrap request to allow body re-reading
-        CachedBodyHttpServletRequest cachedRequest = new CachedBodyHttpServletRequest(request);
+        log.info("Request Path: {} Method: {}", path, method);
+        log.info("Request URI: {}", request.getRequestURI());
 
-        // Read body only once
-        String body = new String(cachedRequest.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        // Public UIs
+        if (path.startsWith("/graphiql") || path.startsWith("/actuator"))
+            return true;
 
-        // Skip JWT for login and register mutations
-        if (request.getRequestURI().equals("/graphql") &&
-                body.contains("mutation") &&
-                (body.contains("login") || body.contains("register")) || body.contains("refreshToken")) {
-            filterChain.doFilter(cachedRequest, response);
+        // GET /graphql = graphiql introspection
+        if (path.equals("/graphql") && method.equalsIgnoreCase("GET"))
+            return true;
+
+
+        return false; // All other requests get filtered
+    }
+
+    @Override
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain) throws ServletException, IOException {
+
+        String authHeader = request.getHeader("Authorization");
+
+        // No Authorization header → pass to next filter (anonymous)
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
             return;
         }
 
-        // Check Authorization header
-        final String authHeader = request.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            response.getWriter().write("""
-            {
-              "errors": [
-                {
-                  "message": "Unauthorized",
-                  "extensions": { "classification": "UNAUTHORIZED" }
-                }
-              ]
-            }
-        """);
-            return; // don't continue filter chain
-        }
-
-        final String jwt = authHeader.substring(7);
-        final String userEmail = jwtService.extractUsername(jwt);
+        String jwt = authHeader.substring(7);
+        String userEmail = jwtService.extractUsername(jwt);
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-            // Check if the token is valid and not expired or revoked
-            var isTokenValid = tokenRepository.findByToken(jwt)
+
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+
+            boolean isTokenValid = tokenRepository.findByToken(jwt)
                     .map(t -> !t.isExpired() && !t.isRevoked())
                     .orElse(false);
+
             if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
+
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails,
+                                null,
+                                userDetails.getAuthorities()
+                        );
+
+                authToken.setDetails(
+                        new WebAuthenticationDetailsSource().buildDetails(request)
                 );
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                // Set authentication in security cxt
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
 
-        filterChain.doFilter(cachedRequest, response);
+        filterChain.doFilter(request, response);
     }
-
-
 }
