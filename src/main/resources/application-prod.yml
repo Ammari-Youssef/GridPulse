@@ -1,0 +1,36 @@
+server:
+  port: 8080
+
+spring:
+  main:
+    banner-mode: "off"
+  application:
+    name: GridPulse
+
+management:
+  server:
+    port: 9001        # Port admin
+
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - prometheus
+          - gridpulse # Endpoint custom GridPulse
+
+  endpoint:
+    health:
+      show-details: never
+    prometheus:
+      access: unrestricted
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: INFO
+    org.springframework.web: WARN
+
+
+
