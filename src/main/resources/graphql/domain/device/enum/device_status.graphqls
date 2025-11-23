@@ -6,6 +6,7 @@ enum DeviceStatus{
     ERROR,
     NEW,
     UNKNOWN,
+
     # Lifecycle states
     COMMISSIONING,
     STANDBY,

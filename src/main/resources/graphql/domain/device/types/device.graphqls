@@ -1,23 +1,18 @@
 type Device implements Auditable {
     id: UUID!
     name: String!
+    model: String!
     serialNumber: String!
-    soc: Float!
-    soh: Float!
-    batteryChemistry: String!
-    cycles: Int!
+    manufacturer: String!
+    softwareVersion: String!
+
+    ip: String!
+    swUpdateTime: DateTime
     gpsLat: Float
     gpsLong: Float
     lastSeen: DateTime!
     status: DeviceStatus!
-    powerDispatched: Float!
-    temperature: Float!
-    voltage: Float!
-    model: String!
-    softwareVersion: String!
-    manufacturer: String!
-    swUpdateTime: DateTime
-    ip: String!
+
 
     # Relations
 
