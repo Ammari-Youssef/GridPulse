@@ -5,6 +5,10 @@ type Meter implements Auditable {
     manufacturer: String
     version: String
 
+    powerDispatched: Float
+    energyConsumed: Float
+    energyProduced: Float
+
     # Auditable fields
     createdBy: String!
     updatedBy: String

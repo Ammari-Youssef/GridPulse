@@ -3,4 +3,8 @@ input MeterInput{
     model: String
     manufacturer: String
     version: String
+
+    powerDispatched: Float
+    energyConsumed: Float
+    energyProduced: Float
 }
