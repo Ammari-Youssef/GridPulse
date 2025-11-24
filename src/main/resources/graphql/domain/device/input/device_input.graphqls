@@ -1,22 +1,17 @@
 input DeviceInput {
     name: String
+    model: String
+    manufacturer: String
+    softwareVersion: String
     serialNumber: String
-    soc: Float
-    soh: Float
-    batteryChemistry: String
-    cycles: Int
+
+    ip: String
     gpsLat: Float
     gpsLong: Float
     lastSeen: DateTime
-    status: String
-    powerDispatched: Float
-    temperature: Float
-    voltage: Float
-    model: String
-    softwareVersion: String
-    manufacturer: String
     swUpdateTime: DateTime
-    ip: String
+    status: DeviceStatus
+
 
     # Relations
     fleetId: UUID!

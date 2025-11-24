@@ -1,24 +1,12 @@
 package com.youssef.GridPulse.domain.device.dto;
 
+import com.youssef.GridPulse.domain.device.enums.DeviceStatus;
 import jakarta.validation.constraints.*;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
 public record DeviceInput(
-        @PositiveOrZero(message = "State of Charge must be a positive number or zero.")
-        @Max(value = 100, message = "State of Charge cannot exceed 100%.")
-        Float soc,
-
-        @Size(max = 10, message = "State of Health must not exceed 10 characters.")
-        String soh,
-
-        @NotBlank(message = "Battery chemistry is mandatory.")
-        @Size(max = 50, message = "Battery chemistry must not exceed 50 characters.")
-        String batteryChemistry,
-
-        @PositiveOrZero(message = "Cycle count must be a positive number or zero.")
-        Integer cycles,
 
         @DecimalMin(value = "-90.0", message = "Latitude must be at least -90.0.")
         @DecimalMax(value = "90.0", message = "Latitude must be at most 90.0.")
@@ -38,16 +26,8 @@ public record DeviceInput(
         @NotBlank(message = "Serial number is mandatory.")
         String serialNumber,
 
-        Float powerDispatched,
-
         @NotBlank(message = "Status is mandatory.")
-        @Size(max = 20, message = "Status must not exceed 20 characters.")
-        String status,
-
-        Float temperature,
-
-        @Positive(message = "Voltage must be a positive number.")
-        Float voltage,
+        DeviceStatus status,
 
         @NotBlank(message = "Model is mandatory.")
         @Size(max = 100, message = "Model name must not exceed 100 characters.")

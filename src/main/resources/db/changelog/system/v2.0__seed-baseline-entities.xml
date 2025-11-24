@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- 1. Admin User -->
+    <changeSet id="seed-1-admin-user" author="youssef" labels="tag,post-seed">
+        <insert tableName="_user">
+            <column name="id" value="00000000-0000-0000-0000-000000000001"/>
+            <column name="firstname" value="Youssef"/>
+            <column name="lastname" value="Ammari"/>
+            <column name="email" value="youssef@gridpulse.io"/>
+            <column name="password" value="$2a$12$57cyNwuMeTXRX7VJagTFKOYIDv.gYVHA4jCAlQxy29pcqdb2gwuFK"/>
+            <column name="role" value="ADMIN"/>
+            <column name="created_at" valueDate="2025-11-22T20:37:00"/>
+            <column name="created_by" value="SYSTEM"/>
+            <column name="source" value="APP"/>
+        </insert>
+        <rollback>
+            <delete tableName="token">
+                <where>user_id='00000000-0000-0000-0000-000000000001'</where>
+            </delete>
+            <delete tableName="_user">
+                <where>id='00000000-0000-0000-0000-000000000001'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="seed-1-1-end-user" author="youssef" labels="tag,post-seed">
+        <insert tableName="_user">
+            <column name="id" value="00000000-0000-0000-0000-000000000101"/>
+            <column name="firstname" value="Younes"/>
+            <column name="lastname" value="Ammari"/>
+            <column name="email" value="younes@gridpulse.io"/>
+            <column name="password" value="$2a$12$EpG7Ni6.OT5Wp3xHe05UFuPxLY0LJ6evUICSHOE87p9s9kYTnEB5."/>
+            <column name="role" value="ADMIN"/>
+            <column name="created_at" valueDate="2025-11-22T20:37:00"/>
+            <column name="created_by" value="SYSTEM"/>
+            <column name="source" value="APP"/>
+        </insert>
+        <rollback>
+            <delete tableName="_user">
+                <where>id='00000000-0000-0000-0000-000000000101'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <!-- 2. BMS -->
+    <changeSet id="seed-2-bms" author="youssef" labels="tag,post-seed">
+        <insert tableName="bms">
+            <column name="id" value="00000000-0000-0000-0000-000000000002"/>
+            <column name="name" value="Main Battery Pack"/>
+            <column name="model" value="BMS-X100"/>
+            <column name="manufacturer" value="GridPulse Energy"/>
+            <column name="version" value="1.0.0"/>
+            <column name="soc" value="85.5"/>
+            <column name="soh" value="HEALTHY"/>
+            <column name="battery_chemistry" value="LI_ION"/>
+            <column name="cycles" value="120"/>
+            <column name="temperature" value="32.5"/>
+            <column name="voltage" value="400.0"/>
+            <column name="created_at" valueDate="2025-11-22T20:37:00"/>
+            <column name="created_by" value="SYSTEM"/>
+            <column name="source" value="APP"/>
+        </insert>
+        <rollback>
+            <delete tableName="bms">
+                <where>id='00000000-0000-0000-0000-000000000002'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <!-- 3. Meter -->
+    <changeSet id="seed-3-meter" author="youssef" labels="tag,post-seed">
+        <insert tableName="meter">
+            <column name="id" value="00000000-0000-0000-0000-000000000003"/>
+            <column name="name" value="Main Energy Meter"/>
+            <column name="model" value="MTR-500"/>
+            <column name="manufacturer" value="GridPulse Systems"/>
+            <column name="version" value="2.1.0"/>
+            <column name="power_dispatched" value="12.5"/>
+            <column name="energy_consumed" value="250.0"/>
+            <column name="energy_produced" value="100.0"/>
+            <column name="created_at" valueDate="2025-11-22T20:37:00"/>
+            <column name="created_by" value="SYSTEM"/>
+            <column name="source" value="APP"/>
+        </insert>
+        <rollback>
+            <delete tableName="meter">
+                <where>id='00000000-0000-0000-0000-000000000003'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <!-- 4. Inverter -->
+    <changeSet id="seed-4-inverter" author="youssef" labels="tag,post-seed">
+        <insert tableName="inverter">
+            <column name="id" value="00000000-0000-0000-0000-000000000004"/>
+            <column name="name" value="Demo Inverter"/>
+            <column name="model" value="INV-CORE"/>
+            <column name="manufacturer" value="GridPulse Inverters"/>
+            <column name="version" value="v1.0"/>
+            <column name="created_at" valueDate="2025-11-22T20:37:00"/>
+            <column name="created_by" value="SYSTEM"/>
+            <column name="source" value="APP"/>
+        </insert>
+        <rollback>
+            <delete tableName="inverter">
+                <where>id='00000000-0000-0000-0000-000000000004'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <!-- 4.1 Inverter Common -->
+    <changeSet id="seed-4-1-inverter-common" author="youssef" labels="tag,post-seed">
+        <insert tableName="inv_common">
+            <column name="id" value="00000000-0000-0000-0000-000000000104"/>
+            <column name="model_id" valueNumeric="1"/>
+            <column name="model_length" valueNumeric="1"/>
+            <column name="inverter_id" value="00000000-0000-0000-0000-000000000004"/>
+            <column name="created_at" valueDate="2025-11-22T20:37:00"/>
+            <column name="created_by" value="SYSTEM"/>
+            <column name="source" value="APP"/>
+
+            <!-- Descriptive fields -->
+            <column name="manufacturer" value="GridPulse Inverters"/>
+            <column name="model" value="INV-CORE-50KW"/>
+            <column name="options" value="WiFi Monitoring, Remote Control"/>
+            <column name="version" value="v1.0.0"/>
+            <column name="serial_number" value="INV-CORE-001"/>
+            <column name="device_address" valueNumeric="101"/>
+            <column name="pad" valueNumeric="0"/>
+        </insert>
+
+        <rollback>
+            <delete tableName="inv_common">
+                <where>id='00000000-0000-0000-0000-000000000104'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <!-- 4.2 Inverter Nameplate -->
+    <changeSet id="seed-4-2-inverter-nameplate" author="youssef" labels="tag,post-seed">
+        <insert tableName="inv_nameplate">
+            <column name="id" value="00000000-0000-0000-0000-000000000204"/>
+            <column name="model_id" valueNumeric="120"/>
+            <column name="model_length" valueNumeric="1"/>
+            <column name="inverter_id" value="00000000-0000-0000-0000-000000000004"/>
+            <column name="created_at" valueDate="2025-11-22T20:37:00"/>
+            <column name="created_by" value="SYSTEM"/>
+            <column name="source" value="APP"/>
+
+            <!-- Technical nameplate values -->
+            <column name="der_type" valueNumeric="1"/> <!-- e.g. PV inverter -->
+            <column name="w_rating" valueNumeric="50000"/> <!-- 50 kW -->
+            <column name="w_rating_sf" valueNumeric="1"/>
+            <column name="va_rating" valueNumeric="55000"/> <!-- 55 kVA -->
+            <column name="va_rating_sf" valueNumeric="1"/>
+            <column name="var_ratingq1" valueNumeric="20000"/>
+            <column name="var_ratingq2" valueNumeric="20000"/>
+            <column name="var_ratingq3" valueNumeric="20000"/>
+            <column name="var_ratingq4" valueNumeric="20000"/>
+            <column name="var_rating_sf" valueNumeric="1"/>
+            <column name="ac_current_rating" valueNumeric="80"/> <!-- 80 A -->
+            <column name="ac_current_rating_sf" valueNumeric="1"/>
+            <column name="pf_ratingq1" valueNumeric="95"/>
+            <column name="pf_ratingq2" valueNumeric="95"/>
+            <column name="pf_ratingq3" valueNumeric="95"/>
+            <column name="pf_ratingq4" valueNumeric="95"/>
+            <column name="pf_rating_sf" valueNumeric="1"/>
+            <column name="energy_rating_wh" valueNumeric="1000000"/> <!-- 1 MWh -->
+            <column name="energy_rating_wh_sf" valueNumeric="1"/>
+            <column name="amp_hour_rating" valueNumeric="2000"/>
+            <column name="amp_hour_rating_sf" valueNumeric="1"/>
+            <column name="max_charge_rate" valueNumeric="100"/> <!-- 100 A -->
+            <column name="max_charge_rate_sf" valueNumeric="1"/>
+            <column name="max_discharge_rate" valueNumeric="120"/> <!-- 120 A -->
+            <column name="max_discharge_rate_sf" valueNumeric="1"/>
+            <column name="pad" valueNumeric="0"/>
+
+        </insert>
+
+        <rollback>
+            <delete tableName="inv_nameplate">
+                <where>id='00000000-0000-0000-0000-000000000204'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <!-- 4.3 Inverter Settings -->
+    <changeSet id="seed-4-3-inverter-settings" author="youssef" labels="tag,post-seed">
+        <insert tableName="inv_settings">
+            <column name="id" value="00000000-0000-0000-0000-000000000304"/>
+            <column name="model_id" valueNumeric="121"/>
+            <column name="model_length" valueNumeric="1"/>
+            <column name="inverter_id" value="00000000-0000-0000-0000-000000000004"/>
+            <column name="created_at" valueDate="2025-11-22T20:37:00"/>
+            <column name="created_by" value="SYSTEM"/>
+            <column name="source" value="APP"/>
+
+            <!-- Technical settings -->
+            <column name="w_max" valueNumeric="50000"/> <!-- Max active power: 50 kW -->
+            <column name="v_ref" valueNumeric="400"/>   <!-- Reference voltage -->
+            <column name="v_ref_ofs" valueNumeric="5"/> <!-- Voltage offset -->
+            <column name="v_max" valueNumeric="800"/>   <!-- Max input voltage -->
+            <column name="v_min" valueNumeric="350"/>   <!-- Min input voltage -->
+            <column name="va_max" valueNumeric="55000"/> <!-- Max apparent power: 55 kVA -->
+
+            <!-- Reactive power limits -->
+            <column name="var_maxq1" valueNumeric="20000"/>
+            <column name="var_maxq2" valueNumeric="20000"/>
+            <column name="var_maxq3" valueNumeric="20000"/>
+            <column name="var_maxq4" valueNumeric="20000"/>
+
+            <!-- Ramp and gradient settings -->
+            <column name="w_gra" valueNumeric="100"/> <!-- Power gradient -->
+            <column name="pf_minq1" valueNumeric="90"/>
+            <column name="pf_minq2" valueNumeric="90"/>
+            <column name="pf_minq3" valueNumeric="90"/>
+            <column name="pf_minq4" valueNumeric="90"/>
+
+            <!-- Enum-based fields -->
+            <column name="var_act" value="SWITCH"/>        <!-- VarAction enum -->
+            <column name="clc_tot_va" value="VECTOR"/>     <!-- ClcTotVaMethod enum -->
+            <column name="conn_ph" value="THREE_PHASE"/>   <!-- ConnPhase (mapped to A/B/C or descriptive) -->
+
+            <!-- Other operational settings -->
+            <column name="max_rmp_rte" valueNumeric="10"/> <!-- Max ramp rate -->
+            <column name="ecp_nom_hz" valueNumeric="50"/>  <!-- Nominal frequency -->
+        </insert>
+
+        <rollback>
+            <delete tableName="inv_settings">
+                <where>id='00000000-0000-0000-0000-000000000304'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+
+    <!-- 5. Fleet -->
+    <changeSet id="seed-5-fleet" author="youssef" labels="tag,post-seed">
+        <insert tableName="fleet">
+            <column name="id" value="00000000-0000-0000-0000-000000000005"/>
+            <column name="name" value="Fleet 1"/>
+            <column name="location" value="Oujda, Morocco"/>
+            <column name="owner" value="00000000-0000-0000-0000-000000000001"/>
+            <column name="description" value="Baseline seeded fleet for demo devices"/>
+            <column name="created_at" valueDate="2025-11-22T20:37:00"/>
+            <column name="created_by" value="SYSTEM"/>
+            <column name="source" value="APP"/>
+        </insert>
+        <rollback>
+            <delete tableName="fleet">
+                <where>id='00000000-0000-0000-0000-000000000005'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <!-- 6. Device -->
+    <changeSet id="seed-device" author="youssef" labels="tag,post-seed">
+        <insert tableName="device">
+            <column name="id" value="00000000-0000-0000-0000-000000000006"/>
+            <column name="serial_number" value="DEV-001"/>
+            <column name="name" value="Demo Device"/>
+            <column name="model" value="INV-900"/>
+            <column name="manufacturer" value="GridPulse Devices"/>
+            <column name="status" value="ONLINE"/>
+            <column name="last_seen" valueDate="2025-11-22T20:20:00"/>
+            <column name="software_version" value="3.2.1"/>
+            <column name="sw_update_time" valueDate="2025-11-20T10:00:00"/>
+            <column name="ip" value="192.168.1.10"/>
+            <column name="gps_lat" value="34.68"/>
+            <column name="gps_long" value="-1.91"/>
+
+            <!-- Updated FKs -->
+            <column name="bms_id" value="00000000-0000-0000-0000-000000000002"/>
+            <column name="meter_id" value="00000000-0000-0000-0000-000000000003"/>
+            <column name="fleet_id" value="00000000-0000-0000-0000-000000000005"/>
+            <column name="user_id" value="00000000-0000-0000-0000-000000000001"/>
+            <column name="operator_id" value="00000000-0000-0000-0000-000000000001"/>
+            <column name="inverter_id" value="00000000-0000-0000-0000-000000000004"/>
+
+            <column name="created_at" valueDate="2025-11-22T20:37:00"/>
+            <column name="created_by" value="SYSTEM"/>
+            <column name="source" value="APP"/>
+        </insert>
+        <rollback>
+            <delete tableName="device">
+                <where>id='00000000-0000-0000-0000-000000000006'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <!-- 7. Message -->
+    <changeSet id="seed-7-message" author="youssef" labels="tag,post-seed">
+        <insert tableName="messages">
+            <column name="id" value="00000000-0000-0000-0000-000000000007"/>
+            <column name="device_id" value="00000000-0000-0000-0000-000000000006"/>
+            <column name="cloud_message_id" value="MSG-001"/>
+            <column name="message_text" value='{"cpuUsage": 50, "latitude": 51.88668, "diskUsage": 20, "longitude": -8.53528, "memoryUsage": 50, "temperature": 25}'/>
+            <column name="received_at" valueDate="2025-11-22T20:36:00"/>
+            <column name="sent_at" valueDate="2025-11-22T20:35:00"/>
+            <column name="severity" value="INFO"/>
+            <column name="message_type" value="SYSTEM"/>
+            <column name="status" value="NEW"/>
+            <column name="format" value="TEXT"/>
+            <column name="priority" value="HIGH"/>
+            <column name="explanation" value="Baseline seeded message for demo device startup"/>
+
+            <!-- Audit fields -->
+            <column name="created_at" valueDate="2025-11-22T20:37:00"/>
+            <column name="created_by" value="SYSTEM"/>
+            <column name="source" value="APP"/>
+        </insert>
+
+        <rollback>
+            <delete tableName="messages">
+                <where>id='00000000-0000-0000-0000-000000000007'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <!-- 8. Security Key -->
+    <changeSet id="seed-admin-security-key" author="youssef" labels="tag,post-seed">
+        <insert tableName="security_keys">
+            <column name="id" value="00000000-0000-0000-0000-000000000008"/>
+            <column name="name" value="Admin Device Key"/>
+            <column name="device_id" value="00000000-0000-0000-0000-000000000006"/>
+            <column name="owner_id" value="00000000-0000-0000-0000-000000000001"/>
+            <column name="security_type" value="SOFTWARE_KEY"/>
+            <column name="serial_number" value="SEC-001"/>
+
+            <column name="public_key"
+                    value="-----BEGIN PUBLIC KEY-----This is a demo public key for baseline seeding-----END PUBLIC KEY-----"/>
+
+            <column name="private_key"
+                    value="-----BEGIN PRIVATE KEY-----This is a demo private key for baseline seeding-----END PRIVATE KEY-----"/>
+
+            <column name="key_source" value="CLOUD"/>
+            <column name="status" value="ACTIVE"/>
+            <column name="created_at" valueDate="2025-11-22T20:37:00"/>
+            <column name="created_by" value="SYSTEM"/>
+            <column name="source" value="APP"/>
+        </insert>
+        <rollback>
+            <delete tableName="security_keys">
+                <where>id='00000000-0000-0000-0000-000000000008'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

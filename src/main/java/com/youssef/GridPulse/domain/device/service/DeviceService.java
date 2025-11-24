@@ -8,7 +8,7 @@ import com.youssef.GridPulse.domain.bms.repository.BmsRepository;
 import com.youssef.GridPulse.domain.device.dto.DeviceInput;
 import com.youssef.GridPulse.domain.device.entity.Device;
 import com.youssef.GridPulse.domain.device.entity.DeviceHistory;
-import com.youssef.GridPulse.domain.enums.BatteryHealthStatus;
+import com.youssef.GridPulse.domain.bms.enums.BatteryHealthStatus;
 import com.youssef.GridPulse.domain.device.mapper.DeviceMapper;
 import com.youssef.GridPulse.domain.device.repository.DeviceHistoryRepository;
 import com.youssef.GridPulse.domain.device.repository.DeviceRepository;
@@ -109,11 +109,19 @@ public class DeviceService extends BaseService<Device, DeviceHistory, UUID, Devi
         Device device = repository.findById(deviceId)
                 .orElseThrow(() -> new EntityNotFoundException("Device not found"));
 
-        return device.getHealthStatus();
+        return device.getBms().getSoh();
     }
 
     public List<Device> getByFleetId(UUID fleetId) {
         return ((DeviceRepository) repository).findByFleetId(fleetId);
+    }
+
+    public List<Device> getByUserId(UUID userId) {
+        return ((DeviceRepository) repository).findByUserId(userId);
+    }
+
+    public List<Device> getByOperatorId(UUID operatorId) {
+        return ((DeviceRepository) repository).findByOperatorId(operatorId);
     }
 
     public PageResponse<Device> getByFleetIdOffsetBased(UUID fleetId, PageRequestInput pageRequest) {
@@ -128,6 +136,62 @@ public class DeviceService extends BaseService<Device, DeviceHistory, UUID, Devi
                 result.getTotalPages(),
                 result.isLast()
         );
+    }
+
+    public PageResponse<Device> getByUserIdOffsetBased(UUID userId, PageRequestInput pageRequest) {
+        Pageable pageable = setPageRequestFields(pageRequest);
+        Page<Device> result = ((DeviceRepository) repository).findByUser_Id(userId, pageable);
+
+        return new PageResponse<>(
+                result.getContent(),
+                result.getNumber(),
+                result.getSize(),
+                result.getTotalElements(),
+                result.getTotalPages(),
+                result.isLast()
+        );
+    }
+
+    public PageResponse<Device> getByOperatorIdOffsetBased(UUID operatorId, PageRequestInput pageRequest) {
+        Pageable pageable = setPageRequestFields(pageRequest);
+        Page<Device> result = ((DeviceRepository) repository).findByOperator_Id(operatorId, pageable);
+
+        return new PageResponse<>(
+                result.getContent(),
+                result.getNumber(),
+                result.getSize(),
+                result.getTotalElements(),
+                result.getTotalPages(),
+                result.isLast()
+        );
+    }
+
+    @Transactional
+    public Device assignDeviceToOperator(UUID deviceId, UUID operatorId) {
+        Device device = ((DeviceRepository) repository).findById(deviceId)
+                .orElseThrow(() -> new EntityNotFoundException("Device not found"));
+
+        User operator = userRepository.findById(operatorId)
+                .orElseThrow(() -> new EntityNotFoundException("Operator not found"));
+
+        device.setOperator(operator);
+        return ((DeviceRepository) repository).save(device);
+    }
+
+    @Transactional
+    public Device assignDeviceToUser(UUID deviceId, UUID userId) {
+        Device device = ((DeviceRepository) repository).findById(deviceId)
+                .orElseThrow(() -> new EntityNotFoundException("Device not found"));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+//        if (device.getUser() != null) {
+//            throw new IllegalStateException("Device already assigned to an end user");
+//        }
+
+        device.setUser(user);
+        return ((DeviceRepository) repository).save(device);
     }
 
 }

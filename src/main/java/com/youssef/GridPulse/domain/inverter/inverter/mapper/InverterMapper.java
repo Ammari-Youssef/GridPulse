@@ -27,6 +27,7 @@ public interface InverterMapper extends BaseMapper<Inverter, InverterHistory, In
     @Mapping(target = "devices", ignore = true)
     @Mapping(target = "commonList", ignore = true)
     @Mapping(target = "settingsList", ignore = true)
+    @Mapping(target = "nameplateList", ignore = true)
     Inverter toEntity(InverterInput inverterInput);
 
     @Override
@@ -52,6 +53,7 @@ public interface InverterMapper extends BaseMapper<Inverter, InverterHistory, In
     @Mapping(target = "devices", ignore = true)
     @Mapping(target = "commonList", ignore = true)
     @Mapping(target = "settingsList", ignore = true)
+    @Mapping(target = "nameplateList", ignore = true)
     void updateEntity(InverterInput inverterInput, @MappingTarget Inverter entity);
 
     // Custom mapping for devices to device IDs
