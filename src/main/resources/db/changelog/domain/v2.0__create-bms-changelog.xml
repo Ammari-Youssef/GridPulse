@@ -6,15 +6,15 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
         objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-    <changeSet id="create_fleet_table" author="youssef">
-        <createTable tableName="fleet">
+    <changeSet id="create_bms_table" author="youssef" labels="domain,bms">
+        <createTable tableName="bms">
             <column name="id" type="UUID">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_fleet"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_bms"/>
             </column>
-            <column name="created_at" type="DATETIME">
+            <column name="created_at" type="timestamp with time zone">
                 <constraints nullable="false"/>
             </column>
-            <column name="updated_at" type="DATETIME"/>
+            <column name="updated_at" type="timestamp with time zone"/>
             <column name="created_by" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
@@ -23,25 +23,27 @@
                 <constraints nullable="false"/>
             </column>
             <column name="name" type="VARCHAR(255)"/>
-            <column name="location" type="VARCHAR(255)"/>
-            <column name="owner" type="VARCHAR(255)"/>
-            <column name="description" type="VARCHAR(255)"/>
+            <column name="model" type="VARCHAR(255)"/>
+            <column name="manufacturer" type="VARCHAR(255)"/>
+            <column name="version" type="VARCHAR(255)"/>
+
+            <column name="soc" type="FLOAT"/>
+            <column name="soh" type="VARCHAR(255)"/>
+            <column name="battery_chemistry" type="VARCHAR(255)"/>
+            <column name="cycles" type="INT"/>
+            <column name="temperature" type="FLOAT"/>
+            <column name="voltage" type="FLOAT"/>
+
         </createTable>
 
         <rollback>
-            <dropTable tableName="fleet"/>
+            <dropTable tableName="bms"/>
         </rollback>
-
-        <comment>
-            This table stores information about fleets, a swarm of devices managed together.
-            It includes metadata for auditing and tracking changes, ensuring data integrity and traceability.
-        </comment>
     </changeSet>
-
-    <changeSet id="create_fleet_history_table" author="youssef">
-        <createTable tableName="fleet_history">
+    <changeSet id="create_bms_history_table" author="youssef" labels="audit,bms">
+        <createTable tableName="bms_history">
             <column name="id" type="UUID">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_fleetHistory"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_bmshistory"/>
             </column>
             <column name="original_id" type="UUID">
                 <constraints nullable="false"/>
@@ -58,10 +60,10 @@
             <column name="synced" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_at" type="DATETIME">
+            <column name="created_at" type="timestamp with time zone">
                 <constraints nullable="false"/>
             </column>
-            <column name="updated_at" type="DATETIME"/>
+            <column name="updated_at" type="timestamp with time zone"/>
             <column name="created_by" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
@@ -70,19 +72,20 @@
                 <constraints nullable="false"/>
             </column>
             <column name="name" type="VARCHAR(255)"/>
-            <column name="location" type="VARCHAR(255)"/>
-            <column name="owner" type="VARCHAR(255)"/>
-            <column name="description" type="VARCHAR(255)"/>
+            <column name="model" type="VARCHAR(255)"/>
+            <column name="manufacturer" type="VARCHAR(255)"/>
+            <column name="version" type="VARCHAR(255)"/>
+
+            <column name="soc" type="FLOAT"/>
+            <column name="soh" type="VARCHAR(255)"/>
+            <column name="battery_chemistry" type="VARCHAR(255)"/>
+            <column name="cycles" type="INT"/>
+            <column name="temperature" type="FLOAT"/>
+            <column name="voltage" type="FLOAT"/>
         </createTable>
-
         <rollback>
-            <dropTable tableName="fleet_history"/>
+            <dropTable tableName="bms_history"/>
         </rollback>
-
-        <comment>
-            This table stores information about fleets auditing history for tracking changes over time.
-            It includes metadata for auditing and tracking changes, ensuring data integrity and traceability.
-        </comment>
     </changeSet>
 
 </databaseChangeLog>

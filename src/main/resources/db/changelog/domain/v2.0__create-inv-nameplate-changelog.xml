@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="create_inv_nameplate_table"
+               author="youssef"
+               labels="domain,invNameplate">
+        <createTable tableName="inv_nameplate">
+            <column name="id"
+                    type="UUID">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="pk_invnameplate"/>
+            </column>
+            <column name="model_id"
+                    type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="model_length"
+                    type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="inverter_id"
+                    type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at"
+                    type="timestamp with time zone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at"
+                    type="timestamp with time zone"/>
+            <column name="created_by"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_by"
+                    type="VARCHAR(255)"/>
+            <column name="source"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="der_type"
+                    type="INT"/>
+            <column name="w_rating"
+                    type="INT"/>
+            <column name="w_rating_sf"
+                    type="INT"/>
+            <column name="va_rating"
+                    type="INT"/>
+            <column name="va_rating_sf"
+                    type="INT"/>
+            <column name="var_ratingq1"
+                    type="INT"/>
+            <column name="var_ratingq2"
+                    type="INT"/>
+            <column name="var_ratingq3"
+                    type="INT"/>
+            <column name="var_ratingq4"
+                    type="INT"/>
+            <column name="var_rating_sf"
+                    type="INT"/>
+            <column name="ac_current_rating"
+                    type="INT"/>
+            <column name="ac_current_rating_sf"
+                    type="INT"/>
+            <column name="pf_ratingq1"
+                    type="INT"/>
+            <column name="pf_ratingq2"
+                    type="INT"/>
+            <column name="pf_ratingq3"
+                    type="INT"/>
+            <column name="pf_ratingq4"
+                    type="INT"/>
+            <column name="pf_rating_sf"
+                    type="INT"/>
+            <column name="energy_rating_wh"
+                    type="INT"/>
+            <column name="energy_rating_wh_sf"
+                    type="INT"/>
+            <column name="amp_hour_rating"
+                    type="INT"/>
+            <column name="amp_hour_rating_sf"
+                    type="INT"/>
+            <column name="max_charge_rate"
+                    type="INT"/>
+            <column name="max_charge_rate_sf"
+                    type="INT"/>
+            <column name="max_discharge_rate"
+                    type="INT"/>
+            <column name="max_discharge_rate_sf"
+                    type="INT"/>
+            <column name="pad"
+                    type="INT"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="inverter_id"
+                                 baseTableName="inv_nameplate"
+                                 constraintName="FK_INVNAMEPLATE_ON_INVERTER"
+                                 referencedColumnNames="id"
+                                 referencedTableName="inverter"/>
+
+        <rollback>
+            <dropTable tableName="inv_nameplate"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="create_inv_nameplate_history_table"
+               author="youssef"
+               labels="audit,invNameplate">
+        <createTable tableName="inv_nameplate_history">
+            <column name="id"
+                    type="UUID">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="pk_invnameplatehistory"/>
+            </column>
+            <column name="model_id"
+                    type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="model_length"
+                    type="INT"/>
+            <column name="inverter_id"
+                    type="UUID"/>
+            <column name="original_id"
+                    type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_record"
+                    type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_record"
+                    type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deleted_record"
+                    type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="synced"
+                    type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at"
+                    type="timestamp with time zone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at"
+                    type="timestamp with time zone"/>
+            <column name="created_by"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_by"
+                    type="VARCHAR(255)"/>
+            <column name="source"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="der_type"
+                    type="INT"/>
+            <column name="w_rating"
+                    type="INT"/>
+            <column name="w_rating_sf"
+                    type="INT"/>
+            <column name="va_rating"
+                    type="INT"/>
+            <column name="va_rating_sf"
+                    type="INT"/>
+            <column name="var_ratingq1"
+                    type="INT"/>
+            <column name="var_ratingq2"
+                    type="INT"/>
+            <column name="var_ratingq3"
+                    type="INT"/>
+            <column name="var_ratingq4"
+                    type="INT"/>
+            <column name="var_rating_sf"
+                    type="INT"/>
+            <column name="ac_current_rating"
+                    type="INT"/>
+            <column name="ac_current_rating_sf"
+                    type="INT"/>
+            <column name="pf_ratingq1"
+                    type="INT"/>
+            <column name="pf_ratingq2"
+                    type="INT"/>
+            <column name="pf_ratingq3"
+                    type="INT"/>
+            <column name="pf_ratingq4"
+                    type="INT"/>
+            <column name="pf_rating_sf"
+                    type="INT"/>
+            <column name="energy_rating_wh"
+                    type="INT"/>
+            <column name="energy_rating_wh_sf"
+                    type="INT"/>
+            <column name="amp_hour_rating"
+                    type="INT"/>
+            <column name="amp_hour_rating_sf"
+                    type="INT"/>
+            <column name="max_charge_rate"
+                    type="INT"/>
+            <column name="max_charge_rate_sf"
+                    type="INT"/>
+            <column name="max_discharge_rate"
+                    type="INT"/>
+            <column name="max_discharge_rate_sf"
+                    type="INT"/>
+            <column name="pad"
+                    type="INT"/>
+        </createTable>
+
+        <createIndex indexName="idx_invNameplate_history_original_id"
+                     tableName="inv_nameplate_history">
+            <column name="original_id"/>
+        </createIndex>
+
+        <rollback>
+            <dropTable tableName="inv_nameplate_history"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
