@@ -152,7 +152,7 @@
             <column name="source" value="APP"/>
 
             <!-- Technical nameplate values -->
-            <column name="der_type" valueNumeric="1"/> <!-- e.g. PV inverter -->
+            <column name="der_type" value="PV"/> <!-- e.g. PV inverter -->
             <column name="w_rating" valueNumeric="50000"/> <!-- 50 kW -->
             <column name="w_rating_sf" valueNumeric="1"/>
             <column name="va_rating" valueNumeric="55000"/> <!-- 55 kVA -->
