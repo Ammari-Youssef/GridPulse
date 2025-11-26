@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="create_security_keys_table"
+               author="youssef"
+               labels="domain,security_keys">
+        <createTable tableName="security_keys">
+            <column name="id"
+                    type="UUID">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="pk_security_keys"/>
+            </column>
+            <column name="created_at"
+                    type="timestamp with time zone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at"
+                    type="timestamp with time zone"/>
+            <column name="created_by"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_by"
+                    type="VARCHAR(255)"/>
+            <column name="source"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="device_id"
+                    type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_id"
+                    type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="security_type"
+                    type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="serial_number"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="public_key"
+                    type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="private_key"
+                    type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="key_source"
+                    type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status"
+                    type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revoked_timestamp"
+                    type="timestamp with time zone"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="device_id"
+                                 baseTableName="security_keys"
+                                 constraintName="FK_SECURITY_KEYS_ON_DEVICE"
+                                 referencedColumnNames="id"
+                                 referencedTableName="device"/>
+
+        <addForeignKeyConstraint baseColumnNames="owner_id"
+                                 baseTableName="security_keys"
+                                 constraintName="FK_SECURITY_KEYS_ON_OWNER"
+                                 referencedColumnNames="id"
+                                 referencedTableName="_user"/>
+
+        <addUniqueConstraint columnNames="serial_number"
+                             constraintName="uc_security_keys_serialnumber"
+                             tableName="security_keys"/>
+
+        <rollback>
+            <dropTable tableName="security_keys"/>
+        </rollback>
+
+    </changeSet>
+    <changeSet id="create_security_keys__history_table"
+               author="youssef"
+               labels="audit,security_keys">
+        <createTable tableName="security_keys_history">
+            <column name="id"
+                    type="UUID">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="pk_security_keys_history"/>
+            </column>
+            <column name="original_id"
+                    type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_record"
+                    type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_record"
+                    type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deleted_record"
+                    type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="synced"
+                    type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at"
+                    type="timestamp with time zone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at"
+                    type="timestamp with time zone"/>
+            <column name="created_by"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_by"
+                    type="VARCHAR(255)"/>
+            <column name="source"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name"
+                    type="VARCHAR(255)"/>
+            <column name="device_id"
+                    type="UUID"/>
+            <column name="owner_id"
+                    type="UUID"/>
+            <column name="security_type"
+                    type="VARCHAR(50)"/>
+            <column name="serial_number"
+                    type="VARCHAR(255)"/>
+            <column name="public_key"
+                    type="TEXT"/>
+            <column name="private_key"
+                    type="TEXT"/>
+            <column name="key_source"
+                    type="VARCHAR(50)"/>
+            <column name="status"
+                    type="VARCHAR(50)"/>
+            <column name="revoked_timestamp"
+                    type="timestamp with time zone"/>
+        </createTable>
+        <createIndex indexName="idx_sk_history_original_id"
+                     tableName="security_keys_history">
+            <column name="original_id"/>
+        </createIndex>
+
+        <rollback>
+            <dropTable tableName="security_keys_history"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

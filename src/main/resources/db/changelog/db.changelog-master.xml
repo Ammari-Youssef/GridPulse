@@ -6,37 +6,31 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
         objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
+    <!-- Domain entity creation migrations -->
+    <include file="db/changelog/domain/v2.0__create-user-changelog.xml"/>
+    <include file="db/changelog/domain/v2.0__create-token-changelog.xml"/>
+    <include file="db/changelog/domain/v2.0__create-bms-changelog.xml"/>
+    <include file="db/changelog/domain/v2.0__create-meter-changelog.xml"/>
+    <include file="db/changelog/domain/v2.0__create-fleet-changelog.xml"/>
+    <include file="db/changelog/domain/v2.0__create-inverter-changelog.xml"/>
+    <include file="db/changelog/domain/v2.0__create-inv-common-changelog.xml"/>
+    <include file="db/changelog/domain/v2.0__create-inv-settings-changelog.xml"/>
+    <include file="db/changelog/domain/v2.0__create-inv-nameplate-changelog.xml"/>
+    <include file="db/changelog/domain/v2.0__create-device-changelog.xml"/>
+    <include file="db/changelog/domain/v2.0__create-security-keys-changelog.xml"/>
+    <include file="db/changelog/domain/v2.0__create-message-changelog.xml"/>
 
-    <include file="/db/changelog/user/v1.0__create-user-17-08-changelog.xml"/>
-    <include file="/db/changelog/token/v1.0__create-token-17-08-changelog.xml"/>
-    <include file="/db/changelog/user/v1.0__create-user-history-17-08-changelog.xml"/>
-    <include file="/db/changelog/inverter/v1.0__create-inverter-17-08-changelog.xml"/>
-    <include file="/db/changelog/inverter/v1.0__create-inverter-history-17-08-changelog.xml"/>
-    <include file="/db/changelog/user/v1.0__remove-disabledRecord-column-from-user-history-30-08-changelog.xml"/>
-    <include file="db/changelog/device/v1.0__create-device-23-09-changelog.xml"/>
-    <include file="/db/changelog/device/v1.0__create-device-history-26-09-changelog.xml"/>
-    <include file="/db/changelog/user/v1.0__create-device-collection-tables-ids-for-user-history-28-9-changelog.xml"/>
-    <include file="/db/changelog/inverter/v1.0__create-collection-device-ids-inverter-history-29-09-changelog.xml"/>
-    <include file="/db/changelog/message/v1.0__create-message-3-10-changelog.xml"/>
-    <include file="/db/changelog/message/v1.0__create-message-history-3-10-changelog.xml"/>
-    <include file="db/changelog/message/v1.0__add-message-status-4-10-changelog.xml"/>
-    <include file="/db/changelog/bms/v1.0__create-bms-5-10-changelog.xml"/>
-    <include file="/db/changelog/bms/v1.0__create-bms-history-5-10-changelog.xml"/>
-    <include file="db/changelog/device/v1.0__add-bmsId-to-device-tables.xml"/>
-    <include file="db/changelog/meter/v1.0__create-meter-05-10-changelog.xml"/>
-    <include file="db/changelog/meter/v1.0__create-meter-history-05-10-changelog.xml"/>
-    <include file="/db/changelog/device/v1.0__add-meterId-fk-to-device-tables-08-10.xml"/>
-    <include file="/db/changelog/device/v1.0__add-ip-and-software-update-time-to-device-tables-10-10-changelog.xml"/>
-    <include file="db/changelog/message/v1.0__add-fields-to-message-tables-10-10-changelog.xml"/>
-    <include file="db/changelog/device/v1.0__alter-device-soh-column-14-10-changelog.xml"/>
-    <include file="db/changelog/fleet/v1.0__create-fleet-tables-15-10-changelog.xml"/>
-    <include file="db/changelog/device/v1.0__add-fleetId-to-device-tables-16-10-changelog.xml"/>
-    <include file="/db/changelog/message/v1.0__remove-fleetId-from-message-tables-16-01-changelog.xml"/>
-     <include file="db/changelog/security-keys/v1.1__create-security-keys-23-10-2025-changelog.xml"/>
-    <include file="db/changelog/device/v1.0__addserialnumber-to-device-tables-23-10-changelog.xml"/>
-    <include file="db/changelog/inverter/common/v1.0__create-inv-common-tables-26-01-changelog.xml"/>
-    <include file="db/changelog/inverter/nameplate/v1.0__create-inv-nameplate-tables-04-11-changelog.xml"/>
-    <include file="/db/changelog/inverter/settings/v1.0__create-inv-settings-tables-04-11-changelog.xml"/>
-    <include file="db/changelog/message/v1.0__change-messageText-type-to-json-07-11-changelog.xml"/>
-    <include file="db/changelog/system/v1.1__normalize-timestamps-with-timezone__2025-11-08-changelog.xml"/>
+    <!-- Tag baseline after all v2.0 migrations -->
+    <changeSet id="v2.0-gridpulse-baseline" author="youssef" labels="tag">
+        <tagDatabase tag="v2.0-schema-baseline"/>
+    </changeSet>
+
+    <!-- System-level baseline seeding -->
+    <include file="db/changelog/system/v2.0__seed-baseline-entities.xml"/>
+
+    <!-- Tag baseline after seeding migrations -->
+    <changeSet id="v2.0-gridpulse-seed-baseline" author="youssef" labels="tag">
+        <tagDatabase tag="v2.0-seed-baseline"/>
+    </changeSet>
+
 </databaseChangeLog>

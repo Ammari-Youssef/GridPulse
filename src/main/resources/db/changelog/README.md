@@ -78,11 +78,13 @@ spring.liquibase.show-summary=summary
 
 ### 📜 Liquibase CLI Commands
 
-        ./mvnw liquibase:update	                                # Apply all pending changes
-        ./mvnw liquibase:rollback -Dliquibase.rollbackCount=1	# Rollback last change (1 changeSet)
-        ./mvnw liquibase:rollback --define liquibase.rollbackCount=1 # Alternative syntax if the one above don't work
-        ./mvnw liquibase:history	                            # View applied changesets
-        ./mvnw liquibase:validate	                            # Verify changelog integrity
+        ./mvnw liquibase:update	                                  # Apply all pending changes
+        ./mvnw liquibase:rollback -Dliquibase.rollbackCount=1	  # Rollback last change (1 changeSet)
+        ./mvnw liquibase:rollback --define liquibase.rollbackCount=1  # Alternative syntax if the one above don't work
+        ./mvnw liquibase:history	                                  # View applied changesets
+        ./mvnw liquibase:validate	                                  # Verify changelog integrity
+        ./mvnw liquibase:tag --define liquibase.tag=tag_name          # Create a tag (bookmark) at the current database state
+        ./mvnw liquibase:rollback --define liquibase.tag=tag_name     # Rollback to last bookmark of the database
 
 # 🔒 Rollback Best Practices
 

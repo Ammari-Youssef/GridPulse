@@ -1,0 +1,14 @@
+application:
+  seed:
+    enabled: true
+    users: 10
+    operators: 5
+    fleets: 5
+    bms: 200
+    meter: 200
+    devicesPerUser: 5
+    invertersPerDevice: 2
+    totalInverters: 50
+    security-keys-per-device: 1
+    messagesPerDevice: 3
+

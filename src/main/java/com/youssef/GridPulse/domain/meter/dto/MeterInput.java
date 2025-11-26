@@ -4,6 +4,11 @@ public record MeterInput(
         String name,
         String model,
         String manufacturer,
-        String version
+        String version,
+
+        Float powerDispatched,
+        Float energyConsumed,
+        Float energyProduced
+
 ) {
 }

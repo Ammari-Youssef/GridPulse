@@ -20,4 +20,8 @@ public class MeterHistory extends BaseHistoryEntity {
     private String model;
     private String manufacturer;
     private String version; // Firmware or software version
+
+    private Float energyConsumed;
+    private Float energyProduced;
+    private Float powerDispatched; // Can be negative or positive
 }

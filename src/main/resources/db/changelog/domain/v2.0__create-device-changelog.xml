@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="create_device_table"
+               author="youssef" labels="domain,device">
+        <createTable tableName="device">
+            <column name="id"
+                    type="UUID">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="pk_device"/>
+            </column>
+            <column name="created_at"
+                    type="timestamp with time zone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at"
+                    type="timestamp with time zone"/>
+            <column name="created_by"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_by"
+                    type="VARCHAR(255)"/>
+            <column name="source"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="serial_number"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="model"
+                    type="VARCHAR(255)"/>
+            <column name="manufacturer"
+                    type="VARCHAR(255)"/>
+            <column name="status"
+                    type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_seen"
+                    type="timestamp with time zone"/>
+
+            <column name="software_version"
+                    type="VARCHAR(255)"/>
+            <column name="sw_update_time"
+                    type="timestamp with time zone"/>
+            <column name="ip"
+                    type="VARCHAR(255)"/>
+            <column name="gps_lat"
+                    type="DOUBLE"/>
+            <column name="gps_long"
+                    type="DOUBLE"/>
+
+            <column name="bms_id"
+                    type="UUID"/>
+            <column name="meter_id"
+                    type="UUID"/>
+            <column name="user_id"
+                    type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="operator_id"
+                    type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="inverter_id"
+                    type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fleet_id"
+                    type="UUID"/>
+        </createTable>
+
+        <addUniqueConstraint columnNames="serial_number"
+                             constraintName="uc_device_serialnumber"
+                             tableName="device"/>
+
+        <addForeignKeyConstraint baseColumnNames="bms_id"
+                                 baseTableName="device"
+                                 constraintName="FK_DEVICE_ON_BMS"
+                                 referencedColumnNames="id"
+                                 referencedTableName="bms"/>
+
+        <addForeignKeyConstraint baseColumnNames="inverter_id"
+                                 baseTableName="device"
+                                 constraintName="FK_DEVICE_ON_INVERTER"
+                                 referencedColumnNames="id"
+                                 referencedTableName="inverter"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="device"
+                                 constraintName="FK_DEVICE_ON_USER"
+                                 referencedColumnNames="id"
+                                 referencedTableName="_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="meter_id"
+                                 baseTableName="device"
+                                 constraintName="FK_DEVICE_ON_METER"
+                                 referencedColumnNames="id"
+                                 referencedTableName="meter"/>
+
+        <addForeignKeyConstraint baseColumnNames="fleet_id"
+                                 baseTableName="device"
+                                 constraintName="FK_DEVICE_ON_FLEET"
+                                 referencedColumnNames="id"
+                                 referencedTableName="fleet"/>
+
+        <addForeignKeyConstraint baseColumnNames="operator_id"
+                                 baseTableName="device"
+                                 constraintName="FK_DEVICE_ON_OPERATOR"
+                                 referencedColumnNames="id"
+                                 referencedTableName="_user"/>
+
+        <addUniqueConstraint columnNames="bms_id"
+                             constraintName="uc_device_bms"
+                             tableName="device"/>
+
+        <addUniqueConstraint columnNames="meter_id"
+                             constraintName="uc_device_meter"
+                             tableName="device"/>
+
+        <rollback>
+            <dropTable tableName="device"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="create_device_history_table"
+               author="youssef" labels="audit,device">
+        <createTable tableName="device_history">
+            <column name="id"
+                    type="UUID">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="pk_devicehistory"/>
+            </column>
+            <column name="original_id"
+                    type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_record"
+                    type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_record"
+                    type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deleted_record"
+                    type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="synced"
+                    type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at"
+                    type="timestamp with time zone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at"
+                    type="timestamp with time zone"/>
+            <column name="created_by"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_by"
+                    type="VARCHAR(255)"/>
+            <column name="source"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="gps_lat"
+                    type="DOUBLE"/>
+            <column name="gps_long"
+                    type="DOUBLE"/>
+            <column name="last_seen"
+                    type="timestamp with time zone"/>
+            <column name="name"
+                    type="VARCHAR(255)"/>
+            <column name="model"
+                    type="VARCHAR(255)"/>
+            <column name="manufacturer"
+                    type="VARCHAR(255)"/>
+            <column name="status"
+                    type="VARCHAR(255)"/>
+
+            <column name="software_version"
+                    type="VARCHAR(255)"/>
+            <column name="sw_update_time"
+                    type="timestamp with time zone"/>
+            <column name="ip"
+                    type="VARCHAR(255)"/>
+            <column name="serial_number"
+                    type="VARCHAR(255)"/>
+
+            <column name="user_id"
+                    type="UUID"/>
+            <column name="operator_id"
+                    type="UUID"/>
+            <column name="inverter_id"
+                    type="UUID"/>
+            <column name="bms_id"
+                    type="UUID"/>
+            <column name="meter_id"
+                    type="UUID"/>
+            <column name="fleet_id"
+                    type="UUID"/>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="device_history"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
