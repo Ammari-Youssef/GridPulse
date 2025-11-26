@@ -44,7 +44,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="der_type"
-                    type="INT"/>
+                    type="VARCHAR(255)"/>
             <column name="w_rating"
                     type="INT"/>
             <column name="w_rating_sf"
@@ -162,7 +162,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="der_type"
-                    type="INT"/>
+                    type="VARCHAR(255)"/>
             <column name="w_rating"
                     type="INT"/>
             <column name="w_rating_sf"

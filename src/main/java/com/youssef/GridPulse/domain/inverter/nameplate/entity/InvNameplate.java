@@ -1,8 +1,11 @@
 package com.youssef.GridPulse.domain.inverter.nameplate.entity;
 
 import com.youssef.GridPulse.domain.inverter.base.SunSpecModelEntity;
+import com.youssef.GridPulse.domain.inverter.nameplate.enums.DerType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -38,7 +41,8 @@ public class InvNameplate extends SunSpecModelEntity {
      * JSON name: "DERTyp"
      */
     @Column
-    private Integer derType;
+    @Enumerated(EnumType.STRING)
+    private DerType derType;
 
     /**
      * Continuous power output capability of the inverter
