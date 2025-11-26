@@ -86,7 +86,32 @@ public class DatabaseSeeder {
                 }
             }
 
-            log.info("[SEED] Completed");
+            log.info("""
+        [SEED] Completed
+        ───────────────────────────────
+        Users               : {}
+        Operators           : {}
+        Fleets              : {}
+        BMS                 : {}
+        Meters              : {}
+        Devices/User        : {}
+        Inverters/Device    : {}
+        Total Inverters     : {}
+        SecKeys/Device      : {}
+        Messages/Device     : {}
+        """,
+                    config.getUsers(),
+                    config.getOperators(),
+                    config.getFleets(),
+                    config.getBms(),
+                    config.getMeter(),
+                    config.getDevicesPerUser(),
+                    config.getInvertersPerDevice(),
+                    config.getTotalInverters(),
+                    config.getSecurityKeysPerDevice(),
+                    config.getMessagesPerDevice()
+            );
+
         };
     }
 }
