@@ -1,3 +1,6 @@
+# ===========================
+# STAGE 1 — BUILD
+# ===========================
 FROM eclipse-temurin:17-jdk-alpine AS builder
 
 # Set the working directory inside the container
@@ -5,17 +8,22 @@ WORKDIR /app
 
 # Copy only the files needed for dependency resolution first (better layer caching)
 COPY mvnw .
-RUN chmod +x mvnw # Make mvnw executable
+RUN chmod +x mvnw # Make mvn wrapper executable
 COPY .mvn .mvn
 COPY pom.xml .
 
-# Copy the source code
+# Pre-download maven dependencies in advance (caching optimization)
+RUN ./mvnw -q dependency:go-offline
+
+# Copy the source code (Avoiding cache break in each code updates)
 COPY src src
 
-# Build the application (jar file)
+# Build the application (jar file - skip tests)
 RUN ./mvnw clean package -DskipTests
 
-# Final runtime stage
+# ===========================
+# STAGE 2 — RUNTIME
+# ===========================
 FROM eclipse-temurin:17-jre-alpine
 
 LABEL maintainer="youssef.ammari.795@gmail.com"
@@ -28,7 +36,7 @@ RUN mkdir -p /app && chown appuser:appgroup /app
 WORKDIR /app
 
 # Copy the jar from the builder stage (not from host's target directory)
-COPY --from=builder --chown=appuser:appgroup /app/target/gridpulse-cloud-backend-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=builder --chown=appuser:appgroup /app/target/*.jar app.jar
 
 # Switch to non-root user
 USER appuser
