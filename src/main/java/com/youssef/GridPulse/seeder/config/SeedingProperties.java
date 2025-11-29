@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @ConfigurationProperties(prefix = "application.seed")
 public class SeedingProperties {
-    private boolean enabled = true;
+    private boolean enabled = false;
 
     private int users = 10;
     private int operators = 5;

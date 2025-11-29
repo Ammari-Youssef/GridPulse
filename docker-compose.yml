@@ -10,6 +10,14 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      backend-net:
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER}" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
     restart: unless-stopped
 
   gridpulse-cloud-backend:
@@ -17,12 +25,19 @@ services:
     image: gridpulse-cloud-backend
     container_name: GridPulse-Backend-Cloud
     depends_on:
-      - gridpulse-db
+      gridpulse-db:
+        condition: service_healthy
     env_file:
       - .env.docker
     ports:
       - "8080:8080"
+    networks:
+      - backend-net
     restart: unless-stopped
 
 volumes:
   pgdata:
+
+networks:
+  backend-net:
+    driver: bridge
