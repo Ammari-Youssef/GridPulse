@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="create_inv_common_table"
+               author="dell"
+               labels="domain,invCommon">
+        <createTable tableName="inv_common">
+            <column name="id"
+                    type="UUID">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="pk_invcommon"/>
+            </column>
+            <column name="model_id"
+                    type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="model_length"
+                    type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="inverter_id"
+                    type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at"
+                    type="timestamp with time zone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at"
+                    type="timestamp with time zone"/>
+            <column name="created_by"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_by"
+                    type="VARCHAR(255)"/>
+            <column name="source"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="manufacturer"
+                    type="VARCHAR(255)"/>
+            <column name="model"
+                    type="VARCHAR(255)"/>
+            <column name="options"
+                    type="VARCHAR(255)"/>
+            <column name="version"
+                    type="VARCHAR(255)"/>
+            <column name="serial_number"
+                    type="VARCHAR(255)"/>
+            <column name="device_address"
+                    type="INT"/>
+            <column name="pad"
+                    type="INT"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="inverter_id"
+                                 baseTableName="inv_common"
+                                 constraintName="FK_INVCOMMON_ON_INVERTER"
+                                 referencedColumnNames="id"
+                                 referencedTableName="inverter"/>
+
+        <rollback>
+            <dropTable tableName="inv_common"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="create_inv_common_history_table"
+               author="youssef"
+               labels="audit,invCommon">
+        <createTable tableName="inv_common_history">
+            <column name="id"
+                    type="UUID">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="pk_invcommonhistory"/>
+            </column>
+            <column name="model_id"
+                    type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="model_length"
+                    type="INT"/>
+            <column name="inverter_id"
+                    type="UUID"/>
+            <column name="original_id"
+                    type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_record"
+                    type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_record"
+                    type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deleted_record"
+                    type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="synced"
+                    type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at"
+                    type="timestamp with time zone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at"
+                    type="timestamp with time zone"/>
+            <column name="created_by"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_by"
+                    type="VARCHAR(255)"/>
+            <column name="source"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="manufacturer"
+                    type="VARCHAR(255)"/>
+            <column name="model"
+                    type="VARCHAR(255)"/>
+            <column name="options"
+                    type="VARCHAR(255)"/>
+            <column name="version"
+                    type="VARCHAR(255)"/>
+            <column name="serial_number"
+                    type="VARCHAR(255)"/>
+            <column name="device_address"
+                    type="INT"/>
+            <column name="pad"
+                    type="INT"/>
+        </createTable>
+
+        <createIndex indexName="idx_invCommon_history_original_id"
+                     tableName="inv_common_history">
+            <column name="original_id"/>
+        </createIndex>
+
+        <rollback>
+            <dropTable tableName="inv_common_history"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

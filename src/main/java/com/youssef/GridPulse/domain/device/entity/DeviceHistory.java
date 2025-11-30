@@ -1,6 +1,7 @@
 package com.youssef.GridPulse.domain.device.entity;
 
 import com.youssef.GridPulse.common.base.BaseHistoryEntity;
+import com.youssef.GridPulse.domain.device.enums.DeviceStatus;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,24 +20,18 @@ import java.util.UUID;
 @Entity
 public class DeviceHistory extends BaseHistoryEntity {
 
-    private Float soc;
-    private Float soh;
-    private String batteryChemistry;
-    private Integer cycles;
+    private String name;
+    private String model;
+    private String softwareVersion;
+    private String manufacturer;
+    private String serialNumber;
+
+    private String ip;
     private Double gpsLat;
     private Double gpsLong;
+    private DeviceStatus status;
     private OffsetDateTime lastSeen;
-    private String name;
-    private Float powerDispatched;
-    private String status;
-    private Float temperature;
-    private Float voltage;
-    private String model;
-    private String manufacturer;
-    private String softwareVersion;
     private OffsetDateTime swUpdateTime;
-    private String ip;
-    private String serialNumber;
 
     private UUID userId;
     private UUID operatorId;

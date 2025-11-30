@@ -4,9 +4,13 @@ type Bms implements Auditable {
     model: String
     manufacturer: String
     version: String
-    soh: String
+
+    soh: BatteryHealthStatus
     soc: Float
-    batteryChemistry: String
+    batteryChemistry: BatteryChemistry
+    cycles: Int
+    temperature: Float
+    voltage: Float
 
     createdBy: String!
     updatedBy: String

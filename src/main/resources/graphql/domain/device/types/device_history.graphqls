@@ -2,22 +2,18 @@ type DeviceHistory implements Auditable & AuditableHistory {
     id: UUID!
     originalId: UUID!
     name: String!
+    model: String!
     serialNumber: String!
-    soc: Float!
-    soh: Float!
-    batteryChemistry: String!
-    cycles: Int!
+    softwareVersion: String!
+    manufacturer: String!
+
+    ip: String
     gpsLat: Float
     gpsLong: Float
     lastSeen: DateTime!
     swUpdateTime: DateTime
-    status: String!
-    powerDispatched: Float!
-    temperature: Float!
-    voltage: Float!
-    model: String!
-    softwareVersion: String!
-    manufacturer: String!
+    status: DeviceStatus!
+
 
     # Relations
     fleetId: UUID!

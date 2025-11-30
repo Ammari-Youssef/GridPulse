@@ -1,0 +1,7 @@
+enum BatteryChemistry {
+    LI_ION,
+    NI_MH,
+    LEAD_ACID,
+    LFP,
+    NI_CD
+}

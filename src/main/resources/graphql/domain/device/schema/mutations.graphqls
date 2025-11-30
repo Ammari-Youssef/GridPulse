@@ -3,4 +3,7 @@ extend type Mutation {
     updateDevice(id: UUID!, input: DeviceInput!): Device
     deleteDevice(id: UUID!): Boolean
     markDeviceHistorySynced(id: UUID!): Boolean!
+
+    assignDeviceToUser(deviceId: UUID!, userId: UUID!): Device!
+    assignDeviceToOperator(deviceId: UUID!, operatorId: UUID!): Device!
 }

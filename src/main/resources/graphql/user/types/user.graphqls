@@ -7,6 +7,9 @@ type User implements Auditable {
     role: Role!
     enabled: Boolean!
 
+    usedDevices: [Device!]!
+    operatedDevices: [Device!]!
+
     createdBy: String!
     updatedBy: String
     createdAt: DateTime!

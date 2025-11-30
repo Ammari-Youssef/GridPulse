@@ -1,0 +1,28 @@
+server:
+    port: 8080
+
+spring:
+    main:
+        banner-mode: "console"
+    application:
+        name: GridPulse
+
+management:
+    server:
+        port: 9000   # Port des endpoints Actuator en DEV
+
+    endpoints:
+        web:
+            exposure:
+                include: "*"    # Tout visible en DEV
+
+    endpoint:
+        health:
+            show-details: always
+
+
+logging:
+    level:
+        root: DEBUG
+        org.springframework.web: off
+        org.springframework.security: DEBUG

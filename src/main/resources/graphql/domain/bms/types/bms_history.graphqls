@@ -5,9 +5,13 @@ type BmsHistory implements Auditable & AuditableHistory  {
     model: String
     manufacturer: String
     version: String
-    soh: String
+
+    soh: BatteryHealthStatus
     soc: Float
-    batteryChemistry: String
+    batteryChemistry: BatteryChemistry
+    cycles: Int
+    temperature: Float
+    voltage: Float
 
     # Auditable fields
     createdBy: String!

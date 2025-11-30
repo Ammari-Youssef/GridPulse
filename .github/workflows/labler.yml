@@ -1,0 +1,35 @@
+name: Labeler
+
+on:
+  pull_request_target:
+  schedule:
+    - cron: "0 1 * * 1" # every Monday at 01:00 UTC
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    steps:
+      - uses: actions/labeler@v6
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          sync-labels: true
+
+  label-previous:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Label specific past PRs
+        uses: actions/labeler@v6
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          pr-number: |
+            1
+            2
+            3
+          sync-labels: true

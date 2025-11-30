@@ -1,16 +1,21 @@
 package com.youssef.GridPulse.domain.bms.dto;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.PositiveOrZero;
+import com.youssef.GridPulse.domain.bms.enums.BatteryChemistry;
+import com.youssef.GridPulse.domain.bms.enums.BatteryHealthStatus;
+
 
 public record BmsInput(
-        @NotBlank String name,
+        String name,
         String model,
         String manufacturer,
-        String batteryChemistry,
-        @Max(value = 100) @PositiveOrZero Float soc,
-        String soh,
-        String version
+        String version,
+
+
+        Float soc,
+        BatteryHealthStatus soh, // State of Health (%)
+        BatteryChemistry batteryChemistry, // Lithium-Ion, Lead-Acid, etc.
+        Integer cycles,
+        Float temperature,
+        Float voltage
 ) {
 }

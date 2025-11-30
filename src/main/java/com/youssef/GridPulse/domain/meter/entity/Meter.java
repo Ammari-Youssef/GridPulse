@@ -23,6 +23,10 @@ public class Meter extends BaseEntity {
     private String manufacturer;
     private String version; // Firmware or software version
 
+    private Float powerDispatched; // Can be negative or positive
+    private Float energyConsumed;
+    private Float energyProduced;
+
     @OneToOne(mappedBy = "meter")
     private Device device;
 

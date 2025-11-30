@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="create_meter_table"
+               author="youssef"
+               labels="domain,meter">
+        <createTable tableName="meter">
+            <column name="id"
+                    type="UUID">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="pk_meter"/>
+            </column>
+            <column name="created_at"
+                    type="timestamp with time zone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at"
+                    type="timestamp with time zone"/>
+            <column name="created_by"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_by"
+                    type="VARCHAR(255)"/>
+            <column name="source"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name"
+                    type="VARCHAR(255)"/>
+            <column name="model"
+                    type="VARCHAR(255)"/>
+            <column name="manufacturer"
+                    type="VARCHAR(255)"/>
+            <column name="version"
+                    type="VARCHAR(255)"/>
+
+            <column name="power_dispatched"
+                    type="FLOAT"/>
+            <column name="energy_consumed"
+                    type="FLOAT"/>
+            <column name="energy_produced"
+                    type="FLOAT"/>
+
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="meter"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_meter_history_table"
+               author="youssef"
+               labels="audit,meter">
+        <createTable tableName="meter_history">
+            <column name="id"
+                    type="UUID">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="pk_meterhistory"/>
+            </column>
+            <column name="original_id"
+                    type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_record"
+                    type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_record"
+                    type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deleted_record"
+                    type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="synced"
+                    type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at"
+                    type="timestamp with time zone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at"
+                    type="timestamp with time zone"/>
+            <column name="created_by"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_by"
+                    type="VARCHAR(255)"/>
+            <column name="source"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name"
+                    type="VARCHAR(255)"/>
+            <column name="model"
+                    type="VARCHAR(255)"/>
+            <column name="manufacturer"
+                    type="VARCHAR(255)"/>
+            <column name="version"
+                    type="VARCHAR(255)"/>
+
+            <column name="power_dispatched"
+                    type="FLOAT"/>
+            <column name="energy_consumed"
+                    type="FLOAT"/>
+            <column name="energy_produced"
+                    type="FLOAT"/>
+
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="meter_history"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

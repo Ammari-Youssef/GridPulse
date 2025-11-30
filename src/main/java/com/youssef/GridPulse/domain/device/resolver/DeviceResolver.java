@@ -6,7 +6,7 @@ import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageRe
 import com.youssef.GridPulse.domain.device.dto.DeviceInput;
 import com.youssef.GridPulse.domain.device.entity.Device;
 import com.youssef.GridPulse.domain.device.entity.DeviceHistory;
-import com.youssef.GridPulse.domain.enums.BatteryHealthStatus;
+import com.youssef.GridPulse.domain.bms.enums.BatteryHealthStatus;
 import com.youssef.GridPulse.domain.device.service.DeviceService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -28,8 +28,18 @@ public class DeviceResolver extends BaseResolver<Device, DeviceHistory, UUID, De
         this.service = service;
     }
 
-    // Pagination Offset
+    // Assign Device to User
+    @MutationMapping
+    public Device assignDeviceToUser(@Argument UUID deviceId, @Argument UUID userId){
+        return service.assignDeviceToUser(deviceId, userId);
+    }
+    // Assign Device to Operator
+    @MutationMapping
+    public Device assignDeviceToOperator(@Argument UUID deviceId, @Argument UUID operatorId){
+        return service.assignDeviceToOperator(deviceId, operatorId);
+    }
 
+    // Pagination Offset
     @QueryMapping
     public PageResponse<Device> getAllDevicePaged(@Argument PageRequestInput pageRequest) {
         return super.getAllPaged(pageRequest);
@@ -45,14 +55,36 @@ public class DeviceResolver extends BaseResolver<Device, DeviceHistory, UUID, De
         return super.getHistoryByOriginalIdPaged(originalId, pageRequest);
     }
 
-    // Pagination Offset - by Fleet ID
+    // Pagination Offset - by Fleet ID (Special)
     @QueryMapping
     public PageResponse<Device> getDeviceByFleetIdPaged(@Argument UUID fleetId, @Argument PageRequestInput pageRequest) {
         return service.getByFleetIdOffsetBased(fleetId, pageRequest);
     }
 
+    // Pagination Offset - by Operator ID (Special)
+    @QueryMapping
+    public PageResponse<Device> getDevicesByOperatorIdPaged(@Argument UUID operatorId, @Argument PageRequestInput pageRequest) {
+        return service.getByOperatorIdOffsetBased(operatorId, pageRequest);
+    }
 
-    // CRUD
+    // Pagination Offset - by User ID (Special)
+    @QueryMapping
+    public PageResponse<Device> getDevicesByUserIdPaged(@Argument UUID userId, @Argument PageRequestInput pageRequest) {
+        return service.getByUserIdOffsetBased(userId, pageRequest);
+    }
+
+    // Listing - By Operator ID (Special)
+    @QueryMapping
+    public List<Device> getDevicesByOperatorId(@Argument UUID operatorId) {
+        return service.getByOperatorId(operatorId);
+    }
+    // Listing - By User ID
+    @QueryMapping
+    public List<Device> getDevicesByUserId(@Argument UUID userId) {
+        return service.getByUserId(userId);
+    }
+
+    // Listing - By Fleet ID
     @QueryMapping
     public List<Device> getDevicesByFleetId(@Argument UUID fleetId) {
         return service.getByFleetId(fleetId);
@@ -63,6 +95,7 @@ public class DeviceResolver extends BaseResolver<Device, DeviceHistory, UUID, De
         return service.getHealthStatus(deviceId);
     }
 
+    // Common CRUD
     @QueryMapping
     @PreAuthorize("hasRole('ADMIN')")
     public List<Device> getAllDevices() {
