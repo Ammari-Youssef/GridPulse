@@ -1,16 +1,16 @@
-HELP.md
+backend/HELP.md
 target/
-!.mvn/wrapper/maven-wrapper.jar
+!backend/.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
 ### Logs ###
-logs/
+backend/logs/
 *.log
 
 
-.env
-.env.docker
+backend/.env
+backend/.env.docker
 !**/src/main/resources/liquibase.properties  # Liquibase configuration file
 
 ### STS ###
