@@ -3,14 +3,20 @@
 # Automating Docker, Backend, Database, Tests
 # ==========================================
 
-# Docker compose service names
-BACKEND_SERVICE=gridpulse-cloud-backend
-DB_SERVICE=gridpulse-db
+# ------------------------------------------
+# Docker compose services
+# ------------------------------------------
 
-# Container names
-BACKEND_CONTAINER=GridPulse-Backend-Cloud
+BACKEND_SERVICE=backend
+DB_SERVICE=postgres
+FRONTEND_SERVICE=frontend
 
-# PostgreSQL volume name
+# Containers names
+BACKEND_CONTAINER=gridpulse-backend
+DB_CONTAINER=gridpulse-postgres
+FRONTEND_CONTAINER=gridpulse-frontend
+
+# PostgreSQL volume
 DB_VOLUME=pgdata
 
 # ------------------------------------------
@@ -28,7 +34,7 @@ down:
 
 restart:
 	docker compose down
-	docker compose up -d
+	docker compose up -d --build
 
 logs:
 	docker compose logs -f $(BACKEND_SERVICE)
@@ -42,9 +48,9 @@ ps:
 
 check-env:
 	@echo "🔹 Checking critical environment variables in backend container..."
-	@docker exec -it $(BACKEND_CONTAINER) env | grep -E 'SPRING_SECURITY_USER_PASSWORD|SPRING_SECURITY_USER_NAME|DB_USER|DB_PASS' || \
-	( echo "❌ Some critical env vars are missing!" && exit 1 )
-	@echo "✅ All critical env vars are present."
+	@docker exec -it $(BACKEND_CONTAINER) env | grep -E 'DB_USER|DB_PASS|SPRING_' || \
+	( echo "❌ Missing critical env vars!" && exit 1 )
+	@echo "✅ Environment variables OK."
 
 # ------------------------------------------
 # PostgreSQL Maintenance
@@ -53,27 +59,27 @@ check-env:
 db-reset:
 	docker compose down
 	docker volume rm $(DB_VOLUME)
-	docker compose up -d
+	docker compose up -d --build
 	@echo "✔ PostgreSQL database reset successfully."
 
 db-shell:
-	docker exec -it $(DB_SERVICE) psql -U $$DB_USER -d $$DB_NAME
+	docker exec -it $(DB_CONTAINER) psql -U $$DB_USER -d $$DB_NAME
 
 db-import:
-	docker exec -i $(DB_SERVICE) psql -U $$DB_USER -d $$DB_NAME < dump.sql
+	docker exec -i $(DB_CONTAINER) psql -U $$DB_USER -d $$DB_NAME < dump.sql
 
 # ------------------------------------------
 # Backend — Build & Test
 # ------------------------------------------
 
 build-app:
-	./mvnw clean package -DskipTests
+	cd backend && ./mvnw clean package -DskipTests
 
 test-backend:
-	./mvnw test
+	cd backend && ./mvnw test
 
 clean:
-	./mvnw clean
+	cd backend && ./mvnw clean
 
 # ------------------------------------------
 # Backend — Inside Container
@@ -93,7 +99,7 @@ seed:
 	docker exec -it $(BACKEND_CONTAINER) java -jar app.jar --seed
 
 # ------------------------------------------
-# Frontend (Optional) — If you add Angular later
+# Frontend — Angular
 # ------------------------------------------
 
 test-frontend:
@@ -134,8 +140,8 @@ help:
 	@echo "  make db-shell             : Enter PostgreSQL shell"
 	@echo "  make build-app            : Build Spring Boot JAR"
 	@echo "  make test-backend         : Run backend tests"
-	@echo "  make bash                 : Enter backend container shell"
-	@echo "  make env                  : Show environment variables from container"
-	@echo "  make seed                 : Run seeding command"
+	@echo "  make bash                 : Enter backend container"
+	@echo "  make env                  : Show env vars from container"
+	@echo "  make seed                 : Run backend seeding"
 	@echo "  make prune                : Remove unused Docker resources"
-	@echo "  make prune-all            : Deep clean Docker system"
+	@echo "  make prune-all            : Deep Docker clean"

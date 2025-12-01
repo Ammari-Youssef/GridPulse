@@ -16,7 +16,7 @@ COPY pom.xml .
 RUN ./mvnw -q dependency:go-offline
 
 # Copy the source code (Avoiding cache break in each code updates)
-COPY src src
+COPY ../src src
 
 # Build the application (jar file - skip tests)
 RUN ./mvnw clean package -DskipTests

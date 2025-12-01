@@ -1,16 +1,16 @@
-HELP.md
+backend/HELP.md
 target/
-!.mvn/wrapper/maven-wrapper.jar
+!backend/.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
 ### Logs ###
-logs/
+backend/logs/
 *.log
 
 
-.env
-.env.docker
+backend/.env
+backend/.env.docker
 !**/src/main/resources/liquibase.properties  # Liquibase configuration file
 
 ### STS ###
@@ -40,3 +40,49 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+### Angular ###
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# Node
+!**/node_modules
+npm-debug.log
+yarn-error.log
+
+# IDEs and editors
+.idea/
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Visual Studio Code
+!**/vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Miscellaneous
+/.angular/cache
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+
+# System files
+.DS_Store
+Thumbs.db
+/frontend/node_modules/**
+/frontend/node_modules
