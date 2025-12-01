@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Step 1 - Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Step 2 - Set up JDK 17
         uses: actions/setup-java@v5
@@ -24,32 +24,35 @@ jobs:
           cache: maven
 
       - name: Step 3 - Build and run tests with Maven
-        run: mvn -B clean verify --file pom.xml
+        run: mvn -B clean verify --file backend/pom.xml
 
       - name: Step 4 - Upload test results (JUnit)
         if: always()
         uses: actions/upload-artifact@v5
         with:
           name: junit-results
-          path: target/surefire-reports/*.xml
+          path: backend/target/surefire-reports/*.xml
 
       - name: Step 5 - List the current directory
         run: ls -a
 
       - name: Step 6 - List the target folder
         run: |
-          cd target
+          cd backend/target
           ls -a
 
       - name: Step 7 - List build artifacts
         run: |
           echo "Target folder content:"
-          ls -la target
+          ls -la backend/target
 
   # Job 2: Docker image build & push
   docker:
     runs-on: ubuntu-latest
     steps:
+      - name: Step 0 - Checkout Repository
+        uses: actions/checkout@v6
+
       - name: Step 1 - Login to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -66,4 +69,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
+          context: ./backend
+          file: ./backend/Dockerfile
           tags: ammysf/gridpulse-cloud-backend:v1.0.0

@@ -4,7 +4,7 @@ target/
 !**/src/test/**/target/
 
 # Ignore Docker and env files
-Dockerfile
+backend/Dockerfile
 .dockerignore
 .env
 **/.env
@@ -24,9 +24,9 @@ Dockerfile
 HELP.md
 
 # Ignore everything in .mvn except wrapper files
-.mvn/*
-!.mvn/wrapper/maven-wrapper.jar
-!.mvn/wrapper/maven-wrapper.properties
+backend/.mvn/*
+!backend/.mvn/wrapper/maven-wrapper.jar
+!backend/.mvn/wrapper/maven-wrapper.properties
 
 # Include Maven wrapper scripts
 !mvnw

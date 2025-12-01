@@ -1,7 +1,7 @@
 services:
-  gridpulse-db:
+  postgres:
     image: postgres:16
-    container_name: GridPulse-Cloud-DB
+    container_name: gridpulse-postgres
     environment:
       POSTGRES_DB: gridpulse_cloud
       POSTGRES_USER: ${DB_USER}
@@ -11,29 +11,37 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
-      backend-net:
+      - backend-net
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${DB_USER}" ]
       interval: 5s
       timeout: 3s
       retries: 5
-
     restart: unless-stopped
 
-  gridpulse-cloud-backend:
-    build: .
-    image: gridpulse-cloud-backend
-    container_name: GridPulse-Backend-Cloud
+  backend:
+    build: ./backend
+    image: gridpulse-backend
+    container_name: gridpulse-backend
     depends_on:
-      gridpulse-db:
+      postgres:
         condition: service_healthy
     env_file:
-      - .env.docker
+      - backend/.env.docker
     ports:
       - "8080:8080"
     networks:
       - backend-net
     restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    image: gridpulse-frontend
+    container_name: gridpulse-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
 
 volumes:
   pgdata:
