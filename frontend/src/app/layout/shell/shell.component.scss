@@ -1,0 +1,17 @@
+.shell-container {
+    height: 100vh;
+}
+
+.shell-sidenav {
+    width: 250px;
+}
+
+.shell-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.page-content {
+    padding: 24px;
+}
