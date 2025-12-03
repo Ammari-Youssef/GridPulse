@@ -17,6 +17,7 @@ import { MessagesComponent } from './features/messages/messages/messages.compone
 import { SettingsComponent } from './features/settings/settings/settings.component';
 import { DeviceManagerComponent } from './features/device-manager/device-manager/device-manager.component';
 import { NotFoundComponent } from './features/not-found/not-found.component';
+import { HelloComponent } from './features/hello/hello.component';
 
 // --- Resolver propre pour les détails ---
 const idTitleResolver: ResolveFn<string> = (route) => {
@@ -25,6 +26,7 @@ const idTitleResolver: ResolveFn<string> = (route) => {
 };
 
 export const routes: Routes = [
+  { path: 'hello', component: HelloComponent, title: 'API GridPulse' },
   {
     path: '',
     component: ShellComponent,
