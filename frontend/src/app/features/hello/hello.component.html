@@ -1,8 +1,31 @@
-@if (errorMessage) {
-    <div class="error">
-        Error: {{ errorMessage }}
-    </div>
+<!-- LOADING STATE -->
+@if (loading) {
+<div class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+</div>
 }
 
-@if (data) {}
-<pre> {{ data | json }}</pre>
+<!-- ERROR STATE -->
+@if (errorMessage && data == null && loading=== false) {
+<mat-card class="error-card">
+    <mat-card-title>Error</mat-card-title>
+    <mat-card-content>
+        <p>{{ errorMessage }}</p>
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="retry()">
+            Retry
+        </button>
+    </mat-card-actions>
+</mat-card>
+}
+
+<!-- SUCCESS STATE -->
+@if (data && !loading) {
+<mat-card>
+    <mat-card-title>Received Data</mat-card-title>
+    <mat-card-content>
+        <pre>{{ data | json }}</pre>
+    </mat-card-content>
+</mat-card>
+}

@@ -1,16 +1,19 @@
 import { ApolloLink } from '@apollo/client/core';
+import { inject } from '@angular/core';
+import { TokenStorageService } from '../../core/services/token-storage.service';
 
 export const authLink = new ApolloLink((operation, forward) => {
   const token = localStorage.getItem('token');
 
-  operation.setContext(({ headers }: { headers?: Record<string, string> }) => {
-    return {
+  operation.setContext(
+    ({ headers }: { headers?: Record<string, string> } = {}) => ({
       headers: {
         ...(headers ?? {}),
-        Authorization: token ? `Bearer ${token}` : '',
+        // If no token, do not set Authorization or set to empty string
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
-    };
-  });
+    })
+  );
 
   return forward(operation);
 });
