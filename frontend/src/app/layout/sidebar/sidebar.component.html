@@ -23,9 +23,10 @@
         <mat-icon>analytics</mat-icon>
         <span>Analytics</span>
     </a>
-
+@if (userRole === 'ADMIN') {
     <a mat-list-item routerLink="/settings" routerLinkActive="active-link">
         <mat-icon>settings</mat-icon>
         <span>Settings</span>
     </a>
+}
 </mat-nav-list>
