@@ -3,9 +3,9 @@ services:
     image: postgres:16
     container_name: gridpulse-postgres
     environment:
-      POSTGRES_DB: gridpulse_cloud
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: root
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
     ports:
       - "5432:5432"
     volumes:
@@ -13,7 +13,7 @@ services:
     networks:
       - backend-net
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER}" ]
       interval: 5s
       timeout: 3s
       retries: 5
@@ -44,9 +44,12 @@ services:
       backend:
         condition: service_started
 
-volumes:
+    networks:
+      - backend-net
+
+volumes: # Volumes are persistent storage for containers
   pgdata:
 
 networks:
-  backend-net:
+  backend-net: # name of the network the containers will be able to communicate with each other within
     driver: bridge
