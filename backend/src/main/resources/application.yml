@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: GridPulse
+
+  profiles:
+    active: dev
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASS}
+    driver-class-name: ${DB_DRIVER}
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    database: POSTGRESQL
+    database-platform: ${DB_DIALECT}
+    properties:
+      hibernate:
+        dialect: ${DB_DIALECT}
+        format_sql: true
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    test-rollback-on-update: true
+    show-summary: summary
+    user: ${DB_USER}
+    password: ${DB_PASS}
+    url: ${DB_URL}
+
+  security:
+    user:
+      name: ${SPRING_SECURITY_USER_NAME}
+      password: ${SPRING_SECURITY_USER_PASSWORD}
+
+application:
+  security:
+    jwt:
+      secret-key: ${JWT_SECRET_KEY}
+      expiration: ${JWT_EXPIRATION_TIME}
+      refresh-token:
+        expiration: ${REFRESH_EXPIRATION_TIME}
