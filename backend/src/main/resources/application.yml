@@ -15,7 +15,7 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: none
-    database: ${DB_NAME}
+    database: POSTGRESQL
     database-platform: ${DB_DIALECT}
     properties:
       hibernate:
