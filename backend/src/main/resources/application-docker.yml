@@ -1,0 +1,36 @@
+spring:
+    application:
+        name: GridPulse
+
+    datasource:
+        url: ${DB_URL}
+        username: ${DB_USER}
+        password: ${DB_PASS}
+        driver-class-name: ${DB_DRIVER}
+
+    jpa:
+        database: ${DB_NAME}
+        database-platform: ${DB_DIALECT}
+
+management:
+    server:
+        port: 9000       # Port admin
+
+    endpoints:
+        web:
+            exposure:
+                include:
+                    - health
+                    - info
+                    - prometheus
+                    - gridpulse # Endpoint custom GridPulse
+
+    endpoint:
+        health:
+            show-details: never
+        prometheus:
+            access: unrestricted
+
+logging:
+    level:
+        root: INFO

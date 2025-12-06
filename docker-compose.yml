@@ -3,7 +3,7 @@ services:
     image: postgres:16
     container_name: gridpulse-postgres
     environment:
-      POSTGRES_DB: gridpulse_cloud
+      POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASS}
     ports:
@@ -41,11 +41,15 @@ services:
     ports:
       - "3000:80"
     depends_on:
-      - backend
+      backend:
+        condition: service_started
 
-volumes:
+    networks:
+      - backend-net
+
+volumes: # Volumes are persistent storage for containers
   pgdata:
 
 networks:
-  backend-net:
+  backend-net: # name of the network the containers will be able to communicate with each other within
     driver: bridge
