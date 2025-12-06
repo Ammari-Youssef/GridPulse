@@ -8,8 +8,7 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -24,8 +23,7 @@ import java.sql.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Testcontainers
-@SpringBootTest
-@ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class LiquibaseMigrationTest {
 
     static {
@@ -44,11 +42,11 @@ public class LiquibaseMigrationTest {
             .withPassword("test");
 
     @DynamicPropertySource
-    public static void overrideProperties(DynamicPropertyRegistry dynamicPropertyRegistry) {
-        dynamicPropertyRegistry.add("spring.datasource.url", postgresqlContainer::getJdbcUrl);
-        dynamicPropertyRegistry.add("spring.datasource.username", postgresqlContainer::getUsername);
-        dynamicPropertyRegistry.add("spring.datasource.password", postgresqlContainer::getPassword);
-        dynamicPropertyRegistry.add("spring.datasource.driver-class-name", postgresqlContainer::getDriverClassName);
+    public static void overrideProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgresqlContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", postgresqlContainer::getUsername);
+        registry.add("spring.datasource.password", postgresqlContainer::getPassword);
+        registry.add("spring.datasource.driver-class-name", postgresqlContainer::getDriverClassName);
     }
 
     @Test
