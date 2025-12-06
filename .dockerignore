@@ -1,33 +1,52 @@
-# Ignore build artifacts
-target/
+#############################################
+# BUILD ARTIFACTS — BACKEND & FRONTEND
+#############################################
+backend/target/
+**/target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-# Ignore Docker and env files
-backend/Dockerfile
-.dockerignore
+frontend/dist/
+**/dist/
+**/.angular/cache
+**/node_modules/
+
+
+#############################################
+# ENV & SECRETS
+#############################################
 .env
 **/.env
-**/Dockerfile*
 
-# Ignore Git
+#############################################
+# GIT
+#############################################
 .git
 .gitignore
 
-# Ignore node and frontend stuff
-**/node_modules
-**/dist
 
-# Ignore docs and logs
-*.md
+#############################################
+# LOGS & TEMP FILES
+#############################################
 *.log
-HELP.md
+.log
+tmp/
+npm-debug.log
+yarn-error.log
 
-# Ignore everything in .mvn except wrapper files
+
+#############################################
+# DOCS
+#############################################
+*.md
+
+
+#############################################
+# MAVEN WRAPPER
+#############################################
 backend/.mvn/*
 !backend/.mvn/wrapper/maven-wrapper.jar
 !backend/.mvn/wrapper/maven-wrapper.properties
 
-# Include Maven wrapper scripts
 !mvnw
 !mvnw.cmd
