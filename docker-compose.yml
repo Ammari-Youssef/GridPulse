@@ -3,7 +3,7 @@ services:
     image: postgres:16
     container_name: gridpulse-postgres
     environment:
-      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_DB: gridpulse_cloud
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASS}
     ports:
