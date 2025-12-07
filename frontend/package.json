@@ -4,9 +4,13 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "lint": "ng lint",
+    "e2e": "ng e2e",
     "build": "ng build",
+    "ci:build": "ng build --configuration=production",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "ci:test": "ng test --watch=false --no-progress --browsers=ChromeHeadless --code-coverage"
   },
   "private": true,
   "dependencies": {
