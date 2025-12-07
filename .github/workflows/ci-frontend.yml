@@ -1,0 +1,53 @@
+name: GridPulse Frontend CI
+
+on:
+  push:
+    branches: [ "master", "development" ]
+    paths:
+      - "frontend/**"
+      - ".github/workflows/ci-frontend.yml"
+  pull_request:
+    branches: [ "master", "development" ]
+    paths:
+      - "frontend/**"
+      - ".github/workflows/ci-frontend.yml"
+
+jobs:
+  frontend-build:
+    name: Frontend Build & Test with Angular
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.x]
+
+    steps:
+      - name: Step 1 - Checkout code
+        uses: actions/checkout@v6
+
+      - name: Step 2 - Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: "frontend/package-lock.json"
+
+      - name: Step 3 - Install dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Step 4 - Run Angular unit tests
+        working-directory: ./frontend
+        run: npm run ci:test
+
+      - name: Step 5 - Build Angular app
+        working-directory: ./frontend
+        run: npm run ci:build
+
+      - name: Step 6 - Upload build artifact
+        uses: actions/upload-artifact@v5
+        with:
+          name: angular-dist
+          path: frontend/dist
+
+      - name: Step 7 - List Files in Angular Distribution Directory
+        run: ls -R ./frontend/dist
