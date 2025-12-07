@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ShellComponent } from './shell.component';
+import { ActivatedRoute } from '@angular/router';
+import { ActivatedRouteMock } from '../../core/test/mock/activated-route.mock';
 
 describe('ShellComponent', () => {
   let component: ShellComponent;
@@ -8,7 +10,13 @@ describe('ShellComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ShellComponent]
+      imports: [ShellComponent],
+      providers: [
+      {
+        provide: ActivatedRoute,
+        useValue: ActivatedRouteMock
+      }
+    ]
     })
     .compileComponents();
 
