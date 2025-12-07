@@ -9,10 +9,19 @@ on:
     branches: [ "master", "development" ]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
-  docker:
-    name: Docker Build & Push
+
+  # ================================
+  #     BACKEND DOCKER BUILD
+  # ================================
+  backend:
+    name: Backend Docker Build & Push
     runs-on: ubuntu-latest
+
     steps:
       - name: Step 0 - Checkout Repository
         uses: actions/checkout@v6
@@ -23,16 +32,52 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Step 2 - Set up QEMU
+      - name: Step 2 - Setup QEMU
         uses: docker/setup-qemu-action@v3
 
-      - name: Step 3 - Set up Docker Buildx
+      - name: Step 3 - Setup Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Step 4 - Build and push
+      - name: Step 4 - Build & Push Backend Image
         uses: docker/build-push-action@v6
         with:
-          push: true
           context: ./backend
           file: ./backend/Dockerfile
-          tags: ammysf/gridpulse-cloud-backend:v1.0.0
+          push: true
+          tags: |
+            ammysf/gridpulse-backend:latest
+            ammysf/gridpulse-backend:${{ github.sha }}
+
+  # ================================
+  #     FRONTEND DOCKER BUILD
+  # ================================
+  frontend:
+    name: Frontend Docker Build & Push
+    runs-on: ubuntu-latest
+    needs: backend     # optional; if you want parallel execution remove this line
+
+    steps:
+      - name: Step 0 - Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Step 1 - Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Step 2 - Setup QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Step 3 - Setup Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Step 4 - Build & Push Frontend Image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: true
+          tags: |
+            ammysf/gridpulse-frontend:latest
+            ammysf/gridpulse-frontend:${{ github.sha }}
