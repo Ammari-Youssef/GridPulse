@@ -49,5 +49,5 @@ jobs:
           name: angular-dist
           path: frontend/dist
 
-      - name: Step 7 - List Files in Distribution Directory
-        run: ls -R ./dist
+      - name: Step 7 - List Files in Angular Distribution Directory
+        run: ls -R ./frontend/dist
