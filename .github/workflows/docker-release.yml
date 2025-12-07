@@ -1,10 +1,13 @@
 name: GridPulse Docker Build & Release
 
 on:
-  workflow_dispatch:
   push:
+    branches: [ "master", "development" ]
     tags:
-      - "v*.*.*"
+      - 'v*.*.*'
+  pull_request:
+    branches: [ "master", "development" ]
+  workflow_dispatch:
 
 jobs:
   docker:
