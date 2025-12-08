@@ -31,23 +31,16 @@ updates:
     commit-message:
       prefix: "deps-frontend"
     ignore:
-      # Block Angular major upgrades (you stay on v19)
+      # Block Angular major upgrades (keep v19)
       - dependency-name: "@angular/*"
         update-types: ["version-update:semver-major"]
-
-      # Block Angular DevKit major
       - dependency-name: "@angular-devkit/*"
         update-types: ["version-update:semver-major"]
-
-      # Block major RxJS updates (Angular 19 depends on RxJS 7)
       - dependency-name: "rxjs"
         update-types: ["version-update:semver-major"]
-
-      # Block Zone.js major upgrades
       - dependency-name: "zone.js"
         update-types: ["version-update:semver-major"]
-
-      # Optional but recommended for stability
+      # Recommended for stability
       - dependency-name: "typescript"
       - dependency-name: "@types/*"
       - dependency-name: "jasmine-core"
@@ -78,7 +71,6 @@ updates:
       # Testcontainers major upgrades may break config
       - dependency-name: "org.testcontainers:testcontainers"
         update-types: ["version-update:semver-major"]
-
       - dependency-name: "org.testcontainers:testcontainers-bom"
         update-types: ["version-update:semver-major"]
 
@@ -97,7 +89,7 @@ updates:
       - "dependencies"
       - "dependabot"
     ignore:
-      # You want to stay on Java 17
+      # Keep Java 17
       - dependency-name: "eclipse-temurin"
         versions:
           - ">=18"
