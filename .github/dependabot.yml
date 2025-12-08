@@ -59,6 +59,10 @@ updates:
       - "ci/cd"
       - "dependencies"
       - "dependabot"
+    ignore:
+      - dependency-name: "eclipse-temurin"
+        versions:
+          - ">=18"
     commit-message:
       prefix: "deps-docker-backend"
 
@@ -72,6 +76,11 @@ updates:
       - "ci/cd"
       - "dependencies"
       - "dependabot"
+
+    ignore:
+      - dependency-name: "@angular/*"
+        versions:
+          - ">=20"
     commit-message:
       prefix: "deps-docker-frontend"
 
