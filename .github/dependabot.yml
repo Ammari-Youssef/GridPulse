@@ -20,7 +20,7 @@ updates:
   # 2. Frontend (Angular)
   # -------------------------
   - package-ecosystem: "npm"
-    directory: "/frontend"            
+    directory: "/frontend"
     schedule:
       interval: "weekly"
     labels:
@@ -30,11 +30,34 @@ updates:
       - "dependabot"
     commit-message:
       prefix: "deps-frontend"
+    ignore:
+      # Block Angular major upgrades (you stay on v19)
+      - dependency-name: "@angular/*"
+        update-types: ["version-update:semver-major"]
+
+      # Block Angular DevKit major
+      - dependency-name: "@angular-devkit/*"
+        update-types: ["version-update:semver-major"]
+
+      # Block major RxJS updates (Angular 19 depends on RxJS 7)
+      - dependency-name: "rxjs"
+        update-types: ["version-update:semver-major"]
+
+      # Block Zone.js major upgrades
+      - dependency-name: "zone.js"
+        update-types: ["version-update:semver-major"]
+
+      # Optional but recommended for stability
+      - dependency-name: "typescript"
+      - dependency-name: "@types/*"
+      - dependency-name: "jasmine-core"
+      - dependency-name: "karma"
+      - dependency-name: "karma-*"
 
   # -------------------------
   # 3. Backend (Spring Boot)
   # -------------------------
-  - package-ecosystem: "maven"       
+  - package-ecosystem: "maven"
     directory: "/backend"
     schedule:
       interval: "weekly"
@@ -45,10 +68,22 @@ updates:
       - "dependabot"
     commit-message:
       prefix: "deps-backend"
+    ignore:
+      # Do not auto-upgrade Spring Boot major (3.x → 4.x)
+      - dependency-name: "org.springframework.boot:spring-boot-starter-parent"
+        update-types: ["version-update:semver-major"]
+
+      # Testcontainers major upgrades may break config
+      - dependency-name: "org.testcontainers:testcontainers"
+        update-types: ["version-update:semver-major"]
+
+      - dependency-name: "org.testcontainers:testcontainers-bom"
+        update-types: ["version-update:semver-major"]
 
   # -------------------------------------
   # 4. Docker (Dockerfiles + docker-compose)
   # -------------------------------------
+
   # Dockerfile backend
   - package-ecosystem: "docker"
     directory: "/backend"
@@ -60,6 +95,7 @@ updates:
       - "dependencies"
       - "dependabot"
     ignore:
+      # You want to stay on Java 17
       - dependency-name: "eclipse-temurin"
         versions:
           - ">=18"
@@ -76,11 +112,6 @@ updates:
       - "ci/cd"
       - "dependencies"
       - "dependabot"
-
-    ignore:
-      - dependency-name: "@angular/*"
-        versions:
-          - ">=20"
     commit-message:
       prefix: "deps-docker-frontend"
 
