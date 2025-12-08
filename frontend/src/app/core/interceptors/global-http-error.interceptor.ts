@@ -1,6 +1,6 @@
-import { HttpErrorResponse, HttpEventType, HttpInterceptorFn } from '@angular/common/http';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { catchError, count, delay, retry, tap, throwError } from 'rxjs';
+import { retry, tap } from 'rxjs';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 

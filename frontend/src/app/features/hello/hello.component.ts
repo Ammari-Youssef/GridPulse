@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { HelloService } from '../../core/services/hello.service';
 import { JsonPipe } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
+import { HelloResponse } from '../../core/models/interfaces/HelloResponse';
+import { ObservableQuery } from '@apollo/client';
 
 @Component({
   selector: 'app-hello',
@@ -19,14 +21,12 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './hello.component.scss',
 })
 export class HelloComponent implements OnInit {
-  data: any = null;
+  data: HelloResponse | null | undefined = null;
   errorMessage: string | null = null;
   loading = true;
 
-  constructor(
-    private helloService: HelloService,
-    private snackbar: MatSnackBar
-  ) {}
+  helloService = inject(HelloService);
+  snackbar = inject(MatSnackBar);
 
   ngOnInit(): void {
     this.loadData();
@@ -37,14 +37,14 @@ export class HelloComponent implements OnInit {
     this.errorMessage = null;
 
     this.helloService.getHello().subscribe({
-      next: (result: any) => {
+      next: (result: ObservableQuery.Result<HelloResponse>) => {
         this.loading = false;
-        this.data = result.data;
+        this.data = result.data as HelloResponse;
       },
       error: (err) => {
         this.loading = false;
 
-        let message = this.parseError(err);
+        const message = this.parseError(err);
         this.errorMessage = message;
 
         this.snackbar.open(message, 'Close', {
@@ -61,13 +61,24 @@ export class HelloComponent implements OnInit {
     this.loadData();
   }
 
-  private parseError(err: any): string {
-    if (err.graphQLErrors?.length) {
-      return err.graphQLErrors.map((e: any) => e.message).join(', ');
+  private parseError(err: unknown): string {
+    // Check if err is an object (not null)
+    if (err && typeof err === 'object') {
+      // Cast to a known structure
+      const e = err as {
+        graphQLErrors?: { message: string }[];
+        networkError?: { message: string };
+      };
+
+      if (e.graphQLErrors?.length) {
+        return e.graphQLErrors.map((err) => err.message).join(', ');
+      }
+
+      if (e.networkError) {
+        return 'Network Error: ' + e.networkError.message;
+      }
     }
-    if (err.networkError) {
-      return 'Network Error : ' + err.networkError.message;
-    }
+
     return 'Unknown Error';
   }
 }

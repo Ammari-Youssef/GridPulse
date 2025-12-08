@@ -8,5 +8,5 @@ import { Component } from '@angular/core';
 })
 export class DashboardComponent {
 
-  username : String = "John"
+  username = "John"
 }
