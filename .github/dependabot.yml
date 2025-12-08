@@ -73,7 +73,7 @@ updates:
       - dependency-name: "org.springframework.boot:spring-boot-starter-parent"
         update-types: ["version-update:semver-major"]
         versions:
-          - ">=3.5.0" # Keep using spring boot 3.4.5
+          - ">=3.4.5" # Keep using spring boot 3.4.5
 
       # Testcontainers major upgrades may break config
       - dependency-name: "org.testcontainers:testcontainers"
