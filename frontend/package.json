@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "lint": "ng lint",
+    "ci:lint": "ng lint --force",
     "e2e": "ng e2e",
     "build": "ng build",
     "ci:build": "ng build --configuration=production",
