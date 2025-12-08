@@ -1,7 +1,7 @@
 # ===========================
 # STAGE 1 — BUILD
 # ===========================
-FROM eclipse-temurin:17-jdk-alpine AS builder
+FROM eclipse-temurin:25-jdk-alpine AS builder
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -24,7 +24,7 @@ RUN ./mvnw clean package -DskipTests
 # ===========================
 # STAGE 2 — RUNTIME
 # ===========================
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:25-jre-alpine
 
 LABEL maintainer="youssef.ammari.795@gmail.com"
 
