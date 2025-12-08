@@ -1,0 +1,89 @@
+# Please see the documentation for all configuration options:
+# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  # -------------------------
+  # 1. GitHub Actions updates
+  # -------------------------
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "ci/cd"
+      - "dependencies"
+      - "github-actions"
+      - "dependabot"
+
+  # -------------------------
+  # 2. Frontend (Angular)
+  # -------------------------
+  - package-ecosystem: "npm"
+    directory: "/frontend"            
+    schedule:
+      interval: "weekly"
+    labels:
+      - "frontend"
+      - "ci/cd"
+      - "dependencies"
+      - "dependabot"
+    commit-message:
+      prefix: "deps-frontend"
+
+  # -------------------------
+  # 3. Backend (Spring Boot)
+  # -------------------------
+  - package-ecosystem: "maven"       
+    directory: "/backend"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "backend"
+      - "ci/cd"
+      - "dependencies"
+      - "dependabot"
+    commit-message:
+      prefix: "deps-backend"
+
+  # -------------------------------------
+  # 4. Docker (Dockerfiles + docker-compose)
+  # -------------------------------------
+  # Dockerfile backend
+  - package-ecosystem: "docker"
+    directory: "/backend"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "docker"
+      - "ci/cd"
+      - "dependencies"
+      - "dependabot"
+    commit-message:
+      prefix: "deps-docker-backend"
+
+  # Dockerfile frontend
+  - package-ecosystem: "docker"
+    directory: "/frontend"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "docker"
+      - "ci/cd"
+      - "dependencies"
+      - "dependabot"
+    commit-message:
+      prefix: "deps-docker-frontend"
+
+  # docker-compose.yml at root
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "docker"
+      - "ci/cd"
+      - "dependencies"
+      - "dependabot"
+    commit-message:
+      prefix: "deps-docker-compose"
