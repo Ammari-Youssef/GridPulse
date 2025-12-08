@@ -35,19 +35,23 @@ jobs:
         working-directory: ./frontend
         run: npm ci
 
-      - name: Step 4 - Run Angular unit tests
+      - name: Step 4 - Run ESLint
+        working-directory: ./frontend
+        run: npm run lint
+
+      - name: Step 5 - Run Angular unit tests
         working-directory: ./frontend
         run: npm run ci:test
 
-      - name: Step 5 - Build Angular app
+      - name: Step 6 - Build Angular app
         working-directory: ./frontend
         run: npm run ci:build
 
-      - name: Step 6 - Upload build artifact
+      - name: Step 7 - Upload build artifact
         uses: actions/upload-artifact@v5
         with:
           name: angular-dist
           path: frontend/dist
 
-      - name: Step 7 - List Files in Angular Distribution Directory
+      - name: Step 8 - List Files in Angular Distribution Directory
         run: ls -R ./frontend/dist

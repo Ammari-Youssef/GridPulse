@@ -3,10 +3,20 @@ name: GridPulse Docker Build & Release
 on:
   push:
     branches: [ "master", "development" ]
+    paths:
+      - "frontend/**"
+      - "backend/**"
+      - ".github/workflows/ci-frontend.yml"
+      - ".github/workflows/ci-backend.yml"
     tags:
       - 'v*.*.*'
   pull_request:
     branches: [ "master", "development" ]
+    paths:
+      - "frontend/**"
+      - "backend/**"
+      - ".github/workflows/ci-frontend.yml"
+      - ".github/workflows/ci-backend.yml"
   workflow_dispatch:
 
 permissions:
