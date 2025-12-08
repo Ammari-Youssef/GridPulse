@@ -58,7 +58,7 @@ jobs:
             ammysf/gridpulse-backend:latest
             ammysf/gridpulse-backend:${{ github.sha }}
           cache-from: type=registry,ref=ammysf/gridpulse-backend:cache
-          cache-to: type=registry,ref=ammysf/gridpulse-backend:cache,mode=max
+          cache-to: type=registry,ref=ammysf/gridpulse-backend:cache,mode=max,inline=true
 
   # ================================
   #     FRONTEND DOCKER BUILD
@@ -94,4 +94,4 @@ jobs:
             ammysf/gridpulse-frontend:latest
             ammysf/gridpulse-frontend:${{ github.sha }}
           cache-from: type=registry,ref=ammysf/gridpulse-frontend:cache
-          cache-to: type=registry,ref=ammysf/gridpulse-frontend:cache,mode=max
+          cache-to: type=registry,ref=ammysf/gridpulse-frontend:cache,mode=max,inline=true
