@@ -1,6 +1,4 @@
 import { ApolloLink } from '@apollo/client/core';
-import { inject } from '@angular/core';
-import { TokenStorageService } from '../../core/services/token-storage.service';
 
 export const authLink = new ApolloLink((operation, forward) => {
   const token = localStorage.getItem('token');
