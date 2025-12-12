@@ -1,5 +1,8 @@
 import { ResolveFn, Routes } from '@angular/router';
 
+// Auth
+import { LoginComponent } from './feature/auth/login/login.component';
+
 // Layout
 import { ShellComponent } from './layout/shell/shell.component';
 
@@ -30,6 +33,9 @@ const idTitleResolver: ResolveFn<string> = (route) => {
 export const routes: Routes = [
   // Public route
   { path: 'hello', component: HelloComponent, title: 'API GridPulse' },
+
+  // Authentication
+  { path: 'login', component: LoginComponent, title: 'Sign in' },
 
   // Forbidden (before wildcard)
   {
