@@ -1,19 +1,27 @@
-import { CanActivateFn, Router } from '@angular/router';
-import { inject } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { CanActivate, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { TokenStorageService } from '../services/token-storage.service';
 
-export const roleGuard: CanActivateFn = (route, state) => {
-  void state;
+@Injectable({
+  providedIn: 'root',
+})
+export class RoleGuard implements CanActivate {
   
-  const tokenService = inject(TokenStorageService);
-  const router = inject(Router);
+  constructor(
+    private tokenService: TokenStorageService,
+    private router: Router
+  ) {}
 
-  const expectedRole = route.data['role'] as 'ADMIN' | 'USER';
-  const userRole = tokenService.getUserRole();
+  canActivate(
+    route: ActivatedRouteSnapshot
+  ): boolean | ReturnType<Router['parseUrl']> {
+    const expectedRole = route.data['role'] as 'ADMIN' | 'USER';
+    const userRole = this.tokenService.getUserRole();
 
-  if (userRole === expectedRole) {
-    return true;
+    if (userRole === expectedRole) {
+      return true;
+    }
+
+    return this.router.parseUrl('/forbidden');
   }
-
-  return router.parseUrl('/forbidden');
-};
+}
