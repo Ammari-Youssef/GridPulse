@@ -1,27 +1,40 @@
-import { HttpInterceptorFn } from '@angular/common/http';
-import { inject } from '@angular/core';
+import { Injectable } from '@angular/core';
+import {
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+} from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { TokenStorageService } from '../services/token-storage.service';
 
-export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
-  const router = inject(Router);
-  const tokenService = inject(TokenStorageService);
+@Injectable()
+export class HttpErrorInterceptor implements HttpInterceptor {
+  constructor(
+    private router: Router,
+    private tokenService: TokenStorageService
+  ) {}
 
-  return next(req).pipe(
-    catchError((err) => {
-      const status = err?.status;
-      console.error('[HTTP ERROR INTERCEPTOR]', status, err);
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+    return next.handle(req).pipe(
+      catchError((err) => {
+        const status = err?.status;
+        console.error('[HTTP ERROR INTERCEPTOR]', status, err);
 
-      if (status === 401) {
-        tokenService.clearToken();
-        router.navigate(['/login']);
-      } else if (status === 403) {
-        router.navigate(['/forbidden']);
-      }
+        if (status === 401) {
+          this.tokenService.clearToken();
+          this.router.navigate(['/login']);
+        } else if (status === 403) {
+          this.router.navigate(['/forbidden']);
+        }
 
-      return throwError(() => err);
-    })
-  );
-};
+        return throwError(() => err);
+      })
+    );
+  }
+}

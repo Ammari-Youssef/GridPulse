@@ -10,7 +10,7 @@ describe('ShellComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ShellComponent],
+      imports: [],
       providers: [
       {
         provide: ActivatedRoute,

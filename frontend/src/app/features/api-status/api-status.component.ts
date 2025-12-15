@@ -1,32 +1,25 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { HelloService } from '../../core/services/hello.service';
-import { JsonPipe } from '@angular/common';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatCardModule } from '@angular/material/card';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatButtonModule } from '@angular/material/button';
-import { HelloResponse } from '../../core/models/interfaces/HelloResponse';
+import { Component, OnInit } from '@angular/core';
+import { ApiStatusService } from '../../core/services/api-status.service';
+
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ApiStatusResponse } from '../../core/models/interfaces/api-status-response';
 import { ObservableQuery } from '@apollo/client';
 
 @Component({
-  selector: 'app-hello',
-  imports: [
-    JsonPipe,
-    MatProgressSpinnerModule,
-    MatCardModule,
-    MatSnackBarModule,
-    MatButtonModule,
-  ],
-  templateUrl: './hello.component.html',
-  styleUrl: './hello.component.scss',
+  selector: 'app-api-status',
+  standalone: false,
+  templateUrl: './api-status.component.html',
+  styleUrl: './api-status.component.scss',
 })
-export class HelloComponent implements OnInit {
-  data: HelloResponse | null | undefined = null;
+export class ApiStatusComponent implements OnInit {
+  data: ApiStatusResponse | null | undefined = null;
   errorMessage: string | null = null;
   loading = true;
 
-  helloService = inject(HelloService);
-  snackbar = inject(MatSnackBar);
+  constructor(
+    private apiStatusService: ApiStatusService,
+    private snackbar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.loadData();
@@ -36,10 +29,10 @@ export class HelloComponent implements OnInit {
     this.loading = true;
     this.errorMessage = null;
 
-    this.helloService.getHello().subscribe({
-      next: (result: ObservableQuery.Result<HelloResponse>) => {
+    this.apiStatusService.getHello().subscribe({
+      next: (result: ObservableQuery.Result<ApiStatusResponse>) => {
         this.loading = false;
-        this.data = result.data as HelloResponse;
+        this.data = result.data as ApiStatusResponse;
       },
       error: (err) => {
         this.loading = false;

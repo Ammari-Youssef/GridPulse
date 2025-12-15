@@ -1,26 +1,37 @@
-import { CanActivateFn, Router } from '@angular/router';
-import { inject } from '@angular/core';
+import { Injectable } from '@angular/core';
+import {
+  CanActivate,
+  ActivatedRouteSnapshot,
+  Router,
+  RouterStateSnapshot,
+} from '@angular/router';
 import { TokenStorageService } from '../services/token-storage.service';
 
+@Injectable({
+  providedIn: 'root',
+})
+export class AuthGuard implements CanActivate {
+  constructor(
+    private tokenService: TokenStorageService,
+    private router: Router
+  ) {}
 
-export const authGuard: CanActivateFn = (route, state) => {
-  void state;
-  
-  const tokenService = inject(TokenStorageService);
-  const router = inject(Router);
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    _state: RouterStateSnapshot
+  ): boolean | ReturnType<Router['parseUrl']> {
+    const isLogged = this.tokenService.isAuthenticated();
+    const userRole = this.tokenService.getUserRole();
+    const requiredRole = route.data?.['role'];
 
-  const isLogged = tokenService.isAuthenticated();
-  const userRole = tokenService.getUserRole(); 
-  const requiredRole = route.data?.['role'];
+    if (!isLogged) {
+      return this.router.parseUrl('/login');
+    }
 
-  if (!isLogged) {
-    return router.parseUrl('/login');
+    if (requiredRole && userRole !== requiredRole) {
+      return this.router.parseUrl('/forbidden');
+    }
+
+    return true;
   }
-
-  // Forbidden
-  if (requiredRole && userRole !== requiredRole) {
-    return router.parseUrl('/forbidden');
-  }
-
-  return true;
-};
+}

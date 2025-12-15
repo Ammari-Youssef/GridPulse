@@ -8,7 +8,7 @@ describe('StatsCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [StatsCardComponent]
+      imports: []
     })
     .compileComponents();
 

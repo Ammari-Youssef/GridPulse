@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ForbiddenComponent } from './forbidden.component';
+import { CommonModule } from '@angular/common';
 
 describe('ForbiddenComponent', () => {
   let component: ForbiddenComponent;
@@ -8,7 +9,7 @@ describe('ForbiddenComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ForbiddenComponent]
+      imports: [CommonModule]
     })
     .compileComponents();
 

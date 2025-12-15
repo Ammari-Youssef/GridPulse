@@ -1,13 +1,10 @@
 <!-- LOADING STATE -->
-@if (loading) {
-<div class="loading-container">
+<div class="loading-container" *ngIf="loading">
     <mat-spinner diameter="50"></mat-spinner>
 </div>
-}
 
 <!-- ERROR STATE -->
-@if (errorMessage && data === null && loading === false) {
-<mat-card class="error-card">
+<mat-card class="error-card" *ngIf="errorMessage && data === null && !loading">
     <mat-card-title>Error</mat-card-title>
     <mat-card-content>
         <p>{{ errorMessage }}</p>
@@ -18,14 +15,11 @@
         </button>
     </mat-card-actions>
 </mat-card>
-}
 
 <!-- SUCCESS STATE -->
-@if (data && !loading) {
-<mat-card>
+<mat-card *ngIf="data && !loading">
     <mat-card-title>Received Data</mat-card-title>
     <mat-card-content>
         <pre>{{ data | json }}</pre>
     </mat-card-content>
 </mat-card>
-}
