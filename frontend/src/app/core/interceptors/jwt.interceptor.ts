@@ -1,4 +1,3 @@
-/* eslint-disable @angular-eslint/prefer-inject */
 import { Injectable } from '@angular/core';
 import {
   HttpEvent,
