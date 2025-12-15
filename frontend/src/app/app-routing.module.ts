@@ -1,4 +1,5 @@
-import { ResolveFn, Routes } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 
 // Layout
 import { ShellComponent } from './layout/shell/shell.component';
@@ -14,82 +15,76 @@ import { MessagesComponent } from './features/messages/messages/messages.compone
 import { SettingsComponent } from './features/settings/settings/settings.component';
 import { DeviceManagerComponent } from './features/device-manager/device-manager/device-manager.component';
 import { NotFoundComponent } from './shared/pages/not-found/not-found.component';
-import { HelloComponent } from './features/hello/hello.component';
+import { ApiStatusComponent } from './features/api-status/api-status.component';
 import { ForbiddenComponent } from './shared/pages/forbidden/forbidden.component';
 
-// Guards
-import { authGuard } from './core/guards/auth.guard';
-import { roleGuard } from './core/guards/role.guard';
+// Guards (CLASS-BASED)
+import { AuthGuard } from './core/guards/auth.guard';
+import { RoleGuard } from './core/guards/role.guard';
 
-// --- Resolver ---
-const idTitleResolver: ResolveFn<string> = (route) => {
-  const id = route.paramMap.get('id');
-  return id ? `Details – ${id}` : 'Details';
-};
+// Resolver (CLASS-BASED)
+import { IdTitleResolver } from './core/resolvers/id-title.resolver';
 
-export const routes: Routes = [
-  // Public route
-  { path: 'hello', component: HelloComponent, title: 'API GridPulse' },
+const routes: Routes = [
+  { path: 'api-status', component: ApiStatusComponent, title: 'API Status GridPulse' },
 
-  // Forbidden (before wildcard)
   {
     path: 'forbidden',
     component: ForbiddenComponent,
     title: '403 – Forbidden',
   },
 
-  // Main authenticated area
   {
     path: '',
     component: ShellComponent,
-    canActivate: [authGuard],
-    canActivateChild: [authGuard],
+    canActivate: [AuthGuard],
+    // canActivateChild: [AuthGuard],
     children: [
-      // Dashboard
       {
         path: '',
         component: DashboardComponent,
         title: 'GridPulse ⚡ Dashboard',
       },
 
-      // Fleets
       { path: 'fleets', component: FleetListComponent, title: 'Fleet List' },
       {
         path: 'fleets/:id',
         component: FleetDetailsComponent,
-        title: idTitleResolver,
+        resolve: { title: IdTitleResolver },
       },
 
-      // Devices
       { path: 'devices', component: DeviceListComponent, title: 'Device List' },
       {
         path: 'devices/:id',
         component: DeviceDetailsComponent,
-        title: idTitleResolver,
+        resolve: { title: IdTitleResolver },
       },
 
-      // Alerts + Analytics
       { path: 'messages', component: MessagesComponent, title: 'Alerts' },
       { path: 'analytics', component: AnalyticsComponent, title: 'Analytics' },
 
-      // --- Admin-only routes ---
       {
         path: 'settings',
         component: SettingsComponent,
-        canActivate: [roleGuard],
+        canActivate: [RoleGuard],
         data: { role: 'ADMIN' },
         title: 'Admin – Settings',
       },
       {
         path: 'device-manager',
         component: DeviceManagerComponent,
-        canActivate: [roleGuard],
+        canActivate: [RoleGuard],
         data: { role: 'ADMIN' },
         title: 'Admin – Device Manager',
       },
     ],
   },
 
-  // Wildcard
   { path: '**', component: NotFoundComponent, title: 'Not Found – 404' },
 ];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
+})
+export class AppRoutingModule {}
