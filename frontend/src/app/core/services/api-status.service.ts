@@ -1,18 +1,18 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { HELLO_QUERY } from '../../graphql/hello.query';
 import { catchError, throwError } from 'rxjs';
-import { HelloResponse } from '../models/interfaces/HelloResponse';
+import { ApiStatusResponse } from '../models/interfaces/api-status-response';
 
 @Injectable({
   providedIn: 'root',
 })
-export class HelloService {
-  private readonly apollo = inject(Apollo);
+export class ApiStatusService {
+  constructor(private apollo: Apollo) {}
 
   getHello() {
     return this.apollo
-      .watchQuery<HelloResponse>({
+      .watchQuery<ApiStatusResponse>({
         query: HELLO_QUERY,
         errorPolicy: 'all',
       })
