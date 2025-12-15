@@ -31,6 +31,18 @@ module.exports = defineConfig([
           style: "kebab-case",
         },
       ],
+      
+      // STOP standalone forcing
+      "@angular-eslint/prefer-standalone": "off",
+      "@angular-eslint/prefer-standalone-component": "off",
+
+      // STOP inject() forcing
+      "@angular-eslint/prefer-inject": "off",
+      "@angular-eslint/prefer-injectable-provided-in": "off",
+      "@angular-eslint/use-injectable-provided-in": "off",
+
+      // STOP noise
+      "@typescript-eslint/no-unused-vars": "off",
     },
   },
   {
@@ -39,6 +51,24 @@ module.exports = defineConfig([
       angular.configs.templateRecommended,
       angular.configs.templateAccessibility,
     ],
-    rules: {},
+    rules: {
+      "@angular-eslint/directive-selector": [
+        "error",
+        { type: "attribute", prefix: "app", style: "camelCase" }
+      ],
+      "@angular-eslint/component-selector": [
+        "error",
+        { type: "element", prefix: "app", style: "kebab-case" }
+      ],
+
+      // Disable rules enforcing inject() or standalone patterns
+      "@angular-eslint/prefer-injectable-provided-in": "off",
+      "@angular-eslint/prefer-standalone-component": "off",
+      "@angular-eslint/use-injectable-provided-in": "off",
+      "@angular-eslint/prefer-inject": "off",
+
+      // Disable unused vars
+      "@typescript-eslint/no-unused-vars": "off",
+    }
   }
 ]);
