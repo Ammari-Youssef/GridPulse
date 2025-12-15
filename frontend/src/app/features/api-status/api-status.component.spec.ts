@@ -3,6 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ApiStatusComponent } from './api-status.component';
 import { Apollo } from 'apollo-angular';
 import { ApolloMock } from '../../core/test/mock/apollo.mock';
+import { CommonModule } from '@angular/common';
+import { ApiStatusModule } from './api-status.module';
 
 describe('ApiStatusComponent', () => {
   let component: ApiStatusComponent;
@@ -10,7 +12,7 @@ describe('ApiStatusComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ApiStatusComponent],
+      imports: [CommonModule, ApiStatusModule],
       providers: [
         {
           provide: Apollo,
