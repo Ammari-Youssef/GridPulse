@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiStatusService } from '../../core/services/api-status.service';
+import { ApiStatusService } from '@core/services/api-status.service';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ApiStatusResponse } from '../../core/models/interfaces/api-status-response';
+import { ApiStatusResponse } from '@core/models/interfaces/api-status-response';
 import { ObservableQuery } from '@apollo/client';
 
 @Component({

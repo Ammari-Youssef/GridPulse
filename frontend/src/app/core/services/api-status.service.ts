@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { HELLO_QUERY } from '../../graphql/hello.query';
+import { HELLO_QUERY } from '@graphql/hello.query';
 import { catchError, throwError } from 'rxjs';
-import { ApiStatusResponse } from '../models/interfaces/api-status-response';
+import { ApiStatusResponse } from '@core/models/interfaces/api-status-response';
 
 @Injectable({
   providedIn: 'root',

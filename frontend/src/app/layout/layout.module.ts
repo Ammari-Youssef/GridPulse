@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 // Components
-import { NavbarComponent } from './navbar/navbar.component';
-import { ShellComponent } from './shell/shell.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
+import { NavbarComponent } from '@layout/navbar/navbar.component';
+import { ShellComponent } from '@layout/shell/shell.component';
+import { SidebarComponent } from '@layout/sidebar/sidebar.component';
 
 // Angular Material
 import { MatButtonModule } from '@angular/material/button';

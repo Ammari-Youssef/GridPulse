@@ -6,18 +6,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 // Interceptors
-import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
-import { GlobalHttpErrorInterceptor } from './core/interceptors/global-http-error.interceptor';
-import { HttpErrorInterceptor } from './core/interceptors/http-error.interceptor';
+import { JwtInterceptor } from '@interceptors/jwt.interceptor';
+import { GlobalHttpErrorInterceptor } from '@interceptors/global-http-error.interceptor';
+import { HttpErrorInterceptor } from '@interceptors/http-error.interceptor';
 
 // Custom modules
-import { SharedModule } from './shared/shared.module';
-import { CoreModule } from './core/core.module';
-import { LayoutModule } from './layout/layout.module';
-import { DashboardModule } from './features/dashboard/dashboard.module';
+import { SharedModule } from '@shared/shared.module';
+import { CoreModule } from '@core/core.module';
+import { LayoutModule } from '@layout/layout.module';
+import { DashboardModule } from '@features/dashboard/dashboard.module';
 
-import { GraphQLModule } from './graphql/graphql.module';
-import { ApiStatusModule } from './features/api-status/api-status.module';
+import { GraphQLModule } from '@graphql/graphql.module';
+import { ApiStatusModule } from '@features/api-status/api-status.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -31,7 +31,7 @@ import { ApiStatusModule } from './features/api-status/api-status.module';
 
     // Apollo GraphQL
     GraphQLModule,
-    
+
 
     // Custom modules
     SharedModule,

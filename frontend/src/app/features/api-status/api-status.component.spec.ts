@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ApiStatusComponent } from './api-status.component';
 import { Apollo } from 'apollo-angular';
-import { ApolloMock } from '../../core/test/mock/apollo.mock';
+import { ApolloMock } from '@testing/mock/apollo.mock';
 import { CommonModule } from '@angular/common';
 import { ApiStatusModule } from './api-status.module';
 

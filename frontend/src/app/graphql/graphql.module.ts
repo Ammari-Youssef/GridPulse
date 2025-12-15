@@ -2,7 +2,7 @@ import { provideApollo } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { inject, NgModule } from '@angular/core';
 import { ApolloClient, InMemoryCache } from '@apollo/client';
-import { environment } from '../../environments/environment.development';
+import { environment } from '@environments/environment.development';
 
 export function createApollo(): ApolloClient.Options {
   const uri = environment.apiUrl;
