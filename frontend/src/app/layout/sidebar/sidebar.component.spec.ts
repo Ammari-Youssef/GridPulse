@@ -3,6 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SidebarComponent } from './sidebar.component';
 import { ActivatedRoute } from '@angular/router';
 import { ActivatedRouteMock } from '../../core/test/mock/activated-route.mock';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;
@@ -10,7 +12,7 @@ describe('SidebarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SidebarComponent],
+      imports: [CommonModule, MatIconModule],
       providers: [
         {
           provide: ActivatedRoute,

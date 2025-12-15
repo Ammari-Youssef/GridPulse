@@ -1,18 +1,18 @@
 import { TestBed } from '@angular/core/testing';
 
-import { HelloService } from './hello.service';
+import { ApiStatusService } from './api-status.service';
 import { Apollo } from 'apollo-angular';
 import { ApolloMock } from '../test/mock/apollo.mock';
 
-describe('HelloService', () => {
-  let service: HelloService;
+describe('ApiStatusService', () => {
+  let service: ApiStatusService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [{ provide: Apollo, useValue: ApolloMock }],
     });
 
-    service = TestBed.inject(HelloService);
+    service = TestBed.inject(ApiStatusService);
   });
 
   it('should be created', () => {

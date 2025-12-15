@@ -1,16 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HelloComponent } from './hello.component';
+import { ApiStatusComponent } from './api-status.component';
 import { Apollo } from 'apollo-angular';
 import { ApolloMock } from '../../core/test/mock/apollo.mock';
+import { CommonModule } from '@angular/common';
+import { ApiStatusModule } from './api-status.module';
 
-describe('HelloComponent', () => {
-  let component: HelloComponent;
-  let fixture: ComponentFixture<HelloComponent>;
+describe('ApiStatusComponent', () => {
+  let component: ApiStatusComponent;
+  let fixture: ComponentFixture<ApiStatusComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HelloComponent],
+      imports: [CommonModule, ApiStatusModule],
       providers: [
         {
           provide: Apollo,
@@ -19,7 +21,7 @@ describe('HelloComponent', () => {
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(HelloComponent);
+    fixture = TestBed.createComponent(ApiStatusComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

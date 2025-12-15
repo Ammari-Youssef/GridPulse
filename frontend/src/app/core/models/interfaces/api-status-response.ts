@@ -1,4 +1,4 @@
-export interface HelloResponse {
+export interface ApiStatusResponse {
   hello: string;
   version: string;
   uptime: number;
