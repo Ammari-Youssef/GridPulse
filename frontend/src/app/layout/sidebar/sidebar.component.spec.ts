@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SidebarComponent } from './sidebar.component';
 import { ActivatedRoute } from '@angular/router';
-import { ActivatedRouteMock } from '../../core/test/mock/activated-route.mock';
+import { ActivatedRouteMock } from '@testing/mock/activated-route.mock';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 

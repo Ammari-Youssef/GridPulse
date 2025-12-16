@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { ApiStatusService } from './api-status.service';
 import { Apollo } from 'apollo-angular';
-import { ApolloMock } from '../test/mock/apollo.mock';
+import { ApolloMock } from '@testing/mock/apollo.mock';
 
 describe('ApiStatusService', () => {
   let service: ApiStatusService;
