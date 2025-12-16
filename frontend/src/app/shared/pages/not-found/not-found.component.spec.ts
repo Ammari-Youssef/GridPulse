@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NotFoundComponent } from './not-found.component';
 import { ActivatedRoute } from '@angular/router';
-import { ActivatedRouteMock } from '../../../core/test/mock/activated-route.mock';
+import { ActivatedRouteMock } from '@testing/mock/activated-route.mock';
 
 describe('NotFoundComponent', () => {
   let component: NotFoundComponent;

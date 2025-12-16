@@ -2,28 +2,28 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 // Layout
-import { ShellComponent } from './layout/shell/shell.component';
+import { ShellComponent } from '@layout/shell/shell.component';
 
 // Features
-import { DashboardComponent } from './features/dashboard/dashboard/dashboard.component';
-import { FleetListComponent } from './features/fleets/fleet-list/fleet-list.component';
-import { FleetDetailsComponent } from './features/fleets/fleet-details/fleet-details.component';
-import { DeviceListComponent } from './features/devices/device-list/device-list.component';
-import { DeviceDetailsComponent } from './features/devices/device-details/device-details.component';
-import { AnalyticsComponent } from './features/dashboard/analytics/analytics.component';
-import { MessagesComponent } from './features/messages/messages/messages.component';
-import { SettingsComponent } from './features/settings/settings/settings.component';
-import { DeviceManagerComponent } from './features/device-manager/device-manager/device-manager.component';
-import { NotFoundComponent } from './shared/pages/not-found/not-found.component';
-import { ApiStatusComponent } from './features/api-status/api-status.component';
-import { ForbiddenComponent } from './shared/pages/forbidden/forbidden.component';
+import { DashboardComponent } from '@features/dashboard/dashboard/dashboard.component';
+import { FleetListComponent } from '@features/fleets/fleet-list/fleet-list.component';
+import { FleetDetailsComponent } from '@features/fleets/fleet-details/fleet-details.component';
+import { DeviceListComponent } from '@features/devices/device-list/device-list.component';
+import { DeviceDetailsComponent } from '@features/devices/device-details/device-details.component';
+import { AnalyticsComponent } from '@features/dashboard/analytics/analytics.component';
+import { MessagesComponent } from '@features/messages/messages/messages.component';
+import { SettingsComponent } from '@features/settings/settings/settings.component';
+import { DeviceManagerComponent } from '@features/device-manager/device-manager/device-manager.component';
+import { NotFoundComponent } from '@shared/pages/not-found/not-found.component';
+import { ApiStatusComponent } from '@features/api-status/api-status.component';
+import { ForbiddenComponent } from '@shared/pages/forbidden/forbidden.component';
 
 // Guards (CLASS-BASED)
-import { AuthGuard } from './core/guards/auth.guard';
-import { RoleGuard } from './core/guards/role.guard';
+import { AuthGuard } from '@guards/auth.guard';
+import { RoleGuard } from '@guards/role.guard';
 
 // Resolver (CLASS-BASED)
-import { IdTitleResolver } from './core/resolvers/id-title.resolver';
+import { IdTitleResolver } from '@resolvers/id-title.resolver';
 
 const routes: Routes = [
   { path: 'api-status', component: ApiStatusComponent, title: 'API Status GridPulse' },

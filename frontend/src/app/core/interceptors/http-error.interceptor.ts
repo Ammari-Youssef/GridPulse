@@ -8,7 +8,7 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { TokenStorageService } from '../services/token-storage.service';
+import { TokenStorageService } from '@core/services/token-storage.service';
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
