@@ -70,6 +70,7 @@ jobs:
 
           args:
             -Dsonar.projectKey=Ammari-Youssef_GridPulse
+            -Dsonar.organization=ammari-youssef
             -Dsonar.projectBaseDir=./backend
             -Dsonar.sources=src/main/java
             -Dsonar.tests=src/test/java
