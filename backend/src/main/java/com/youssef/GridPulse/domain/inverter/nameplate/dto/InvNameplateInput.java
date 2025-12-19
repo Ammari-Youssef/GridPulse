@@ -2,6 +2,7 @@ package com.youssef.GridPulse.domain.inverter.nameplate.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.youssef.GridPulse.domain.inverter.base.SunSpecModelInput;
+import com.youssef.GridPulse.domain.inverter.nameplate.enums.DerType;
 import jakarta.validation.constraints.*;
 
 import java.util.UUID;
@@ -22,7 +23,7 @@ public record InvNameplateInput(
         Integer modelLength,
 
         @JsonProperty("DERTyp")
-        Integer derType,
+        DerType derType,
 
         @JsonProperty("WRtg")
         Integer wRating,
