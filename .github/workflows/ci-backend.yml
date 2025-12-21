@@ -70,7 +70,7 @@ jobs:
 
       - name: Step 3 - Build backend (required for Sonar)
         working-directory: backend
-        run: mvn clean compile
+        run: mvn clean verify
 
       - name: Step 4 - SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v7.0.0
