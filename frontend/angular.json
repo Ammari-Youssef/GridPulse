@@ -123,6 +123,11 @@
       }
     }
   },
+  "schematics": {
+    "@schematics/angular:component": {
+      "standalone": false
+    }
+  },
   "cli": {
     "schematicCollections": [
       "angular-eslint"
