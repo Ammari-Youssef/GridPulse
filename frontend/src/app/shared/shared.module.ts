@@ -1,16 +1,33 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-// Angular Material Modules
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardActions, MatCardModule } from '@angular/material/card';
-import { ForbiddenComponent } from './pages/forbidden/forbidden.component';
-import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { RouterModule } from '@angular/router';
+
+// Shared Components & Modules
+import { MaterialModule } from '@shared/ui/material/material.module';
+import { ForbiddenComponent } from '@shared/pages/forbidden/forbidden.component';
+import { NotFoundComponent } from '@shared/pages/not-found/not-found.component';
 
 @NgModule({
   declarations: [ForbiddenComponent, NotFoundComponent],
-  exports: [ForbiddenComponent, NotFoundComponent],
-  imports: [CommonModule, MatCardModule, MatCardActions, MatButtonModule, RouterModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+
+    // Material
+    MaterialModule,
+  ],
+  exports: [
+    // Angular
+    CommonModule,
+    RouterModule,
+
+    // Material
+    MaterialModule,
+
+    // Shared Components
+    ForbiddenComponent,
+    NotFoundComponent,
+
+  ],
 })
 export class SharedModule {}
