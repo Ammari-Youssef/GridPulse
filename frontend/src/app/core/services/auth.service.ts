@@ -1,26 +1,147 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { AuthenticationResponse } from '@core/models/interfaces/authentication-response.model';
-import { environment } from '@environments/environment';
+import { BehaviorSubject, catchError, map, Observable, of, switchMap, tap } from 'rxjs';
+
 import { Apollo } from 'apollo-angular';
+
+import { AuthenticationResponse } from '@models/interfaces/authentication-response.model';
+import { TokenStorageService } from '@services/token-storage.service';
+import { User } from '@models/classes/User.model';
+import { Role } from '@models/enums/role.enum';
+
+// GraphQL
+import { CURRENT_USER_QUERY } from '@graphql/schema/auth/queries/current-user.query';
 import { LOGIN_MUTATION } from '@graphql/schema/auth/mutations/login.mutation';
-import { ApolloClient } from '@apollo/client';
+import { LOGOUT_MUTATION } from '@graphql/schema/auth/mutations/logout.mutation';
+import { REFRESH_TOKEN_MUTATION } from '@graphql/schema/auth/mutations/refresh-token.mutation';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly API_URL = environment.apiUrl;
+  private readonly userSubject = new BehaviorSubject<User | null>(null);
+  readonly user$ = this.userSubject.asObservable();
 
-  constructor(private apollo: Apollo) {}
+  constructor(
+    private readonly apollo: Apollo,
+    private readonly tokenStorage: TokenStorageService
+  ) {}
 
-  login(
-    email: string,
-    password: string
-  ): Observable<ApolloClient.MutateResult<AuthenticationResponse>> {
-    return this.apollo.mutate<AuthenticationResponse>({
-      mutation: LOGIN_MUTATION,
-      variables: { email, password },
-    });
+  initAuth(): Observable<User | null> {
+    const token = this.tokenStorage.access;
+    if (!token) {
+      this.userSubject.next(null);
+      return of(null);
+    }
+
+    return this.loadCurrentUser().pipe(
+      catchError(() => {
+        this.logout();
+        return of(null);
+      })
+    );
+  }
+
+  login(email: string, password: string) {
+    return this.apollo
+      .mutate<{ login: AuthenticationResponse }>({
+        mutation: LOGIN_MUTATION,
+        variables: { email, password },
+      })
+      .pipe(
+        tap(({ data }) => {
+          console.log('📦 Full login response:', data);
+
+          if (!data?.login) {
+            console.error('❌ No login data in response');
+            throw new Error('Login failed - no data received');
+          }
+
+          console.log('🔑 Tokens:', {
+            access: data.login.accessToken?.substring(0, 20) + '...',
+            refresh: data.login.refreshToken?.substring(0, 20) + '...',
+          });
+
+          // ← Fix: access nested login object
+          this.tokenStorage.save(
+            data.login.accessToken,
+            data.login.refreshToken
+          );
+        }),
+        switchMap(() => this.loadCurrentUser())
+      );
+  }
+
+  loadCurrentUser() {
+    return this.apollo
+      .query<{ getCurrentUser: User }>({
+        query: CURRENT_USER_QUERY,
+        fetchPolicy: 'network-only',
+      })
+      .pipe(
+        map((res) => {
+          console.log('👤 User loaded:', res.data?.getCurrentUser);
+          return res.data!.getCurrentUser;
+        }),
+        tap((user) => this.userSubject.next(user))
+      );
+  }
+
+  logout(): Observable<boolean> {
+    return this.apollo
+      .mutate<{ logout: boolean }>({
+        mutation: LOGOUT_MUTATION,
+      })
+      .pipe(
+        tap(() => {
+          this.tokenStorage.clear();
+          this.userSubject.next(null);
+          this.apollo.client.resetStore();
+        }),
+        map((res) => res.data?.logout ?? false)
+      );
+  }
+
+  isAuthenticated(): boolean {
+    return !!this.userSubject.value;
+  }
+
+  getUserRole$(): Observable<Role | null> {
+    return this.user$.pipe(map((user) => user?.role ?? null));
+  }
+
+  refreshToken(refreshToken: string) {
+    return this.apollo
+      .mutate<{ refreshToken: AuthenticationResponse }>({
+        mutation: REFRESH_TOKEN_MUTATION,
+        variables: { refreshToken },
+      })
+      .pipe(
+        tap(({ data }) => {
+          console.log('📦 Full refresh token response:', data);
+
+          if (!data?.refreshToken) {
+            console.error('❌ No refresh token data in response');
+            throw new Error('Refresh token failed - no data received');
+          }
+
+          console.log('🔑 Tokens:', {
+            access: data.refreshToken.accessToken?.substring(0, 20) + '...',
+            refresh: data.refreshToken.refreshToken?.substring(0, 20) + '...',
+          });
+
+          // access nested login object
+          this.tokenStorage.save(
+            data.refreshToken.accessToken,
+            data.refreshToken.refreshToken
+          );
+        }),
+        switchMap(() => this.loadCurrentUser())
+      );
+  }
+
+  get currentUser(): User | null {
+    return this.userSubject.value;
+  }
+
+  get role(): Role | null {
+    return this.userSubject.value?.role ?? null;
   }
 }
