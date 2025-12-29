@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -7,6 +7,12 @@ import { Component } from '@angular/core';
   styleUrl: './app.component.scss',
   standalone: false,
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'gridpulse';
+
+  constructor(private readonly authService: AuthService) {}
+
+  ngOnInit(): void {
+    this.authService.initAuth().subscribe();
+  }
 }
