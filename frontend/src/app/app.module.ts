@@ -18,6 +18,7 @@ import { DashboardModule } from '@features/dashboard/dashboard.module';
 
 import { GraphQLModule } from '@graphql/graphql.module';
 import { ApiStatusModule } from '@features/api-status/api-status.module';
+import { AuthModule } from '@features/auth/auth.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -32,24 +33,19 @@ import { ApiStatusModule } from '@features/api-status/api-status.module';
     // Apollo GraphQL
     GraphQLModule,
 
-
     // Custom modules
+    AuthModule,
     SharedModule,
     CoreModule,
     LayoutModule,
 
     // Feature modules
     DashboardModule,
-
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: GlobalHttpErrorInterceptor,
-      multi: true,
-    },
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: GlobalHttpErrorInterceptor, multi: true },
     provideHttpClient(),
   ],
   bootstrap: [AppComponent],

@@ -3,15 +3,16 @@ import { HttpLink } from 'apollo-angular/http';
 import { inject, NgModule } from '@angular/core';
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { environment } from '@environments/environment.development';
+import { authLink } from '@graphql/config/auth-link';
 
 export function createApollo(): ApolloClient.Options {
   const uri = environment.apiUrl;
   const httpLink = inject(HttpLink);
 
-  return {
-    link: httpLink.create({ uri }),
-    cache: new InMemoryCache(),
-  };
+ return {
+   link: authLink.concat(httpLink.create({ uri })),
+   cache: new InMemoryCache(),
+ };
 }
 
 @NgModule({
