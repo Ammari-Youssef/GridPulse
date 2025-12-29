@@ -1,37 +1,21 @@
 import { Injectable } from '@angular/core';
-import {
-  CanActivate,
-  ActivatedRouteSnapshot,
-  Router,
-  RouterStateSnapshot,
-} from '@angular/router';
-import { TokenStorageService } from '@core/services/token-storage.service';
+import { CanActivate, Router, UrlTree } from '@angular/router';
+import { filter, map, Observable, take } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
+import { AuthService } from '@core/services/auth.service';
+
+@Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
   constructor(
-    private tokenService: TokenStorageService,
-    private router: Router
+    private readonly authService: AuthService,
+    private readonly router: Router
   ) {}
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    _state: RouterStateSnapshot
-  ): boolean | ReturnType<Router['parseUrl']> {
-    const isLogged = this.tokenService.isAuthenticated();
-    const userRole = this.tokenService.getUserRole();
-    const requiredRole = route.data?.['role'];
-
-    if (!isLogged) {
-      return this.router.parseUrl('/login');
-    }
-
-    if (requiredRole && userRole !== requiredRole) {
-      return this.router.parseUrl('/forbidden');
-    }
-
-    return true;
+  canActivate(): Observable<boolean | UrlTree> {
+    return this.authService.user$.pipe(
+      filter((user) => user !== null),
+      take(1),
+      map((user) => (user ? true : this.router.parseUrl('/login')))
+    );
   }
 }
