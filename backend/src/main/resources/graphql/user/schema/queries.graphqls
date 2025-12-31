@@ -4,6 +4,7 @@ extend type Query {
     getCurrentUser:  User!
     getUserById(id: UUID!): User!
     getUsersActivityHistory: [UserHistory!]!
+    whoAmi: String
 
     # Offset Pagination
     getAllUserPaged(pageRequest: PageRequestInput!): PageResponse_User!
