@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { Role } from '@core/models/enums/role.enum';
+import { AuthService } from '@core/services/auth.service';
+import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-sidebar',
@@ -7,13 +11,12 @@ import { Component } from '@angular/core';
   standalone: false,
 })
 export class SidebarComponent {
-  userRole: 'ADMIN' | 'USER' | null = 'ADMIN';
+  userRole$: Observable<Role | null>;
 
-  constructor() {
-    const token = localStorage.getItem('access_token');
-    if (token) {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      this.userRole = payload.role;
-    }
+  constructor(private readonly authService: AuthService) {
+    this.userRole$ = this.authService.getUserRole$();
   }
+
+  // Expose Role enum to template
+  readonly Role = Role;
 }
