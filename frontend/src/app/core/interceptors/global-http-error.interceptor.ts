@@ -11,12 +11,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable()
 export class GlobalHttpErrorInterceptor implements HttpInterceptor {
-  constructor(private snackBar: MatSnackBar) {}
+  constructor(private readonly snackBar: MatSnackBar) {}
 
   intercept(
-    req: HttpRequest<any>,
+    req: HttpRequest<unknown>,
     next: HttpHandler
-  ): Observable<HttpEvent<any>> {
+  ): Observable<HttpEvent<unknown>> {
     return next.handle(req).pipe(
       retry({ count: 3, delay: 1000 }),
       tap({

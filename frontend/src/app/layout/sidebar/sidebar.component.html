@@ -1,32 +1,65 @@
-<mat-nav-list>
-    <a mat-list-item routerLink="/" routerLinkActive="active-link">
-        <mat-icon>dashboard</mat-icon>
-        <span>Dashboard</span>
-    </a>
+<div class="flex flex-col h-full bg-white border-r border-gray-200">
 
-    <a mat-list-item routerLink="/devices" routerLinkActive="active-link" >
-        <mat-icon>devices</mat-icon>
-        <span>Devices</span>
-    </a>
+    <!-- Logo Section -->
+    <div class="flex items-center gap-3 px-4 py-6 border-b border-gray-200">
+        <img src="/logo.svg" alt="GridPulse Logo" class="w-10 h-10" />
+        <span class="text-xl font-bold text-gray-900">GridPulse</span>
+    </div>
 
-    <a mat-list-item routerLink="/fleets" routerLinkActive="active-link">
-        <mat-icon>device_hub</mat-icon>
-        <span>Fleets</span>
-    </a>
+    <!-- Navigation Links -->
+    <mat-nav-list class="flex-1 pt-4">
+        <a mat-list-item routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}"
+            class="!flex !items-center !gap-4 !px-4 !py-3 !mb-1 !mx-2 !rounded-lg hover:!bg-gray-100 !transition-colors">
+            <mat-icon class="!text-gray-600">dashboard</mat-icon>
+            <span class="text-sm font-medium">Dashboard</span>
+        </a>
 
-    <a mat-list-item routerLink="/messages" routerLinkActive="active-link">
-        <mat-icon>notification_important</mat-icon>
-        <span>Alerts</span>
-    </a>
+        <a mat-list-item routerLink="/devices" routerLinkActive="active-link"
+            class="!flex !items-center !gap-4 !px-4 !py-3 !mb-1 !mx-2 !rounded-lg hover:!bg-gray-100 !transition-colors">
+            <mat-icon class="!text-gray-600">devices</mat-icon>
+            <span class="text-sm font-medium">Devices</span>
+        </a>
 
-    <a mat-list-item routerLink="/analytics" routerLinkActive="active-link">
-        <mat-icon>analytics</mat-icon>
-        <span>Analytics</span>
-    </a>
-@if (userRole === 'ADMIN') {
-    <a mat-list-item routerLink="/settings" routerLinkActive="active-link">
-        <mat-icon>settings</mat-icon>
-        <span>Settings</span>
-    </a>
-}
-</mat-nav-list>
+        <a mat-list-item routerLink="/fleets" routerLinkActive="active-link"
+            class="!flex !items-center !gap-4 !px-4 !py-3 !mb-1 !mx-2 !rounded-lg hover:!bg-gray-100 !transition-colors">
+            <mat-icon class="!text-gray-600">device_hub</mat-icon>
+            <span class="text-sm font-medium">Fleets</span>
+        </a>
+
+        <a mat-list-item routerLink="/messages" routerLinkActive="active-link"
+            class="!flex !items-center !gap-4 !px-4 !py-3 !mb-1 !mx-2 !rounded-lg hover:!bg-gray-100 !transition-colors">
+            <mat-icon class="!text-gray-600">notification_important</mat-icon>
+            <span class="text-sm font-medium">Alerts</span>
+        </a>
+
+        <a mat-list-item routerLink="/analytics" routerLinkActive="active-link"
+            class="!flex !items-center !gap-4 !px-4 !py-3 !mb-1 !mx-2 !rounded-lg hover:!bg-gray-100 !transition-colors">
+            <mat-icon class="!text-gray-600">analytics</mat-icon>
+            <span class="text-sm font-medium">Analytics</span>
+        </a>
+
+        <!-- Admin Only -->
+        <a *ngIf="(userRole$ | async) === Role.ADMIN" mat-list-item routerLink="/settings"
+            routerLinkActive="active-link"
+            class="!flex !items-center !gap-4 !px-4 !py-3 !mb-1 !mx-2 !rounded-lg hover:!bg-gray-100 !transition-colors">
+            <mat-icon class="!text-gray-600">settings</mat-icon>
+            <span class="text-sm font-medium">Settings</span>
+        </a>
+    </mat-nav-list>
+
+    <!-- Footer (Optional - User info or version) -->
+    <div class="sidebar-footer">
+        <div class="stats-card">
+            <div class="stats-icon-wrapper">
+                <img src="/solar-panels.png" alt="Solar Energy" class="stats-icon" />
+            </div>
+            <div class="stats-info">
+                <p class="stats-label">Energy Status</p>
+                <div class="stats-value">
+                    <span class="status-dot active"></span>
+                    <span class="status-text">All Systems Active</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

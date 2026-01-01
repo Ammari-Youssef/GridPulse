@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { AuthService } from '@core/services/auth.service';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,6 +9,11 @@ import { Component } from '@angular/core';
   standalone: false,
 })
 export class DashboardComponent {
+  readonly firstname$;
 
-  username = "John"
+  constructor(private readonly authService: AuthService) {
+    this.firstname$ = this.authService.user$.pipe(
+      map((user) => user?.firstname)
+    );
+  }
 }

@@ -1,14 +1,72 @@
-<mat-toolbar color="primary">
-    <b>GridPulse</b>
+<mat-toolbar class="navbar">
 
-    <span class="spacer"></span>
+    <!-- Left side - Search -->
+    <div class="flex-1 max-w-2xl">
+        <mat-form-field appearance="outline" class="search-field">
+            <mat-icon matPrefix class="search-icon">search</mat-icon>
+            <input matInput placeholder="Search devices, fleets, alerts..." class="search-input" />
+        </mat-form-field>
+    </div>
 
-    <button mat-icon-button matTooltip="Notifications">
-        <mat-icon>notifications</mat-icon>
-    </button>
+    <!-- Right side - Actions -->
+    <div class="flex items-center gap-2 ml-auto">
+        <!-- Notifications Button with Badge -->
+        <button mat-icon-button matTooltip="Notifications" class="navbar-icon-btn notification-btn">
+            <mat-icon>notifications</mat-icon>
+            <span class="notification-badge"></span>
+        </button>
 
-    <button mat-icon-button matTooltip="Check Your Account">
-        <mat-icon>account_circle</mat-icon>
-    </button>
-    
+        <!-- Theme Toggle Button -->
+        <button mat-icon-button matTooltip="Toggle Theme" class="navbar-icon-btn" (click)="toggleTheme()">
+            <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+        </button>
+
+        <!-- User Menu -->
+        <ng-container *ngIf="user$ | async as user">
+            <!-- Avatar Button -->
+            <button mat-icon-button [matMenuTriggerFor]="userMenu" class="avatar-btn">
+                <img [src]="getAvatarUrl()" alt="User Avatar" class="avatar-image" />
+            </button>
+
+            <!-- Dropdown Menu -->
+            <mat-menu #userMenu="matMenu" xPosition="before">
+                <!-- User Info Header -->
+                <div class="menu-header" mat-menu-item disabled>
+                    <div class="flex items-center gap-3">
+                        <img [src]="getAvatarUrl()" alt="Avatar" class="w-10 h-10 rounded-full object-cover" />
+                        <div class="flex flex-col overflow-hidden">
+                            <span class="font-semibold text-sm text-gray-900 truncate">
+                                {{ user.firstname }} {{ user.lastname }}
+                            </span>
+                            <span class="text-xs text-gray-600 truncate">
+                                {{ user.email }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <mat-divider></mat-divider>
+
+                <!-- Profile Option -->
+                <button mat-menu-item class="menu-item">
+                    <mat-icon>person</mat-icon>
+                    <span>Profile</span>
+                </button>
+
+                <!-- Settings Option -->
+                <button mat-menu-item class="menu-item">
+                    <mat-icon>settings</mat-icon>
+                    <span>Settings</span>
+                </button>
+
+                <mat-divider></mat-divider>
+
+                <!-- Logout Option -->
+                <button mat-menu-item (click)="logout()" class="menu-item logout">
+                    <mat-icon>logout</mat-icon>
+                    <span>Logout</span>
+                </button>
+            </mat-menu>
+        </ng-container>
+    </div>
 </mat-toolbar>

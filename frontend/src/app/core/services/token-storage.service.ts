@@ -1,41 +1,30 @@
 import { Injectable } from '@angular/core';
-
-const ACCESS_TOKEN_KEY = 'token';
-
 @Injectable({
   providedIn: 'root',
 })
 export class TokenStorageService {
-  // Store token
-  setToken(token: string): void {
-    localStorage.setItem(ACCESS_TOKEN_KEY, token);
+  private readonly ACCESS_TOKEN_KEY = 'access_token';
+  private readonly REFRESH_TOKEN_KEY = 'refresh_token';
+
+  save(accessToken: string, refreshToken: string): void {
+    console.log('💾 Saving tokens');
+    localStorage.setItem(this.ACCESS_TOKEN_KEY, accessToken);
+    localStorage.setItem(this.REFRESH_TOKEN_KEY, refreshToken);
   }
 
-  // Retrieve token
-  getToken(): string | null {
-    return localStorage.getItem(ACCESS_TOKEN_KEY);
+  get access(): string | null {
+    const token = localStorage.getItem(this.ACCESS_TOKEN_KEY);
+    console.log('🔍 Getting token:', token ? 'EXISTS' : 'NULL');
+    return token;
   }
 
-  // Remove token
-  clearToken(): void {
-    localStorage.removeItem(ACCESS_TOKEN_KEY);
+  get refresh(): string | null {
+    return localStorage.getItem(this.REFRESH_TOKEN_KEY);
   }
 
-  // Check if authenticated
-  isAuthenticated(): boolean {
-    return true //!!this.getToken();
-  }
-
-  // 🔥 Decode JWT payload
-  getUserRole(): 'ADMIN' | 'USER' | null {
-    const token = this.getToken();
-    if (!token) return null;
-
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.role || null;
-    } catch {
-      return null
-    }
+  clear(): void {
+    console.log('🗑️ Clearing tokens');
+    localStorage.removeItem(this.ACCESS_TOKEN_KEY);
+    localStorage.removeItem(this.REFRESH_TOKEN_KEY);
   }
 }
