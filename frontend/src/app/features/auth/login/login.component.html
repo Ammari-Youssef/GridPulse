@@ -1,0 +1,114 @@
+<!-- login.component.html -->
+<div class="login-container">
+    <div class="login-wrapper">
+        <mat-card class="login-card">
+            <mat-card-content class="p-0">
+                <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                    <div class="grid md:grid-cols-2 gap-0">
+                        <!-- Left Side - Branding -->
+                        <div class="login-branding">
+                            <div class="flex items-center gap-3 mb-8">
+                                <img src="favicon.svg" alt="GridPulse Logo" class="w-12 h-12" />
+                                <span class="text-2xl font-bold text-gray-900">GridPulse</span>
+                            </div>
+
+                            <h1 class="text-3xl font-bold text-gray-900 mb-2">
+                                Welcome back
+                            </h1>
+                            <p class="text-gray-600 text-base">
+                                Sign in to continue to your dashboard
+                            </p>
+
+                            <!-- Optional: Add illustration or features list -->
+                            <div class="mt-12 hidden md:block">
+                                <div class="flex items-start gap-3 mb-4">
+                                    <mat-icon class="text-blue-600">bolt</mat-icon>
+                                    <div>
+                                        <h3 class="font-semibold text-sm text-gray-900">Real-time Monitoring</h3>
+                                        <p class="text-xs text-gray-600">Track your grid performance instantly</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3 mb-4">
+                                    <mat-icon class="text-blue-600">analytics</mat-icon>
+                                    <div>
+                                        <h3 class="font-semibold text-sm text-gray-900">Advanced Analytics</h3>
+                                        <p class="text-xs text-gray-600">Make data-driven decisions</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <mat-icon class="text-blue-600">security</mat-icon>
+                                    <div>
+                                        <h3 class="font-semibold text-sm text-gray-900">Secure & Reliable</h3>
+                                        <p class="text-xs text-gray-600">Enterprise-grade security</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Side - Form -->
+                        <div class="login-form-section">
+                            <div class="space-y-4">
+                                <!-- Email Field -->
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <mat-label>Email</mat-label>
+                                    <input matInput type="email" formControlName="email"
+                                        placeholder="you@gridpulse.io" />
+                                    <mat-icon matPrefix class="form-icon">email</mat-icon>
+
+                                    <mat-error *ngIf="email?.hasError('required')">
+                                        Email is required
+                                    </mat-error>
+                                    <mat-error *ngIf="email?.hasError('email')">
+                                        Please enter a valid email
+                                    </mat-error>
+                                </mat-form-field>
+
+                                <!-- Password Field -->
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <mat-label>Password</mat-label>
+                                    <input matInput type="password" formControlName="password"
+                                        placeholder="Enter your password" />
+                                    <mat-icon matPrefix class="form-icon">lock</mat-icon>
+
+                                    <mat-error *ngIf="password?.hasError('required')">
+                                        Password is required
+                                    </mat-error>
+                                    <mat-error *ngIf="password?.hasError('minlength')">
+                                        Password must be at least 8 characters
+                                    </mat-error>
+                                </mat-form-field>
+
+                                <!-- Error Message -->
+                                <div *ngIf="errorMessage" class="error-alert">
+                                    <mat-icon>error_outline</mat-icon>
+                                    <span>{{ errorMessage }}</span>
+                                </div>
+
+                                <!-- Forgot Password Link -->
+                                <div class="text-right">
+                                    <a href="#" class="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                                        Forgot password?
+                                    </a>
+                                </div>
+
+                                <!-- Sign In Button -->
+                                <button mat-flat-button color="primary" type="submit" class="w-full sign-in-btn"
+                                    [disabled]="form.invalid">
+                                    Sign in
+                                </button>
+
+                                <!-- Create Account Link -->
+                                <div class="text-center mt-4">
+                                    <span class="text-sm text-gray-600">Don't have an account? </span>
+                                    <a href="#" class="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                                        Create account
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

@@ -8,6 +8,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+
 
 const MATERIAL_MODULES = [
   MatButtonModule,
@@ -17,6 +23,18 @@ const MATERIAL_MODULES = [
   MatInputModule,
   MatToolbarModule,
   MatSnackBarModule,
+  MatToolbarModule,
+  MatMenuModule,
+  MatDividerModule,
+  MatTooltipModule,
+
+  MatToolbarModule,
+  MatIconModule,
+  MatButtonModule,
+  MatTooltipModule,
+  MatSidenavModule,
+  MatListModule,
+  MatToolbarModule
 ];
 
 @NgModule({

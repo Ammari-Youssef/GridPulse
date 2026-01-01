@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
 
@@ -18,6 +18,13 @@ import { DashboardModule } from '@features/dashboard/dashboard.module';
 
 import { GraphQLModule } from '@graphql/graphql.module';
 import { ApiStatusModule } from '@features/api-status/api-status.module';
+import { AuthModule } from '@features/auth/auth.module';
+
+// Initializers 
+import { initializeApp } from '@core/init/app-initializer';
+// Services 
+import { AuthService } from '@core/services/auth.service';
+import { TokenStorageService } from '@core/services/token-storage.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -32,24 +39,25 @@ import { ApiStatusModule } from '@features/api-status/api-status.module';
     // Apollo GraphQL
     GraphQLModule,
 
-
     // Custom modules
+    AuthModule,
     SharedModule,
     CoreModule,
     LayoutModule,
 
     // Feature modules
     DashboardModule,
-
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     {
-      provide: HTTP_INTERCEPTORS,
-      useClass: GlobalHttpErrorInterceptor,
+      provide: APP_INITIALIZER,
+      useFactory: initializeApp,
+      deps: [AuthService, TokenStorageService],
       multi: true,
     },
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: GlobalHttpErrorInterceptor, multi: true },
     provideHttpClient(),
   ],
   bootstrap: [AppComponent],

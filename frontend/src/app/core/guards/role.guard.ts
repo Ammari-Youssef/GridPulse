@@ -1,27 +1,27 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, Router } from '@angular/router';
-import { TokenStorageService } from '@core/services/token-storage.service';
+import { CanActivate, ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
+import { filter, map, Observable, take } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
+import { Role } from '@core/models/enums/role.enum';
+import { AuthService } from '@core/services/auth.service';
+
+
+@Injectable({ providedIn: 'root' })
 export class RoleGuard implements CanActivate {
-
   constructor(
-    private tokenService: TokenStorageService,
-    private router: Router
+    private readonly authService: AuthService,
+    private readonly router: Router
   ) {}
 
-  canActivate(
-    route: ActivatedRouteSnapshot
-  ): boolean | ReturnType<Router['parseUrl']> {
-    const expectedRole = route.data['role'] as 'ADMIN' | 'USER';
-    const userRole = this.tokenService.getUserRole();
+  canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
+    const expectedRole = route.data['role'] as Role;
 
-    if (userRole === expectedRole) {
-      return true;
-    }
-
-    return this.router.parseUrl('/forbidden');
+    return this.authService.user$.pipe(
+      filter((user) => !!user),
+      take(1),
+      map((user) =>
+        user.role === expectedRole ? true : this.router.parseUrl('/forbidden')
+      )
+    );
   }
 }

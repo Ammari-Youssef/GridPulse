@@ -14,8 +14,10 @@ import { AnalyticsComponent } from '@features/dashboard/analytics/analytics.comp
 import { MessagesComponent } from '@features/messages/messages/messages.component';
 import { SettingsComponent } from '@features/settings/settings/settings.component';
 import { DeviceManagerComponent } from '@features/device-manager/device-manager/device-manager.component';
-import { NotFoundComponent } from '@shared/pages/not-found/not-found.component';
+
+// Shared Pages
 import { ApiStatusComponent } from '@features/api-status/api-status.component';
+import { NotFoundComponent } from '@shared/pages/not-found/not-found.component';
 import { ForbiddenComponent } from '@shared/pages/forbidden/forbidden.component';
 
 // Guards (CLASS-BASED)
@@ -26,8 +28,16 @@ import { RoleGuard } from '@guards/role.guard';
 import { IdTitleResolver } from '@resolvers/id-title.resolver';
 
 const routes: Routes = [
-  { path: 'api-status', component: ApiStatusComponent, title: 'API Status GridPulse' },
-
+  {
+    path: 'api-status',
+    component: ApiStatusComponent,
+    title: 'API Status GridPulse',
+  },
+  {
+    path: 'login',
+    loadChildren: () =>
+      import('./features/auth/auth.module').then((m) => m.AuthModule),
+  },
   {
     path: 'forbidden',
     component: ForbiddenComponent,

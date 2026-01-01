@@ -1,3 +1,152 @@
-.spacer {
-    flex: 1;
+// Main navbar styling
+.navbar {
+    background-color: white !important;
+    color: #111827 !important;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+    height: 64px;
+    padding: 0 24px !important;
+    display: flex;
+    align-items: center;
+}
+
+// Icon buttons
+.navbar-icon-btn {
+    color: #6b7280 !important;
+    transition: all 0.2s;
+
+    &:hover {
+        background-color: #f3f4f6 !important;
+        color: #111827 !important;
+    }
+}
+
+// Notification button with badge
+.notification-btn {
+    position: relative;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 8px;
+    height: 8px;
+    background-color: #ef4444;
+    border: 2px solid white;
+    border-radius: 50%;
+    display: block;
+}
+
+// Avatar button
+.avatar-btn {
+    padding: 4px !important;
+    width: 40px;
+    height: 40px;
+    margin-left: 8px;
+    transition: transform 0.2s;
+
+    &:hover {
+        transform: scale(1.05);
+    }
+}
+
+.avatar-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e5e7eb;
+    transition: border-color 0.2s;
+
+    .avatar-btn:hover & {
+        border-color: #3b82f6;
+    }
+}
+
+// Menu overrides
+::ng-deep .mat-mdc-menu-panel {
+    min-width: 280px !important;
+}
+
+::ng-deep .mat-mdc-menu-item {
+    &.menu-header {
+        cursor: default !important;
+        opacity: 1 !important;
+
+        &:hover {
+            background: transparent !important;
+        }
+    }
+
+    &.menu-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+
+        mat-icon {
+            color: #6b7280;
+        }
+
+        &:hover {
+            background-color: #f3f4f6;
+        }
+
+        &.logout {
+            color: #dc2626;
+
+            mat-icon {
+                color: #dc2626;
+            }
+
+            &:hover {
+                background-color: #fee2e2;
+            }
+        }
+    }
+}
+
+// Search field
+.search-field {
+    width: 100%;
+    max-width: 500px;
+
+    ::ng-deep {
+        .mat-mdc-form-field-wrapper {
+            padding-bottom: 0;
+        }
+
+        .mat-mdc-text-field-wrapper {
+            background-color: #f3f4f6;
+            border-radius: 8px;
+        }
+
+        .mat-mdc-form-field-subscript-wrapper {
+            display: none;
+        }
+
+        .mdc-notched-outline {
+            display: none;
+        }
+
+        .mat-mdc-form-field-infix {
+            padding: 8px 0;
+            min-height: auto;
+        }
+    }
+
+    @media (max-width: 768px) {
+        display: none;
+    }
+}
+
+.search-icon {
+    color: #9ca3af;
+    margin-right: 8px;
+}
+
+.search-input {
+    font-size: 14px;
+    color: #111827;
 }
