@@ -8,7 +8,7 @@ import { ApiStatusResponse } from '@core/models/interfaces/api-status-response';
   providedIn: 'root',
 })
 export class ApiStatusService {
-  constructor(private apollo: Apollo) {}
+  constructor(private readonly apollo: Apollo) {}
 
   getHello() {
     return this.apollo
@@ -18,7 +18,6 @@ export class ApiStatusService {
       })
       .valueChanges.pipe(
         catchError((err) => {
-          console.error('Apollo error (service):', err);
           return throwError(() => err);
         })
       );

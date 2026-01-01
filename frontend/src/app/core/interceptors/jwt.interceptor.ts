@@ -20,8 +20,6 @@ export class JwtInterceptor implements HttpInterceptor {
 
     // Only add Authorization header if token valid
     if (token && typeof token === 'string' && token.trim().length > 0) {
-      console.log('🔐 Adding Authorization header');
-
       const authReq = req.clone({
         setHeaders: {
           Authorization: `Bearer ${token}`,
@@ -30,7 +28,6 @@ export class JwtInterceptor implements HttpInterceptor {
       return next.handle(authReq);
     }
 
-    console.log('⚠️ No valid token available, skipping Authorization header');
     return next.handle(req);
   }
 }
