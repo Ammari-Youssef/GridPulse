@@ -4,7 +4,6 @@ import { NavbarComponent } from './navbar.component';
 import { CommonModule } from '@angular/common';
 import { Apollo } from 'apollo-angular';
 import { ApolloMock } from '@testing/mock/apollo.mock';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from '@shared/ui/material/material.module';
 
 describe('NavbarComponent', () => {
@@ -13,7 +12,7 @@ describe('NavbarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CommonModule, MaterialModule, BrowserAnimationsModule],
+      imports: [CommonModule, MaterialModule],
       declarations: [NavbarComponent],
       providers: [ { provide: Apollo, useValue: ApolloMock } ]
     }).compileComponents();
