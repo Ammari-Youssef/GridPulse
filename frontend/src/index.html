@@ -10,6 +10,23 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body class="mat-typography">
-  <app-root></app-root>
+<app-root>
+  <!-- Loading screen - Clean minimal version -->
+  <div class="flex flex-col justify-center items-center h-screen bg-[#2563eb]">
+    <div class="text-center text-white">
+      <!-- Logo with subtle animation -->
+      <div class="mb-8 relative">
+        <img src="favicon.svg" alt="GridPulse" class="w-20 h-20 mx-auto animate-pulse" />
+      </div>
+
+      <!-- Elegant spinner -->
+      <div class="w-12 h-12 mx-auto mb-6 border-3 border-white/20 border-t-white rounded-full animate-spin"></div>
+
+      <!-- Text -->
+      <h2 class="text-3xl font-bold mb-2">GridPulse</h2>
+      <p class="text-base opacity-80">Initializing...</p>
+    </div>
+  </div>
+</app-root>
 </body>
 </html>
