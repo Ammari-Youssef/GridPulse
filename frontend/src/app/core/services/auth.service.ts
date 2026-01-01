@@ -25,21 +25,31 @@ export class AuthService {
   ) {}
 
   initAuth(): Observable<User | null> {
+    console.log('🔐 initAuth: Starting authentication check');
+
     const token = this.tokenStorage.access;
+
     if (!token) {
+      console.log('⚠️ initAuth: No token found');
       this.userSubject.next(null);
       return of(null);
     }
 
+    console.log('🔑 initAuth: Token found, loading user...');
     return this.loadCurrentUser().pipe(
-      catchError(() => {
-        this.logout();
+      tap((user) => {
+        console.log('✅ initAuth: User loaded successfully', user.email);
+      }),
+      catchError((error) => {
+        console.error('❌ initAuth: Failed to load user', error);
+        this.tokenStorage.clear();
+        this.userSubject.next(null);
         return of(null);
       })
     );
   }
 
-  login(email: string, password: string) {
+  login(email: string, password: string): Observable<User> {
     return this.apollo
       .mutate<{ login: AuthenticationResponse }>({
         mutation: LOGIN_MUTATION,
@@ -59,7 +69,6 @@ export class AuthService {
             refresh: data.login.refreshToken?.substring(0, 20) + '...',
           });
 
-          // ← Fix: access nested login object
           this.tokenStorage.save(
             data.login.accessToken,
             data.login.refreshToken
@@ -69,7 +78,7 @@ export class AuthService {
       );
   }
 
-  loadCurrentUser() {
+  loadCurrentUser(): Observable<User> {
     return this.apollo
       .query<{ getCurrentUser: User }>({
         query: CURRENT_USER_QUERY,
@@ -95,7 +104,14 @@ export class AuthService {
           this.userSubject.next(null);
           this.apollo.client.resetStore();
         }),
-        map((res) => res.data?.logout ?? false)
+        map((res) => res.data?.logout ?? false),
+        catchError(() => {
+          // Even if server logout fails, clear local state
+          this.tokenStorage.clear();
+          this.userSubject.next(null);
+          this.apollo.client.resetStore();
+          return of(false);
+        })
       );
   }
 
@@ -107,7 +123,7 @@ export class AuthService {
     return this.user$.pipe(map((user) => user?.role ?? null));
   }
 
-  refreshToken(refreshToken: string) {
+  refreshToken(refreshToken: string): Observable<User> {
     return this.apollo
       .mutate<{ refreshToken: AuthenticationResponse }>({
         mutation: REFRESH_TOKEN_MUTATION,
@@ -127,7 +143,6 @@ export class AuthService {
             refresh: data.refreshToken.refreshToken?.substring(0, 20) + '...',
           });
 
-          // access nested login object
           this.tokenStorage.save(
             data.refreshToken.accessToken,
             data.refreshToken.refreshToken

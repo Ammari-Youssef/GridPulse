@@ -21,8 +21,15 @@ export class NavbarComponent {
   }
 
   logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/login']);
+    this.authService.logout().subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: () => {
+        // Still navigate even if server logout fails
+        this.router.navigate(['/login']);
+      },
+    });
   }
 
   getAvatarUrl(): string {

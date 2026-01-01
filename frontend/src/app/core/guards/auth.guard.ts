@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, UrlTree } from '@angular/router';
-import { filter, map, Observable, take } from 'rxjs';
-
-import { AuthService } from '@core/services/auth.service';
+import {
+  CanActivate,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  Router,
+} from '@angular/router';
+import { AuthService } from '@services/auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
@@ -11,11 +14,23 @@ export class AuthGuard implements CanActivate {
     private readonly router: Router
   ) {}
 
-  canActivate(): Observable<boolean | UrlTree> {
-    return this.authService.user$.pipe(
-      filter((user) => user !== null),
-      take(1),
-      map((user) => (user ? true : this.router.parseUrl('/login')))
-    );
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): boolean {
+    console.log('🛡️ AuthGuard: Checking authentication');
+
+    const isAuthenticated = this.authService.isAuthenticated();
+
+    if (isAuthenticated) {
+      console.log('✅ AuthGuard: User authenticated, allowing access');
+      return true;
+    }
+
+    console.log('❌ AuthGuard: Not authenticated, redirecting to login');
+    this.router.navigate(['/login'], {
+      queryParams: { returnUrl: state.url },
+    });
+    return false;
   }
 }
