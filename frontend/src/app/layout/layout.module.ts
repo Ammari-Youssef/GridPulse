@@ -10,7 +10,6 @@ import { SidebarComponent } from '@layout/sidebar/sidebar.component';
 // Angular Material
 import { MaterialModule } from '@shared/ui/material/material.module';
 
-
 @NgModule({
   declarations: [NavbarComponent, ShellComponent, SidebarComponent],
   exports: [ShellComponent, NavbarComponent, SidebarComponent],
@@ -18,10 +17,8 @@ import { MaterialModule } from '@shared/ui/material/material.module';
     CommonModule,
     RouterModule,
 
-    // Angular Material Module  
+    // Angular Material Module
     MaterialModule,
-
-    RouterModule,
   ],
 })
 export class LayoutModule {}
