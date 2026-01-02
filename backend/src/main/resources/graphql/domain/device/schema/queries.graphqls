@@ -18,4 +18,7 @@
     getDeviceByFleetIdPaged(fleetId: UUID!, pageRequest: PageRequestInput!): PageResponse_Device!
     getDevicesByUserIdPaged(userId: UUID!, pageRequest: PageRequestInput!): PageResponse_Device!
     getDevicesByOperatorIdPaged(operatorId: UUID!, pageRequest: PageRequestInput!): PageResponse_Device!
+
+    # Dashboard metrics query
+    getDeviceStats: DeviceStats!
 }
