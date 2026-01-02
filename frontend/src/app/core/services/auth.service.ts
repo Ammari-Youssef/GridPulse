@@ -25,23 +25,16 @@ export class AuthService {
   ) {}
 
   initAuth(): Observable<User | null> {
-    console.log('🔐 initAuth: Starting authentication check');
-
+  
     const token = this.tokenStorage.access;
 
     if (!token) {
-      console.log('⚠️ initAuth: No token found');
       this.userSubject.next(null);
       return of(null);
     }
 
-    console.log('🔑 initAuth: Token found, loading user...');
     return this.loadCurrentUser().pipe(
-      tap((user) => {
-        console.log('✅ initAuth: User loaded successfully', user.email);
-      }),
-      catchError((error) => {
-        console.error('❌ initAuth: Failed to load user', error);
+      catchError(() => {
         this.tokenStorage.clear();
         this.userSubject.next(null);
         return of(null);
@@ -57,17 +50,10 @@ export class AuthService {
       })
       .pipe(
         tap(({ data }) => {
-          console.log('📦 Full login response:', data);
 
           if (!data?.login) {
-            console.error('❌ No login data in response');
             throw new Error('Login failed - no data received');
           }
-
-          console.log('🔑 Tokens:', {
-            access: data.login.accessToken?.substring(0, 20) + '...',
-            refresh: data.login.refreshToken?.substring(0, 20) + '...',
-          });
 
           this.tokenStorage.save(
             data.login.accessToken,
@@ -86,7 +72,6 @@ export class AuthService {
       })
       .pipe(
         map((res) => {
-          console.log('👤 User loaded:', res.data?.getCurrentUser);
           return res.data!.getCurrentUser;
         }),
         tap((user) => this.userSubject.next(user))
@@ -131,17 +116,9 @@ export class AuthService {
       })
       .pipe(
         tap(({ data }) => {
-          console.log('📦 Full refresh token response:', data);
-
           if (!data?.refreshToken) {
-            console.error('❌ No refresh token data in response');
             throw new Error('Refresh token failed - no data received');
           }
-
-          console.log('🔑 Tokens:', {
-            access: data.refreshToken.accessToken?.substring(0, 20) + '...',
-            refresh: data.refreshToken.refreshToken?.substring(0, 20) + '...',
-          });
 
           this.tokenStorage.save(
             data.refreshToken.accessToken,

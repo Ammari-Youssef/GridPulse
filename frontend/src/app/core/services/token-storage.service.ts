@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -7,15 +8,12 @@ export class TokenStorageService {
   private readonly REFRESH_TOKEN_KEY = 'refresh_token';
 
   save(accessToken: string, refreshToken: string): void {
-    console.log('💾 Saving tokens');
     localStorage.setItem(this.ACCESS_TOKEN_KEY, accessToken);
     localStorage.setItem(this.REFRESH_TOKEN_KEY, refreshToken);
   }
 
   get access(): string | null {
-    const token = localStorage.getItem(this.ACCESS_TOKEN_KEY);
-    console.log('🔍 Getting token:', token ? 'EXISTS' : 'NULL');
-    return token;
+    return localStorage.getItem(this.ACCESS_TOKEN_KEY);
   }
 
   get refresh(): string | null {
@@ -23,7 +21,6 @@ export class TokenStorageService {
   }
 
   clear(): void {
-    console.log('🗑️ Clearing tokens');
     localStorage.removeItem(this.ACCESS_TOKEN_KEY);
     localStorage.removeItem(this.REFRESH_TOKEN_KEY);
   }

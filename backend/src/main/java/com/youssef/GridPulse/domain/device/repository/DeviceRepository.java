@@ -2,8 +2,10 @@ package com.youssef.GridPulse.domain.device.repository;
 
 import com.youssef.GridPulse.common.base.BaseRepository;
 import com.youssef.GridPulse.domain.device.entity.Device;
+import com.youssef.GridPulse.domain.device.enums.DeviceStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,5 +18,9 @@ public interface DeviceRepository extends BaseRepository<Device, UUID> {
     Page<Device> findByFleet_Id(UUID fleetId, Pageable pageable);
     Page<Device> findByOperator_Id(UUID operatorId, Pageable pageable);
     Page<Device> findByUser_Id(UUID userId, Pageable pageable);
+
+    // Count devices by status
+    @Query("SELECT COUNT(d) FROM Device d WHERE d.status = :status")
+    Long countByStatus(DeviceStatus status);
 
 }

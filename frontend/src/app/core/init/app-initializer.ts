@@ -11,15 +11,11 @@ export function initializeApp(
 
     if (token) {
       // Load user data before app starts
-      console.log('🔄 Loading user from token...');
+
       return authService
         .loadCurrentUser()
         .toPromise()
-        .then(() => {
-          console.log('✅ User loaded successfully');
-        })
-        .catch((err) => {
-          console.error('❌ Failed to load user, clearing tokens', err);
+        .catch(() => {
           tokenStorage.clear();
         });
     }

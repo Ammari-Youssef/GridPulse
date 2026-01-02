@@ -4,6 +4,8 @@ import { AuthService } from '@services/auth.service';
 import { of } from 'rxjs';
 import { DashboardModule } from '../dashboard.module';
 import { CommonModule } from '@angular/common';
+import { Apollo } from 'apollo-angular';
+import { ApolloMock } from '@testing/mock/apollo.mock';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -25,7 +27,10 @@ describe('DashboardComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [CommonModule, DashboardModule],
-      providers: [{ provide: AuthService, useValue: mockAuthService }],
+      providers: [
+        { provide: AuthService, useValue: mockAuthService },
+        { provide: Apollo, useValue: ApolloMock },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(DashboardComponent);

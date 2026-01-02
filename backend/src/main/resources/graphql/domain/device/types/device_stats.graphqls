@@ -1,0 +1,8 @@
+type DeviceStats {
+    totalDevices: Int!
+    onlineDevices: Int!
+    offlineDevices: Int!
+    maintenanceDevices: Int!  # Changed name for clarity
+    totalAlerts: Int!
+    criticalAlerts: Int!      # NEW - Shows urgent issues
+}

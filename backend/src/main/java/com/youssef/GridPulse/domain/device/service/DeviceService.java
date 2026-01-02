@@ -6,9 +6,11 @@ import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageRe
 import com.youssef.GridPulse.domain.bms.entity.Bms;
 import com.youssef.GridPulse.domain.bms.repository.BmsRepository;
 import com.youssef.GridPulse.domain.device.dto.DeviceInput;
+import com.youssef.GridPulse.domain.device.dto.DeviceStats;
 import com.youssef.GridPulse.domain.device.entity.Device;
 import com.youssef.GridPulse.domain.device.entity.DeviceHistory;
 import com.youssef.GridPulse.domain.bms.enums.BatteryHealthStatus;
+import com.youssef.GridPulse.domain.device.enums.DeviceStatus;
 import com.youssef.GridPulse.domain.device.mapper.DeviceMapper;
 import com.youssef.GridPulse.domain.device.repository.DeviceHistoryRepository;
 import com.youssef.GridPulse.domain.device.repository.DeviceRepository;
@@ -19,6 +21,9 @@ import com.youssef.GridPulse.domain.identity.user.entity.User;
 import com.youssef.GridPulse.domain.identity.user.repository.UserRepository;
 import com.youssef.GridPulse.domain.inverter.inverter.entity.Inverter;
 import com.youssef.GridPulse.domain.inverter.inverter.repository.InverterRepository;
+import com.youssef.GridPulse.domain.message.enums.MessageStatus;
+import com.youssef.GridPulse.domain.message.enums.Severity;
+import com.youssef.GridPulse.domain.message.repository.MessageRepository;
 import com.youssef.GridPulse.domain.meter.entity.Meter;
 import com.youssef.GridPulse.domain.meter.repository.MeterRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -40,6 +45,10 @@ public class DeviceService extends BaseService<Device, DeviceHistory, UUID, Devi
     private final MeterRepository meterRepository;
     private final FleetRepository fleetRepository;
 
+    // MessageRepository for Device Stats
+    private final MessageRepository messageRepository;
+
+
     public DeviceService(
             DeviceRepository repository,
             DeviceHistoryRepository historyRepository,
@@ -50,13 +59,17 @@ public class DeviceService extends BaseService<Device, DeviceHistory, UUID, Devi
             InverterRepository inverterRepository,
             BmsRepository bmsRepository,
             MeterRepository meterRepository,
-            FleetRepository fleetRepository) {
+            FleetRepository fleetRepository,
+
+            MessageRepository messageRepository) {
         super(repository, historyRepository, mapper);
         this.userRepository = userRepository;
         this.inverterRepository = inverterRepository;
         this.bmsRepository = bmsRepository;
         this.meterRepository = meterRepository;
         this.fleetRepository = fleetRepository;
+
+        this.messageRepository = messageRepository;
     }
 
     @Override
@@ -192,6 +205,35 @@ public class DeviceService extends BaseService<Device, DeviceHistory, UUID, Devi
 
         device.setUser(user);
         return ((DeviceRepository) repository).save(device);
+    }
+
+    // Device Stats
+
+    @Transactional(readOnly = true)
+    public DeviceStats getDeviceStats() {
+        Long total = ((DeviceRepository) repository).count();
+        Long online = ((DeviceRepository) repository).countByStatus(DeviceStatus.ONLINE);
+        Long offline = ((DeviceRepository) repository).countByStatus(DeviceStatus.OFFLINE);
+        Long maintenance = ((DeviceRepository) repository).countByStatus(DeviceStatus.MAINTENANCE);
+
+        // All NEW messages
+        Long totalAlerts = messageRepository.countByStatus(MessageStatus.NEW);
+
+        // Only CRITICAL NEW messages
+        Long criticalAlerts = messageRepository.countByStatusAndSeverity(
+                MessageStatus.NEW,
+                Severity.CRITICAL
+        );
+
+        return DeviceStats.builder()
+                .totalDevices(total.intValue())
+                .onlineDevices(online.intValue())
+                .offlineDevices(offline.intValue())
+                .maintenanceDevices(maintenance.intValue())
+                .totalAlerts(totalAlerts.intValue())
+                .criticalAlerts(criticalAlerts.intValue())
+
+                .build();
     }
 
 }
