@@ -1,2 +1,41 @@
-<p>Hello {{firstname$ | async}}, welcome back!</p>
-<h2>Your dashboard for today</h2>
+<div class="min-h-screen bg-gray-50 p-6">
+
+    <!-- Header Section -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">
+            Hello {{ firstname$ | async }}, welcome back! 👋
+        </h1>
+        <p class="text-gray-600 text-lg">
+            Your dashboard overview for today
+        </p>
+    </div>
+
+    <!-- Stats Cards Grid (2 rows x 3 cols on desktop) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+
+        <!-- Row 1: Device Status -->
+        <app-stats-card title="Total Devices" [value]="(metrics$ | async)?.totalDevices || 0" icon="dns"
+            iconColor="text-slate-600" bgColor="bg-slate-100" subtitle="All registered devices" />
+        
+        <app-stats-card title="Online Devices" [value]="(metrics$ | async)?.onlineDevices || 0" icon="wifi"
+            iconColor="text-emerald-600" bgColor="bg-emerald-100" [trend]="'+12%'" subtitle="Currently active" />
+        
+        <app-stats-card title="Offline Devices" [value]="(metrics$ | async)?.offlineDevices || 0" icon="wifi_off"
+            iconColor="text-red-600" bgColor="bg-red-100" subtitle="Connection lost" />
+        
+        <!-- Row 2: Maintenance & Alerts -->
+        <app-stats-card title="In Maintenance" [value]="(metrics$ | async)?.maintenanceDevices || 0" icon="build"
+            iconColor="text-blue-600" bgColor="bg-blue-100" subtitle="Scheduled maintenance" />
+        
+        <app-stats-card title="Total Alerts" [value]="(metrics$ | async)?.totalAlerts || 0" icon="notifications"
+            iconColor="text-orange-600" bgColor="bg-orange-100" [trend]="'-5%'" subtitle="Unread notifications" />
+        
+        <app-stats-card title="Critical Alerts" [value]="(metrics$ | async)?.criticalAlerts || 0" icon="warning"
+            iconColor="text-red-600" bgColor="bg-red-50" subtitle="Requires immediate attention" />
+
+    </div>
+
+    <!-- Map Section -->
+    
+
+</div>

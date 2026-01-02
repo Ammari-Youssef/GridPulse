@@ -7,6 +7,9 @@ import { AnalyticsComponent } from './analytics/analytics.component';
 import { MapComponent } from './map/map.component';
 import { StatsCardComponent } from './stats-card/stats-card.component';
 
+// Shared Modules
+import { MaterialModule } from '@shared/ui/material/material.module';
+
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -14,7 +17,7 @@ import { StatsCardComponent } from './stats-card/stats-card.component';
     MapComponent,
     StatsCardComponent,
   ],
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, MaterialModule],
   exports: [DashboardComponent, AnalyticsComponent],
 })
 export class DashboardModule {}
