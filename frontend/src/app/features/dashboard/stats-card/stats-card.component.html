@@ -1,1 +1,35 @@
-<p>stats-card works!</p>
+<mat-card class="shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer">
+    <mat-card-content class="p-6">
+
+        <!-- Icon & Title Row -->
+        <div class="flex items-center justify-between mb-4">
+            <div [class]="bgColor + ' p-3 rounded-lg'">
+                <mat-icon [class]="iconColor + ' text-3xl'">{{ icon }}</mat-icon>
+            </div>
+
+            <!-- Subtitle (optional) -->
+            <p *ngIf="subtitle" class="text-xs text-black-400 mt-2">
+                {{ subtitle }}
+            </p>
+            
+            <!-- Trend Badge (optional) -->
+            <span *ngIf="trend" [class]="getTrendClass()" class="text-xs font-semibold px-2 py-1 rounded-full">
+                {{ trend }}
+            </span>
+
+        </div>
+
+        <!-- Title -->
+        <p class="text-gray-500 text-sm font-medium mb-2">
+            {{ title }}
+        </p>
+
+        <!-- Value -->
+        <h3 class="text-4xl font-bold text-gray-800">
+            {{ value | number }}
+        </h3>
+
+       
+
+    </mat-card-content>
+</mat-card>
