@@ -1,0 +1,26 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+#device-map {
+    height: 600px;
+    width: 100%;
+    position: relative;
+
+    ::ng-deep {
+        .leaflet-container {
+            height: 100%;
+            width: 100%;
+            font-family: inherit;
+        }
+
+        .leaflet-popup-content-wrapper {
+            border-radius: 8px;
+        }
+
+        .leaflet-popup-content {
+            margin: 0;
+        }
+    }
+}
