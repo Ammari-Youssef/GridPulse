@@ -27,6 +27,23 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   loading = false;
   error: string | null = null;
 
+  // Filter properties
+  availableStatuses: DeviceStatus[] = [
+    DeviceStatus.ONLINE,
+    DeviceStatus.STANDBY,
+    DeviceStatus.OFFLINE,
+    DeviceStatus.ERROR,
+    DeviceStatus.MAINTENANCE,
+    DeviceStatus.NEW,
+    DeviceStatus.COMMISSIONING,
+    DeviceStatus.DECOMMISSIONED,
+    DeviceStatus.RETIRED,
+    DeviceStatus.UNKNOWN,
+  ];
+
+  selectedStatuses = new Set<DeviceStatus>();
+  private allDevices: DeviceLocation[] = [];
+
   constructor(private readonly apollo: Apollo) {}
 
   ngOnInit() {
@@ -39,6 +56,47 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
       this.initMap();
       this.loadDevices();
     }, 100);
+  }
+
+  toggleStatusFilter(status: DeviceStatus | 'ALL'): void {
+    if (status === 'ALL') {
+      this.selectedStatuses.clear();
+    } else if (this.selectedStatuses.has(status)) {
+      this.selectedStatuses.delete(status);
+    } else {
+      this.selectedStatuses.add(status);
+    }
+
+    // Re-render markers with filter
+    this.addDeviceMarkers(this.allDevices);
+  }
+
+
+  getStatusBgColor(status: DeviceStatus): string {
+    switch (status) {
+      case DeviceStatus.ONLINE:
+        return '#2AAD27';
+      case DeviceStatus.STANDBY:
+        return '#31882A';
+      case DeviceStatus.OFFLINE:
+        return '#CB2B3E';
+      case DeviceStatus.ERROR:
+        return '#CB8427';
+      case DeviceStatus.MAINTENANCE:
+        return '#CAC428';
+      case DeviceStatus.UNKNOWN:
+        return '#7B7B7B';
+      case DeviceStatus.NEW:
+        return '#2A81CB';
+      case DeviceStatus.COMMISSIONING:
+        return '#9C2BCB';
+      case DeviceStatus.DECOMMISSIONED:
+        return '#3D3D3D';
+      case DeviceStatus.RETIRED:
+        return '#7B7B7B';
+      default:
+        return '#7B7B7B';
+    }
   }
 
   private fixLeafletIconIssue() {
@@ -119,7 +177,8 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
           }
 
           console.log('📍 Loaded devices:', data.getAllDevices);
-          this.addDeviceMarkers(data.getAllDevices);
+          this.allDevices = data.getAllDevices; // Store all devices
+          this.addDeviceMarkers(this.allDevices);
         },
         error: (error) => {
           this.loading = false;
@@ -132,18 +191,26 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   private addDeviceMarkers(devices: DeviceLocation[]) {
     this.markerClusterGroup.clearLayers();
 
-    const validDevices = devices.filter(
+    // Apply filter
+    let filteredDevices = devices.filter(
       (device) => device.gpsLat !== null && device.gpsLong !== null
     );
 
-    console.log(`📊 Adding ${validDevices.length} markers to map`);
+    // Filter by selected statuses if any are selected
+    if (this.selectedStatuses.size > 0) {
+      filteredDevices = filteredDevices.filter((device) =>
+        this.selectedStatuses.has(device.status)
+      );
+    }
 
-    if (validDevices.length === 0) {
+    console.log(`📊 Adding ${filteredDevices.length} markers to map`);
+
+    if (filteredDevices.length === 0) {
       console.warn('⚠️ No valid devices with GPS coordinates');
       return;
     }
 
-    validDevices.forEach((device) => {
+    filteredDevices.forEach((device) => {
       const icon = this.getDeviceIcon(device.status);
       const marker = L.marker([device.gpsLat!, device.gpsLong!], { icon });
 
@@ -155,10 +222,12 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Fit map to show all markers
     const bounds = this.markerClusterGroup.getBounds();
-    this.map.fitBounds(bounds, {
-      padding: [50, 50],
-      maxZoom: 15,
-    });
+    if (bounds.isValid()) {
+      this.map.fitBounds(bounds, {
+        padding: [50, 50],
+        maxZoom: 15,
+      });
+    }
 
     // Force resize after fitting bounds
     setTimeout(() => {
@@ -208,7 +277,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
       shadowSize: [41, 41],
     });
   }
-
 
   // Pop up when hovering on a markup
   private createPopupContent(device: DeviceLocation): string {
