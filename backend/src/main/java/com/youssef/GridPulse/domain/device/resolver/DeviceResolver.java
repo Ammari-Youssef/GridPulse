@@ -4,6 +4,7 @@ import com.youssef.GridPulse.common.base.BaseResolver;
 import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageRequestInput;
 import com.youssef.GridPulse.configuration.graphql.pagination.offsetBased.PageResponse;
 import com.youssef.GridPulse.domain.device.dto.DeviceInput;
+import com.youssef.GridPulse.domain.device.dto.DeviceStats;
 import com.youssef.GridPulse.domain.device.entity.Device;
 import com.youssef.GridPulse.domain.device.entity.DeviceHistory;
 import com.youssef.GridPulse.domain.bms.enums.BatteryHealthStatus;
@@ -26,6 +27,12 @@ public class DeviceResolver extends BaseResolver<Device, DeviceHistory, UUID, De
     public DeviceResolver(DeviceService service) {
         super(service);
         this.service = service;
+    }
+
+    // Device Stats
+    @QueryMapping
+    public DeviceStats getDeviceStats() {
+        return service.getDeviceStats();
     }
 
     // Assign Device to User
