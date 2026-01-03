@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FleetListComponent } from './fleet-list.component';
+import { Apollo } from 'apollo-angular';
+import { ApolloMock } from '@testing/mock/apollo.mock';
 
 describe('FleetListComponent', () => {
   let component: FleetListComponent;
@@ -9,6 +11,7 @@ describe('FleetListComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [FleetListComponent],
+      providers: [{ provide: Apollo, useValue: { ApolloMock } }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(FleetListComponent);
