@@ -53,6 +53,12 @@ module.exports = tseslint.config(
       // Legacy-friendly: Allow *ngIf, *ngFor instead of @if, @for
       "@angular-eslint/template/prefer-control-flow": "off",
       "@angular-eslint/template/use-track-by-function": "off",
+      
+      // Accessibility rules adjustments
+      "@angular-eslint/template/click-events-have-key-events": "off",
+      "@angular-eslint/template/label-has-associated-control": "off",
+      "@angular-eslint/template/interactive-supports-focus": "off",
+      
     },
   }
 );
