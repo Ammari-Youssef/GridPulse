@@ -39,6 +39,7 @@
         <lombok.version>1.18.36</lombok.version>
         <jacoco.version>0.8.14</jacoco.version>
         <liquibase.version>4.29.2</liquibase.version>
+        <sonar.organization>ammari-youssef</sonar.organization>
     </properties>
     <dependencyManagement>
         <dependencies>
