@@ -5,6 +5,7 @@ import { Fleet } from '@core/models/classes/fleet.model';
 import { PageRequest } from '@graphql/pagination/page.request';
 import { GetAllFleetPagedResponse } from '@core/models/interfaces/get-all-fleet-paged.response';
 import { DELETE_FLEET_MUTATION } from '@graphql/schema/mutations/fleet/delete.mutation';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-fleet-list',
@@ -37,7 +38,11 @@ export class FleetListComponent implements OnInit {
   showDeleteModal = false;
   deleting = false;
 
-  constructor(private readonly apollo: Apollo) {}
+
+  constructor(
+    private readonly apollo: Apollo,
+    private readonly snackBar: MatSnackBar
+  ) {}
 
   ngOnInit() {
     this.loadFleets();
@@ -47,16 +52,12 @@ export class FleetListComponent implements OnInit {
     this.loading = true;
     this.error = null;
 
-    console.log('Loading fleets for page');
-
     const pageRequest: PageRequest = {
       page: this.currentPage,
       size: this.pageSize,
       sortBy: this.sortBy,
       desc: this.sortDesc,
     };
-
-    console.log('Page request', pageRequest);
 
     this.apollo
       .query<GetAllFleetPagedResponse>({
@@ -80,8 +81,15 @@ export class FleetListComponent implements OnInit {
         },
         error: (err) => {
           this.loading = false;
-          this.error = 'Failed to load fleets. Please try again.';
-          console.error('❌ Error loading fleets:', err);
+          const error = this.parseError(err);
+          this.error = error;
+
+          this.snackBar.open(error, 'Close', {
+            duration: 5000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+            panelClass: ['snackbar-error'],
+          });
         },
       });
   }
@@ -206,8 +214,40 @@ export class FleetListComponent implements OnInit {
         error: (err) => {
           this.deleting = false;
           this.error = 'Failed to delete fleet. Please try again.';
+          
+            this.snackBar.open(this.error, 'Close', {
+            duration: 5000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+            panelClass: ['snackbar-error'],
+          });
           console.error('❌ Error deleting fleet:', err);
         },
       });
+  }
+
+  // Helpers
+  private parseError(err: unknown): string {
+    if (err && typeof err === 'object') {
+      const e = err as {
+        graphQLErrors?: { message: string }[];
+        networkError?: { message: string };
+        message?: string;
+      };
+
+      if (e.graphQLErrors?.length) {
+        return e.graphQLErrors.map((err) => err.message).join(', ');
+      }
+
+      if (e.networkError) {
+        return 'Network error: ' + e.networkError.message;
+      }
+
+      if (e.message) {
+        return e.message;
+      }
+    }
+
+    return 'Failed to load fleets. Please try again.';
   }
 }
