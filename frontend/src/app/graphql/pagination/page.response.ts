@@ -1,10 +1,8 @@
-import { Fleet } from "@core/models/classes/fleet.model";
-
-export interface PagedResponse {
+export interface PagedResponse<T> {
   pageNumber: number;
   pageSize: number;
   totalElements: number;
   totalPages: number;
   last: boolean;
-  content: Fleet[];
+  content: T[];
 }
