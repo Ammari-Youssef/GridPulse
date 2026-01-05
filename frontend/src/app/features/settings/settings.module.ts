@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProfileSettingsComponent } from './profile-settings/profile-settings.component';
-import { NotificationSettingsComponent } from './notification-settings/notification-settings.component';
 import { SettingsComponent } from './settings/settings.component';
 import { SecuritySettingsComponent } from './security-settings/security-settings.component';
 import { UserManagementComponent } from './user-management/user-management.component';
@@ -13,7 +12,6 @@ import { SharedModule } from '@shared/shared.module';
     SettingsComponent,
     ProfileSettingsComponent,
     SecuritySettingsComponent,
-    NotificationSettingsComponent,
     UserManagementComponent,
   ],
   imports: [
