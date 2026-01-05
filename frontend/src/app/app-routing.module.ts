@@ -76,9 +76,7 @@ const routes: Routes = [
       {
         path: 'settings',
         component: SettingsComponent,
-        canActivate: [RoleGuard],
-        data: { role: 'ADMIN' },
-        title: 'Admin – Settings',
+        title: 'Settings',
       },
       {
         path: 'device-manager',

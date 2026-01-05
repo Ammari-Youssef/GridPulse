@@ -39,7 +39,7 @@
         </a>
 
         <!-- Admin Only -->
-        <a *ngIf="(userRole$ | async) === Role.ADMIN" mat-list-item routerLink="/settings"
+        <a mat-list-item routerLink="/settings"
             routerLinkActive="active-link"
             class="!flex !items-center !gap-4 !px-4 !py-3 !mb-1 !mx-2 !rounded-lg hover:!bg-gray-100 !transition-colors">
             <mat-icon class="!text-gray-600">settings</mat-icon>
