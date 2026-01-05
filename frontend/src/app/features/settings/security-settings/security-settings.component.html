@@ -1,0 +1,75 @@
+<div class="max-w-2xl">
+    <h2 class="text-xl font-bold text-gray-800 mb-4">Change Password</h2>
+    <p class="text-sm text-gray-600 mb-6">Update your password to keep your account secure</p>
+
+    <form [formGroup]="passwordForm" (ngSubmit)="onChangePassword()">
+
+        <!-- Current Password -->
+        <mat-form-field appearance="outline" class="w-full mb-4">
+            <mat-label>Current Password</mat-label>
+            <input matInput [type]="hideCurrentPassword ? 'password' : 'text'" formControlName="currentPassword"
+                required>
+            <mat-icon matPrefix>lock</mat-icon>
+            <button mat-icon-button matSuffix type="button" (click)="hideCurrentPassword = !hideCurrentPassword">
+                <mat-icon>{{ hideCurrentPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-error>Current password is required</mat-error>
+        </mat-form-field>
+
+        <!-- New Password -->
+        <mat-form-field appearance="outline" class="w-full mb-4">
+            <mat-label>New Password</mat-label>
+            <input matInput [type]="hideNewPassword ? 'password' : 'text'" formControlName="newPassword" required>
+            <mat-icon matPrefix>lock_outline</mat-icon>
+            <button mat-icon-button matSuffix type="button" (click)="hideNewPassword = !hideNewPassword">
+                <mat-icon>{{ hideNewPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-hint>Minimum 8 characters</mat-hint>
+            <mat-error *ngIf="passwordForm.get('newPassword')?.hasError('minlength')">
+                Password must be at least 8 characters
+            </mat-error>
+        </mat-form-field>
+
+        <!-- Confirm Password -->
+        <mat-form-field appearance="outline" class="w-full mb-6">
+            <mat-label>Confirm New Password</mat-label>
+            <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmPassword"
+                required>
+            <mat-icon matPrefix>lock_reset</mat-icon>
+            <button mat-icon-button matSuffix type="button" (click)="hideConfirmPassword = !hideConfirmPassword">
+                <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-error *ngIf="passwordForm.hasError('passwordMismatch')">
+                Passwords do not match
+            </mat-error>
+        </mat-form-field>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-3">
+            <button type="submit" mat-raised-button color="primary" [disabled]="loading || passwordForm.invalid">
+                <mat-icon *ngIf="!loading">vpn_key</mat-icon>
+                <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+                {{ loading ? 'Updating...' : 'Change Password' }}
+            </button>
+        </div>
+
+    </form>
+
+    <!-- Security Info -->
+    <mat-divider class="my-8"></mat-divider>
+
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div class="flex gap-3">
+            <mat-icon class="text-blue-600">info</mat-icon>
+            <div>
+                <h3 class="font-semibold text-blue-900 mb-1">Password Requirements</h3>
+                <ul class="text-sm text-blue-800 space-y-1">
+                    <li>• Minimum 8 characters</li>
+                    <li>• Use a strong, unique password</li>
+                    <li>• Avoid using personal information</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>

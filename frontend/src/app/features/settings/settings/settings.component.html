@@ -1,1 +1,51 @@
-<p>settings works!</p>
+<div class="min-h-screen bg-gray-50 p-6">
+
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">Settings</h1>
+    <p class="text-gray-600">Manage your account and preferences</p>
+  </div>
+
+  <!-- Settings Container -->
+  <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+
+    <!-- Tabs Navigation -->
+    <div class="border-b border-gray-200">
+      <nav class="flex -mb-px overflow-x-auto">
+        <button *ngFor="let tab of visibleTabs" (click)="selectTab(tab.id)"
+                [class.border-blue-500]="isTabActive(tab.id)" [class.text-blue-600]="isTabActive(tab.id)"
+                [class.text-gray-500]="!isTabActive(tab.id)"
+                class="group inline-flex items-center gap-2 px-6 py-4 border-b-2 font-medium text-sm hover:text-blue-600 hover:border-blue-300 transition whitespace-nowrap">
+          <mat-icon class="text-xl">{{ tab.icon }}</mat-icon>
+          <span>{{ tab.label }}</span>
+          <span *ngIf="tab.adminOnly"
+                class="ml-1 px-2 py-0.5 text-xs bg-blue-100 text-blue-700 rounded-full font-semibold">
+                        Admin
+                    </span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="p-6">
+
+      <!-- Profile Tab -->
+      <div *ngIf="activeTab === 'profile'">
+        <app-profile-settings></app-profile-settings>
+      </div>
+
+      <!-- Security Tab -->
+      <div *ngIf="activeTab === 'security'">
+        <app-security-settings></app-security-settings>
+      </div>
+
+      <!-- User Management Tab (Admin Only) -->
+      <div *ngIf="activeTab === 'users' && (isAdmin$ | async)">
+        <app-user-management></app-user-management>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
