@@ -1,18 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DeviceManagerComponent } from './device-manager.component';
+import { MessagesComponent } from './messages.component';
 
-describe('DeviceManagerComponent', () => {
-  let component: DeviceManagerComponent;
-  let fixture: ComponentFixture<DeviceManagerComponent>;
+describe('MessagesComponent', () => {
+  let component: MessagesComponent;
+  let fixture: ComponentFixture<MessagesComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DeviceManagerComponent]
+      imports: [],
+      declarations: [MessagesComponent],
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DeviceManagerComponent);
+    fixture = TestBed.createComponent(MessagesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

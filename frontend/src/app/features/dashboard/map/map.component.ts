@@ -8,6 +8,7 @@ import { GET_DEVICE_LOCATIONS } from '@graphql/schema/queries/device/get-locatio
 import { Apollo } from 'apollo-angular';
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
+import { SnackbarService } from '@shared/services/snackbar.service';
 
 @Component({
   selector: 'app-map',
@@ -44,7 +45,10 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   selectedStatuses = new Set<DeviceStatus>();
   private allDevices: DeviceLocation[] = [];
 
-  constructor(private readonly apollo: Apollo) {}
+  constructor(
+    private readonly apollo: Apollo,
+    private readonly snackbar: SnackbarService
+  ) {}
 
   ngOnInit() {
     this.fixLeafletIconIssue();
@@ -70,7 +74,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     // Re-render markers with filter
     this.addDeviceMarkers(this.allDevices);
   }
-
 
   getStatusBgColor(status: DeviceStatus): string {
     switch (status) {
@@ -154,8 +157,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     setTimeout(() => {
       this.map.invalidateSize();
     }, 200);
-
-    console.log('✅ Map initialized');
   }
 
   private loadDevices() {
@@ -172,18 +173,17 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
           this.loading = false;
 
           if (!data?.getAllDevices) {
-            console.warn('⚠️ No devices returned from API');
+            this.snackbar.showInfo('No devices returned from API');
             return;
           }
 
-          console.log('📍 Loaded devices:', data.getAllDevices);
           this.allDevices = data.getAllDevices; // Store all devices
           this.addDeviceMarkers(this.allDevices);
         },
         error: (error) => {
           this.loading = false;
-          this.error = 'Failed to load device locations. Please try again.';
-          console.error('❌ Error loading devices:', error);
+          this.error = `Failed to load device locations. ${error} Please try again.`;
+          this.snackbar.showError(this.error);
         },
       });
   }
@@ -203,10 +203,8 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
       );
     }
 
-    console.log(`📊 Adding ${filteredDevices.length} markers to map`);
-
     if (filteredDevices.length === 0) {
-      console.warn('⚠️ No valid devices with GPS coordinates');
+      this.snackbar.showInfo('No valid devices with GPS coordinates');
       return;
     }
 

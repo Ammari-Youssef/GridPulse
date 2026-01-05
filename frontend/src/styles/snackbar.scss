@@ -1,0 +1,16 @@
+@use './variables' as v;
+
+.snackbar-error {
+    background-color: v.$color-warn;
+    color: #fff;
+}
+
+.snackbar-success {
+    background-color: v.$color-success;
+    color: #fff;
+}
+
+.snackbar-info {
+    background-color: v.$color-info;
+    color: #fff;
+}
