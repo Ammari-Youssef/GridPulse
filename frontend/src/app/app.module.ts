@@ -8,7 +8,6 @@ import { AppComponent } from './app.component';
 // Interceptors
 import { JwtInterceptor } from '@interceptors/jwt.interceptor';
 import { GlobalHttpErrorInterceptor } from '@interceptors/global-http-error.interceptor';
-import { HttpErrorInterceptor } from '@interceptors/http-error.interceptor';
 
 // Custom modules
 import { SharedModule } from '@shared/shared.module';
@@ -54,7 +53,6 @@ import { TokenStorageService } from '@core/services/token-storage.service';
       multi: true,
     },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: GlobalHttpErrorInterceptor, multi: true },
     provideHttpClient(),
   ],
