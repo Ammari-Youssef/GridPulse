@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { User } from '@core/models/classes/User.model';
 import { Role } from '@core/models/enums/role.enum';
 import { GetAllUsersResponse } from '@core/models/interfaces/get-all-user.response';
 import { GET_ALL_USERS } from '@graphql/schema/queries/users/get-all.query';
+import { SnackbarService } from '@shared/services/snackbar.service'; 
 
 @Component({
   selector: 'app-user-management',
@@ -17,7 +17,10 @@ export class UserManagementComponent implements OnInit {
   loading = false;
   displayedColumns: string[] = ['name', 'email', 'role', 'status', 'actions'];
 
-  constructor(private readonly apollo: Apollo, private readonly snackBar: MatSnackBar) {}
+  constructor(
+    private readonly apollo: Apollo,
+    private readonly snackbar: SnackbarService
+  ) {}
 
   ngOnInit() {
     this.loadUsers();
@@ -35,28 +38,20 @@ export class UserManagementComponent implements OnInit {
         next: ({ data }) => {
           this.users = data!.getAllUsers;
           this.loading = false;
-          console.log('✅ Loaded users:', this.users);
         },
-        error: (error) => {
-          console.error('❌ Error loading users:', error);
+        error: () => {
           this.loading = false;
-          this.snackBar.open('Failed to load users', 'Close', {
-            duration: 3000,
-          });
+          this.snackbar.showError('Failed to load users');
         },
       });
   }
 
   onAddUser() {
-    this.snackBar.open('Add user feature coming soon', 'Close', {
-      duration: 3000,
-    });
+    this.snackbar.showInfo('Add user feature coming soon');
   }
 
   onEditUser(user: User) {
-    this.snackBar.open(`Edit ${user.firstname} ${user.lastname}`, 'Close', {
-      duration: 3000,
-    });
+    this.snackbar.showInfo(`Edit ${user.firstname} ${user.lastname}`);
   }
 
   onDeleteUser(user: User) {
@@ -66,20 +61,14 @@ export class UserManagementComponent implements OnInit {
       )
     ) {
       // TODO: Implement delete mutation
-      this.snackBar.open(`User deleted (not implemented)`, 'Close', {
-        duration: 3000,
-      });
+      this.snackbar.showError(`User deleted (not implemented)`);
     }
   }
 
   onToggleStatus(user: User) {
     // TODO: Implement toggle mutation
     user.enabled = !user.enabled;
-    this.snackBar.open(
-      `User ${user.enabled ? 'enabled' : 'disabled'}`,
-      'Close',
-      { duration: 3000 }
-    );
+    this.snackbar.showInfo(`User ${user.enabled ? 'enabled' : 'disabled'}`);
   }
 
   getRoleLabel(role: Role): string {
