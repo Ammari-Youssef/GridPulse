@@ -14,11 +14,10 @@ import { HttpErrorInterceptor } from '@interceptors/http-error.interceptor';
 import { SharedModule } from '@shared/shared.module';
 import { CoreModule } from '@core/core.module';
 import { LayoutModule } from '@layout/layout.module';
-import { FeaturesModule } from '@features/features.module';
 
-import { GraphQLModule } from '@graphql/graphql.module';
-import { ApiStatusModule } from '@features/api-status/api-status.module';
 import { AuthModule } from '@features/auth/auth.module';
+import { ApiStatusModule } from '@features/api-status/api-status.module';
+import { GraphQLModule } from '@graphql/graphql.module';
 
 // Initializers
 import { initializeApp } from '@core/init/app-initializer';
@@ -44,7 +43,8 @@ import { TokenStorageService } from '@core/services/token-storage.service';
     SharedModule,
     CoreModule,
     LayoutModule,
-    FeaturesModule,
+    ApiStatusModule,
+    
   ],
   providers: [
     {

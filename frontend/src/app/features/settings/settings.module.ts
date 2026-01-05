@@ -6,6 +6,7 @@ import { SecuritySettingsComponent } from './security-settings/security-settings
 import { UserManagementComponent } from './user-management/user-management.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '@shared/shared.module';
+import { SettingsRoutingModule } from './settings-routing.module';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { SharedModule } from '@shared/shared.module';
     ReactiveFormsModule,
     FormsModule,
     SharedModule,
+    SettingsRoutingModule
   ],
 })
 export class SettingsModule {}
