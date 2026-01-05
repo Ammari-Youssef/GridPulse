@@ -1,13 +1,11 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global styles entry point */
 @use 'tailwindcss';
 @use './styles/index.scss';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* Global resets */
+html, body { height: 100%;}
 
-
-.snackbar-error {
-    background: #d32f2f !important;
-    color: white !important;
-    font-weight: 500;
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
 }

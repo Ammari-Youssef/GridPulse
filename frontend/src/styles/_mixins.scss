@@ -1,5 +1,34 @@
+// Flexbox center utility
 @mixin flex-center {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+// Text truncation
+@mixin truncate-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+// Responsive breakpoint helper
+@mixin respond-to($breakpoint) {
+    @if $breakpoint =='sm' {
+        @media (max-width: 600px) {
+            @content;
+        }
+    }
+
+    @else if $breakpoint =='md' {
+        @media (max-width: 960px) {
+            @content;
+        }
+    }
+
+    @else if $breakpoint =='lg' {
+        @media (max-width: 1280px) {
+            @content;
+        }
+    }
 }

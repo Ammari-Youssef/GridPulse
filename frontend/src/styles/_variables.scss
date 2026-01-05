@@ -1,2 +1,13 @@
-$primary: #0055ff;
-$gray-100: #f6f6f6;
+// Colors aligned with Angular Material palettes
+$color-primary: #1976d2; // Blue 700
+$color-accent: #3f51b5; // Indigo 500
+$color-warn: #d32f2f; // Red 700
+$color-success: #2e7d32; // Green 700
+$color-info: #0288d1; // Light Blue 600
+
+// Spacing
+$spacing-unit: 8px;
+
+// Typography
+$font-family-base: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+$font-size-base: 16px;

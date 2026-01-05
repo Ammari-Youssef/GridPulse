@@ -1,0 +1,20 @@
+@use './variables' as v;
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 v.$spacing-unit;
+}
+
+// Utility spacing classes
+.mt-1 {
+    margin-top: v.$spacing-unit;
+}
+
+.mb-1 {
+    margin-bottom: v.$spacing-unit;
+}
+
+.p-1 {
+    padding: v.$spacing-unit;
+}
