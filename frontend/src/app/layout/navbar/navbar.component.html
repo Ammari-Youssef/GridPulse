@@ -10,11 +10,68 @@
 
     <!-- Right side - Actions -->
     <div class="flex items-center gap-2 ml-auto">
-        <!-- Notifications Button with Badge -->
-        <button mat-icon-button matTooltip="Notifications" class="navbar-icon-btn notification-btn">
+        <!-- Notifications Button with Badge and Menu -->
+        <button mat-icon-button matTooltip="Notifications" class="navbar-icon-btn notification-btn"
+            [matMenuTriggerFor]="notificationMenu">
             <mat-icon>notifications</mat-icon>
-            <span class="notification-badge"></span>
+            <span class="notification-badge" *ngIf="unreadCount > 0"></span>
         </button>
+
+        <!-- Notifications Menu -->
+        <mat-menu #notificationMenu="matMenu" xPosition="before" class="notification-menu">
+            <!-- Header -->
+            <div class="notification-header" mat-menu-item disabled>
+                <span class="font-semibold text-sm">Notifications</span>
+                <span class="notification-count-badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <!-- Loading State -->
+            <div *ngIf="loadingNotifications" class="notification-loading" mat-menu-item disabled>
+                <mat-spinner diameter="24"></mat-spinner>
+                <span>Loading notifications...</span>
+            </div>
+
+            <!-- Notifications List -->
+            <ng-container *ngIf="!loadingNotifications && recentMessages.length > 0">
+                <button mat-menu-item class="notification-item" *ngFor="let message of recentMessages"
+                    (click)="navigateToAllMessages()">
+                    <div class="notification-content">
+                        <div class="notification-icon" [ngClass]="getSeverityClass(message.severity)">
+                            <mat-icon>{{ getMessageIcon(message.messageType) }}</mat-icon>
+                        </div>
+                        <div class="notification-details">
+                            <div class="notification-title">
+                                {{ message.device.name }}
+                            </div>
+                            <div class="notification-text">
+                                {{ message.explanation || 'New message' }}
+                            </div>
+                            <div class="notification-time">
+                                {{ getTimeAgo(message.receivedAt) }}
+                            </div>
+                        </div>
+                        <div class="notification-status" *ngIf="message.status === 'NEW'"></div>
+                    </div>
+                </button>
+            </ng-container>
+
+            <!-- Empty State -->
+            <div *ngIf="!loadingNotifications && recentMessages.length === 0" class="notification-empty" mat-menu-item
+                disabled>
+                <mat-icon>notifications_none</mat-icon>
+                <span>No notifications</span>
+            </div>
+
+            <mat-divider *ngIf="recentMessages.length > 0"></mat-divider>
+
+            <!-- View All Link -->
+            <button mat-menu-item class="notification-view-all" (click)="navigateToAllMessages()">
+                <span>View all notifications</span>
+                <mat-icon>arrow_forward</mat-icon>
+            </button>
+        </mat-menu>
 
         <!-- Theme Toggle Button -->
         <button mat-icon-button matTooltip="Toggle Theme" class="navbar-icon-btn" (click)="toggleTheme()">
