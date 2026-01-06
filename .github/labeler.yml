@@ -1,4 +1,6 @@
 # Auto-label rules for PRs
+
+# --- Backend & DB ---
 backend:
   - changed-files:
       - any-glob-to-any-file: ["src/**", "pom.xml", "Dockerfile", "docker-compose.yml"]
@@ -19,10 +21,7 @@ graphql:
   - changed-files:
       - any-glob-to-any-file: ["src/main/graphql/**", "src/**/*.graphql"]
 
-test:
-  - changed-files:
-      - any-glob-to-any-file: ["src/test/**", "src/**/*Test.java", "frontend/**/*.spec.ts", "frontend/e2e/**"]
-
+# --- Frontend ---
 frontend:
   - changed-files:
       - any-glob-to-any-file: ["frontend/**", "frontend/**/*", "frontend/Dockerfile"]
@@ -31,6 +30,11 @@ angular:
   - changed-files:
       - any-glob-to-any-file: ["frontend/**", "frontend/**/*", "frontend/Dockerfile"]
 
+test:
+  - changed-files:
+      - any-glob-to-any-file: ["src/test/**", "src/**/*Test.java", "frontend/**/*.spec.ts", "frontend/e2e/**"]
+
+# --- Infra & CI/CD ---
 ci/cd:
   - changed-files:
       - any-glob-to-any-file: [".github/workflows/**", ".github/labeler.yml"]
@@ -39,22 +43,23 @@ github-actions:
   - changed-files:
       - any-glob-to-any-file: [".github/workflows/**", ".github/labeler.yml"]
 
-docker:
-  - changed-files:
-      - any-glob-to-any-file: ["docker-compose.yml", "Dockerfile"]
-
 infra:
   - changed-files:
       - any-glob-to-any-file: [".github/workflows/**", ".github/labeler.yml", "gitHub-actions/**"]
 
-vercel:
+docker:
   - changed-files:
-      - any-glob-to-any-file: ["vercel.json"]
+      - any-glob-to-any-file: ["docker-compose.yml", "Dockerfile"]
 
 deployment:
   - changed-files:
       - any-glob-to-any-file: ["vercel.json"]
 
+vercel:
+  - changed-files:
+      - any-glob-to-any-file: ["vercel.json"]
+
+# --- Docs & Misc ---
 documentation:
   - changed-files:
       - any-glob-to-any-file: ["docs/**", "README.md"]
