@@ -47,6 +47,14 @@ infra:
   - changed-files:
       - any-glob-to-any-file: [".github/workflows/**", ".github/labeler.yml", "gitHub-actions/**"]
 
+vercel:
+  - changed-files:
+      - any-glob-to-any-file: ["vercel.json"]
+
+deployment:
+  - changed-files:
+      - any-glob-to-any-file: ["vercel.json"]
+
 documentation:
   - changed-files:
       - any-glob-to-any-file: ["docs/**", "README.md"]
