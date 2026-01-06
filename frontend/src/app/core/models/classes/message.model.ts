@@ -1,6 +1,6 @@
-import { MessageStatus } from '../enums/message/MessageStatus.enum';
-import { MessageType } from '../enums/message/MessageType.enum';
-import { Severity } from '../enums/message/Severity.enum';
+import { MessageStatus } from '@models/enums/message/MessageStatus.enum';
+import { MessageType } from '@models/enums/message/MessageType.enum';
+import { Severity } from '@models/enums/message/Severity.enum';
 
 export interface Message {
   id: string;
