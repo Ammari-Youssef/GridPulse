@@ -1,21 +1,5 @@
-.shell-container {
+:host {
+    display: block;
     height: 100vh;
-}
-
-.shell-sidenav {
-    width: 260px;
-    border-right: none; // Remove default border (sidebar has its own)
-}
-
-.shell-content {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    background-color: #f9fafb; // Light gray background for content area
-}
-
-.page-content {
-    padding: 24px;
-    flex: 1;
-    overflow-y: auto;
+    overflow: hidden;
 }
