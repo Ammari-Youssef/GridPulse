@@ -13,8 +13,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatProgressSpinnerModule, MatSpinner } from '@angular/material/progress-spinner';
+import {
+  MatProgressSpinnerModule,
+  MatSpinner,
+} from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
+import { MatSelectModule } from '@angular/material/select';
 
 const MATERIAL_MODULES = [
   MatButtonModule,
@@ -38,18 +42,16 @@ const MATERIAL_MODULES = [
   MatToolbarModule,
   MatSpinner,
 
-  // MatTabsModule,
   MatFormFieldModule,
   MatInputModule,
   MatButtonModule,
   MatIconModule,
-  // MatSlideToggleModule,
-  // MatTable,
   MatMenuModule,
   MatDividerModule,
   MatProgressSpinnerModule,
   MatSnackBarModule,
   MatTableModule,
+  MatSelectModule,
 ];
 
 @NgModule({
