@@ -1,0 +1,7 @@
+export enum BatteryHealthStatus {
+  CRITICAL = 'CRITICAL',
+  DEGRADED = 'DEGRADED',
+  UNHEALTHY = 'UNHEALTHY',
+  HEALTHY = 'HEALTHY',
+  UNKNOWN = 'UNKNOWN',
+}

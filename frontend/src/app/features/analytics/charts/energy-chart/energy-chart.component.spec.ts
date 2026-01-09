@@ -1,19 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AnalyticsComponent } from './analytics.component';
-import { CommonModule } from '@angular/common';
+import { EnergyChartComponent } from './energy-chart.component';
 
-describe('AnalyticsComponent', () => {
-  let component: AnalyticsComponent;
-  let fixture: ComponentFixture<AnalyticsComponent>;
+describe('EnergyChartComponent', () => {
+  let component: EnergyChartComponent;
+  let fixture: ComponentFixture<EnergyChartComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CommonModule]
+      declarations: [EnergyChartComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AnalyticsComponent);
+    fixture = TestBed.createComponent(EnergyChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
