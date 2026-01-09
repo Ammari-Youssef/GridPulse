@@ -1,17 +1,19 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
-import { Message } from '@core/models/classes/message.model';
-import { User } from '@core/models/classes/User.model';
-import { MessageStatus } from '@core/models/enums/message/MessageStatus.enum';
-import { MessageType } from '@core/models/enums/message/MessageType.enum';
-import { Severity } from '@core/models/enums/message/Severity.enum';
-import { GetAllMessagesPagedResponse } from '@core/models/interfaces/get-all-message-paged.response';
-import { AuthService } from '@core/services/auth.service';
-import { PageRequest } from '@graphql/pagination/page.request';
-import { GET_ALL_MESSAGES_PAGED } from '@graphql/schema/queries/message/get-all-paged.query';
-import { Apollo } from 'apollo-angular';
-import { Observable, Subject, interval } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import {Component, OnInit, OnDestroy, Output, EventEmitter} from '@angular/core';
+import {Router} from '@angular/router';
+import {Message} from '@core/models/classes/message.model';
+import {User} from '@core/models/classes/User.model';
+import {MessageStatus} from '@core/models/enums/message/MessageStatus.enum';
+import {MessageType} from '@core/models/enums/message/MessageType.enum';
+import {Severity} from '@core/models/enums/message/Severity.enum';
+import {GetAllMessagesPagedResponse} from '@core/models/interfaces/get-all-message-paged.response';
+import {AuthService} from '@core/services/auth.service';
+import {PageRequest} from '@graphql/pagination/page.request';
+import {GET_ALL_MESSAGES_PAGED} from '@graphql/schema/queries/message/get-all-paged.query';
+import {SnackbarService} from '@shared/services/snackbar.service';
+import {Apollo} from 'apollo-angular';
+import {Observable, Subject, interval} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -19,11 +21,21 @@ import { takeUntil } from 'rxjs/operators';
   standalone: false,
 })
 export class NavbarComponent implements OnInit, OnDestroy {
+  @Output() sidebarToggle = new EventEmitter<void>();
+
   user$: Observable<User | null>;
   recentMessages: Message[] = [];
   unreadCount = 0;
   loadingNotifications = false;
   isDarkMode = false;
+
+  isLargeScreen = false;
+  toggleSidebar(): void {
+    this.sidebarToggle.emit();
+  }
+  private checkScreenSize(): void {
+    this.isLargeScreen = window.innerWidth >= 1024;
+  }
 
   // Pagination
   currentPage = 0;
@@ -41,6 +53,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly authService: AuthService,
+    private readonly snackbar: SnackbarService,
     private readonly router: Router,
     private readonly apollo: Apollo
   ) {
@@ -56,6 +69,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.loadRecentNotifications();
       });
+
+    // Initial screen size check
+    this.checkScreenSize();
+    window.addEventListener('resize', () => this.checkScreenSize());
   }
 
   ngOnDestroy(): void {
@@ -84,7 +101,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: ({ data }) => {
-          console.log('Notification data:', data);
           this.loadingNotifications = false;
 
           if (data?.getAllMessagePaged) {
@@ -103,7 +119,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         },
         error: () => {
           this.loadingNotifications = false;
-          console.error('Failed to load notifications');
+          this.snackbar.showError('Failed to load notifications');
         },
       });
   }

@@ -1,26 +1,76 @@
 <div class="w-full">
     <div class="bg-white rounded-lg shadow-lg overflow-hidden">
         <!-- Header -->
-        <div class="p-6 border-b border-gray-200">
-            <h2 class="text-2xl font-bold text-gray-800">Device Management</h2>
-            <p class="text-sm text-gray-600 mt-1">Monitor and manage all IoT devices</p>
+        <div class="p-4 sm:p-6 border-b border-gray-200">
+            <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Device Management</h2>
+            <p class="text-xs sm:text-sm text-gray-600 mt-1">Monitor and manage all IoT devices</p>
         </div>
 
         <!-- Error Message -->
         <div *ngIf="error" class="p-4 bg-red-50 border-l-4 border-red-500">
-            <p class="text-red-700">{{ error }}</p>
+            <p class="text-sm text-red-700">{{ error }}</p>
         </div>
 
         <!-- Loading State -->
         <div *ngIf="loading" class="p-8 flex items-center justify-center">
             <div class="text-center">
-                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                <p class="mt-4 text-gray-600">Loading devices...</p>
+                <div class="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-b-2 border-blue-600 mx-auto">
+                </div>
+                <p class="mt-4 text-sm text-gray-600">Loading devices...</p>
             </div>
         </div>
 
-        <!-- Device Table -->
-        <div *ngIf="!loading" class="overflow-x-auto">
+        <!-- Mobile Card View -->
+        <div *ngIf="!loading" class="block lg:hidden">
+            <div class="divide-y divide-gray-200">
+                <div *ngFor="let device of devices" class="p-4 hover:bg-gray-50 transition-colors">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="flex-1">
+                            <h3 class="text-sm font-semibold text-gray-900">{{ device.name }}</h3>
+                            <p class="text-xs text-gray-500 font-mono mt-1">{{ device.serialNumber }}</p>
+                        </div>
+                        <span [class]="getStatusColor(device.status)"
+                            class="px-2 py-1 text-xs font-semibold rounded-full whitespace-nowrap ml-2">
+                            {{ device.status }}
+                        </span>
+                    </div>
+
+                    <div class="space-y-2 text-xs">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Fleet:</span>
+                            <span class="text-gray-900 font-medium">{{ device.fleet.name }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Model:</span>
+                            <span class="text-gray-900">{{ device.model }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Last Seen:</span>
+                            <span class="text-gray-900">{{ formatDateTime(device.lastSeen) }}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2 mt-3 pt-3 border-t border-gray-200">
+                        <button (click)="viewDevice(device)"
+                            class="flex-1 px-3 py-2 text-xs font-medium text-blue-600 bg-blue-50 rounded hover:bg-blue-100 transition-colors">
+                            View Details
+                        </button>
+                        <button (click)="confirmDelete(device)"
+                            class="flex-1 px-3 py-2 text-xs font-medium text-red-600 bg-red-50 rounded hover:bg-red-100 transition-colors">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div *ngIf="devices.length === 0" class="p-8 text-center text-gray-500">
+                    No devices found
+                </div>
+            </div>
+        </div>
+
+        <!-- Desktop Table View -->
+        <div *ngIf="!loading" class="hidden lg:block overflow-x-auto">
             <table class="w-full">
                 <thead class="bg-gray-50 border-b border-gray-200">
                     <tr>
@@ -109,36 +159,36 @@
         </div>
 
         <!-- Pagination -->
-        <div *ngIf="!loading && devices.length > 0" class="px-6 py-4 bg-gray-50 border-t border-gray-200">
+        <div *ngIf="!loading && devices.length > 0" class="px-4 sm:px-6 py-4 bg-gray-50 border-t border-gray-200">
             <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div class="text-sm text-gray-700">
+                <div class="text-xs sm:text-sm text-gray-700 text-center sm:text-left">
                     Showing <span class="font-medium">{{ currentPage * pageSize + 1 }}</span>
                     to <span class="font-medium">{{ endIndex }}</span>
                     of <span class="font-medium">{{ totalElements }}</span> results
                 </div>
                 <div class="flex items-center gap-2">
-                    <label class="text-sm text-gray-700">Rows per page:</label>
+                    <label class="text-xs sm:text-sm text-gray-700 whitespace-nowrap">Rows:</label>
                     <select [value]="pageSize" (change)="changePageSize(+$any($event.target).value)"
-                        class="border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        class="border border-gray-300 rounded px-2 py-1 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
                     </select>
                 </div>
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-1 sm:gap-2">
                     <button (click)="previousPage()" [disabled]="currentPage === 0"
                         [class.opacity-50]="currentPage === 0" [class.cursor-not-allowed]="currentPage === 0"
-                        class="px-3 py-1 border border-gray-300 rounded text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:hover:bg-white">
-                        Previous
+                        class="px-2 sm:px-3 py-1 border border-gray-300 rounded text-xs sm:text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:hover:bg-white">
+                        Prev
                     </button>
                     <button *ngFor="let page of getPageNumbers()" (click)="goToPage(page)"
                         [class.bg-blue-600]="page === currentPage" [class.text-white]="page === currentPage"
                         [class.text-gray-700]="page !== currentPage"
-                        class="px-3 py-1 border border-gray-300 rounded text-sm font-medium hover:bg-gray-50">
+                        class="px-2 sm:px-3 py-1 border border-gray-300 rounded text-xs sm:text-sm font-medium hover:bg-gray-50">
                         {{ page + 1 }}
                     </button>
                     <button (click)="nextPage()" [disabled]="currentPage >= totalPages - 1"
                         [class.opacity-50]="currentPage >= totalPages - 1"
                         [class.cursor-not-allowed]="currentPage >= totalPages - 1"
-                        class="px-3 py-1 border border-gray-300 rounded text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:hover:bg-white">
+                        class="px-2 sm:px-3 py-1 border border-gray-300 rounded text-xs sm:text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:hover:bg-white">
                         Next
                     </button>
                 </div>
@@ -148,29 +198,29 @@
 </div>
 
 <!-- View Device Modal -->
-<div *ngIf="showViewModal" class="fixed inset-0 backdrop-blur-sm bg-white/30 flex items-center justify-center z-50"
+<div *ngIf="showViewModal" class="fixed inset-0 backdrop-blur-sm bg-black/30 flex items-center justify-center z-50 p-4"
     role="dialog" aria-modal="true" (click)="closeViewModal()" (keydown.escape)="closeViewModal()">
-    <div class="bg-white rounded-lg shadow-xl max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto"
+    <div class="bg-white rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto"
         (click)="$event.stopPropagation()">
-        <div class="p-6 border-b border-gray-200">
+        <div class="p-4 sm:p-6 border-b border-gray-200">
             <div class="flex items-center justify-between">
-                <h3 class="text-xl font-bold text-gray-800">Device Details</h3>
+                <h3 class="text-lg sm:text-xl font-bold text-gray-800">Device Details</h3>
                 <button (click)="closeViewModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
         </div>
-        <div *ngIf="selectedDevice" class="p-6 space-y-4">
-            <div class="grid grid-cols-2 gap-4">
+        <div *ngIf="selectedDevice" class="p-4 sm:p-6 space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                    <label class="text-sm font-semibold text-gray-600">Name</label>
-                    <p class="text-gray-900 mt-1">{{ selectedDevice!.name }}</p>
+                    <label class="text-xs sm:text-sm font-semibold text-gray-600">Name</label>
+                    <p class="text-sm text-gray-900 mt-1">{{ selectedDevice!.name }}</p>
                 </div>
                 <div>
-                    <label class="text-sm font-semibold text-gray-600">Status</label>
+                    <label class="text-xs sm:text-sm font-semibold text-gray-600">Status</label>
                     <p class="mt-1">
                         <span [class]="getStatusColor(selectedDevice!.status)"
                             class="px-2 py-1 text-xs font-semibold rounded-full">
@@ -179,59 +229,61 @@
                     </p>
                 </div>
                 <div>
-                    <label class="text-sm font-semibold text-gray-600">Serial Number</label>
-                    <p class="text-gray-900 mt-1 font-mono text-sm">{{ selectedDevice!.serialNumber }}</p>
+                    <label class="text-xs sm:text-sm font-semibold text-gray-600">Serial Number</label>
+                    <p class="text-sm text-gray-900 mt-1 font-mono break-all">{{ selectedDevice!.serialNumber }}</p>
                 </div>
                 <div>
-                    <label class="text-sm font-semibold text-gray-600">Model</label>
-                    <p class="text-gray-900 mt-1">{{ selectedDevice!.model }}</p>
+                    <label class="text-xs sm:text-sm font-semibold text-gray-600">Model</label>
+                    <p class="text-sm text-gray-900 mt-1">{{ selectedDevice!.model }}</p>
                 </div>
                 <div>
-                    <label class="text-sm font-semibold text-gray-600">Manufacturer</label>
-                    <p class="text-gray-900 mt-1">{{ selectedDevice!.manufacturer }}</p>
+                    <label class="text-xs sm:text-sm font-semibold text-gray-600">Manufacturer</label>
+                    <p class="text-sm text-gray-900 mt-1">{{ selectedDevice!.manufacturer }}</p>
                 </div>
                 <div>
-                    <label class="text-sm font-semibold text-gray-600">Software Version</label>
-                    <p class="text-gray-900 mt-1">{{ selectedDevice!.softwareVersion }}</p>
+                    <label class="text-xs sm:text-sm font-semibold text-gray-600">Software Version</label>
+                    <p class="text-sm text-gray-900 mt-1">{{ selectedDevice!.softwareVersion }}</p>
                 </div>
                 <div>
-                    <label class="text-sm font-semibold text-gray-600">Fleet</label>
-                    <p class="text-gray-900 mt-1">{{ selectedDevice!.fleet.name }}</p>
+                    <label class="text-xs sm:text-sm font-semibold text-gray-600">Fleet</label>
+                    <p class="text-sm text-gray-900 mt-1">{{ selectedDevice!.fleet.name }}</p>
                 </div>
                 <div>
-                    <label class="text-sm font-semibold text-gray-600">IP Address</label>
-                    <p class="text-gray-900 mt-1 font-mono text-sm">{{ selectedDevice!.ip }}</p>
+                    <label class="text-xs sm:text-sm font-semibold text-gray-600">IP Address</label>
+                    <p class="text-sm text-gray-900 mt-1 font-mono">{{ selectedDevice!.ip }}</p>
                 </div>
                 <div>
-                    <label class="text-sm font-semibold text-gray-600">Last Seen</label>
-                    <p class="text-gray-900 mt-1">{{ formatDateTime(selectedDevice!.lastSeen) }}</p>
+                    <label class="text-xs sm:text-sm font-semibold text-gray-600">Last Seen</label>
+                    <p class="text-sm text-gray-900 mt-1">{{ formatDateTime(selectedDevice!.lastSeen) }}</p>
                 </div>
                 <div>
-                    <label class="text-sm font-semibold text-gray-600">Owner</label>
-                    <p class="text-gray-900 mt-1">{{ selectedDevice!.user.firstname }} {{ selectedDevice!.user.lastname }}
+                    <label class="text-xs sm:text-sm font-semibold text-gray-600">Owner</label>
+                    <p class="text-sm text-gray-900 mt-1">{{ selectedDevice!.user.firstname }} {{
+                        selectedDevice!.user.lastname }}
                     </p>
                 </div>
-                <div *ngIf="selectedDevice.gpsLat && selectedDevice.gpsLong" class="col-span-2">
-                    <label class="text-sm font-semibold text-gray-600">GPS Coordinates</label>
-                    <p class="text-gray-900 mt-1">{{ selectedDevice!.gpsLat }}, {{ selectedDevice!.gpsLong }}</p>
+                <div *ngIf="selectedDevice.gpsLat && selectedDevice.gpsLong" class="col-span-1 sm:col-span-2">
+                    <label class="text-xs sm:text-sm font-semibold text-gray-600">GPS Coordinates</label>
+                    <p class="text-sm text-gray-900 mt-1">{{ selectedDevice!.gpsLat }}, {{ selectedDevice!.gpsLong }}
+                    </p>
                 </div>
                 <div>
-                    <label class="text-sm font-semibold text-gray-600">Created At</label>
-                    <p class="text-gray-900 mt-1">{{ formatDate(selectedDevice!.createdAt) }}</p>
+                    <label class="text-xs sm:text-sm font-semibold text-gray-600">Created At</label>
+                    <p class="text-sm text-gray-900 mt-1">{{ formatDate(selectedDevice!.createdAt) }}</p>
                 </div>
                 <div>
-                    <label class="text-sm font-semibold text-gray-600">Created By</label>
-                    <p class="text-gray-900 mt-1">{{ selectedDevice!.createdBy }}</p>
+                    <label class="text-xs sm:text-sm font-semibold text-gray-600">Created By</label>
+                    <p class="text-sm text-gray-900 mt-1">{{ selectedDevice!.createdBy }}</p>
                 </div>
-                <div class="col-span-2">
-                    <label class="text-sm font-semibold text-gray-600">Device ID</label>
-                    <p class="text-gray-600 text-xs mt-1 font-mono">{{ selectedDevice!.id }}</p>
+                <div class="col-span-1 sm:col-span-2">
+                    <label class="text-xs sm:text-sm font-semibold text-gray-600">Device ID</label>
+                    <p class="text-gray-600 text-xs mt-1 font-mono break-all">{{ selectedDevice!.id }}</p>
                 </div>
             </div>
         </div>
-        <div class="p-6 border-t border-gray-200 flex justify-end">
+        <div class="p-4 sm:p-6 border-t border-gray-200 flex justify-end">
             <button (click)="closeViewModal()"
-                class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors">
+                class="px-4 py-2 text-sm bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors">
                 Close
             </button>
         </div>
@@ -239,26 +291,27 @@
 </div>
 
 <!-- Delete Confirmation Modal -->
-<div *ngIf="showDeleteModal" class="fixed inset-0 backdrop-blur-sm bg-white/30 flex items-center justify-center z-50"
-    role="dialog" aria-modal="true" (click)="cancelDelete()" (keydown.escape)="cancelDelete()">
-    <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4" (click)="$event.stopPropagation()">
-        <div class="p-6 border-b border-gray-200">
-            <h3 class="text-xl font-bold text-gray-800">Delete Device</h3>
+<div *ngIf="showDeleteModal"
+    class="fixed inset-0 backdrop-blur-sm bg-black/30 flex items-center justify-center z-50 p-4" role="dialog"
+    aria-modal="true" (click)="cancelDelete()" (keydown.escape)="cancelDelete()">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full" (click)="$event.stopPropagation()">
+        <div class="p-4 sm:p-6 border-b border-gray-200">
+            <h3 class="text-lg sm:text-xl font-bold text-gray-800">Delete Device</h3>
         </div>
-        <div class="p-6">
-            <p class="text-gray-700">
+        <div class="p-4 sm:p-6">
+            <p class="text-sm text-gray-700">
                 Are you sure you want to delete the device
                 <span class="font-semibold">"{{ deviceToDelete?.name }}"</span>?
             </p>
-            <p class="text-sm text-red-600 mt-2">This action cannot be undone.</p>
+            <p class="text-xs sm:text-sm text-red-600 mt-2">This action cannot be undone.</p>
         </div>
-        <div class="p-6 border-t border-gray-200 flex justify-end gap-3">
+        <div class="p-4 sm:p-6 border-t border-gray-200 flex justify-end gap-3">
             <button (click)="cancelDelete()" [disabled]="deleting"
-                class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors disabled:opacity-50">
+                class="px-4 py-2 text-sm bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors disabled:opacity-50">
                 Cancel
             </button>
             <button (click)="deleteDevice()" [disabled]="deleting"
-                class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors disabled:opacity-50 flex items-center gap-2">
+                class="px-4 py-2 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition-colors disabled:opacity-50 flex items-center gap-2">
                 <span *ngIf="deleting" class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
                 {{ deleting ? 'Deleting...' : 'Delete' }}
             </button>

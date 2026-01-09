@@ -1,15 +1,27 @@
 <mat-toolbar class="navbar">
+    <!-- Mobile Hamburger Menu -->
+    <button *ngIf="!isLargeScreen" mat-icon-button class="mr-2" (click)="toggleSidebar()" matTooltip="Menu">
+        <mat-icon>menu</mat-icon>
+    </button>
 
-    <!-- Left side - Search -->
-    <div class="flex-1 max-w-2xl">
-        <mat-form-field appearance="outline" class="search-field">
+    <!-- Left side - Search (Hidden on mobile) -->
+    <!-- <div class="hidden md:flex flex-1 max-w-2xl">
+        <mat-form-field appearance="outline" class="search-field w-full">
             <mat-icon matPrefix class="search-icon">search</mat-icon>
             <input matInput placeholder="Search devices, fleets, alerts..." class="search-input" />
         </mat-form-field>
-    </div>
+    </div> -->
+
+    <!-- Spacer for mobile -->
+    <div class="flex-1 md:hidden"></div>
 
     <!-- Right side - Actions -->
-    <div class="flex items-center gap-2 ml-auto">
+    <div class="flex items-center gap-1 sm:gap-2 ml-auto">
+        <!-- Mobile Search Button -->
+        <!-- <button mat-icon-button matTooltip="Search" class="navbar-icon-btn md:hidden">
+            <mat-icon>search</mat-icon>
+        </button> -->
+
         <!-- Notifications Button with Badge and Menu -->
         <button mat-icon-button matTooltip="Notifications" class="navbar-icon-btn notification-btn"
             [matMenuTriggerFor]="notificationMenu">
@@ -73,10 +85,11 @@
             </button>
         </mat-menu>
 
-        <!-- Theme Toggle Button -->
-        <button mat-icon-button matTooltip="Toggle Theme" class="navbar-icon-btn" (click)="toggleTheme()">
+        <!-- Theme Toggle Button (Hidden on small mobile) -->
+        <!-- <button mat-icon-button matTooltip="Toggle Theme" class="navbar-icon-btn hidden sm:flex"
+            (click)="toggleTheme()">
             <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
-        </button>
+        </button> -->
 
         <!-- User Menu -->
         <ng-container *ngIf="user$ | async as user">
