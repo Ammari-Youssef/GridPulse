@@ -1,85 +1,130 @@
 <div>
-    <div class="flex items-center justify-between mb-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
             <h2 class="text-xl font-bold text-gray-800 mb-1">User Management</h2>
             <p class="text-sm text-gray-600">Manage system users and their permissions</p>
         </div>
 
-        <button mat-raised-button color="primary" (click)="onAddUser()">
+        <button mat-raised-button color="primary" (click)="onAddUser()" class="w-full sm:w-auto">
             <mat-icon>person_add</mat-icon>
             Add User
         </button>
     </div>
 
-    <!-- Users Table -->
+    <!-- Users Table/Cards Container -->
     <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
-        <table mat-table [dataSource]="users" class="w-full">
 
-            <!-- Name Column -->
-            <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef class="font-semibold">Name</th>
-                <td mat-cell *matCellDef="let user">
-                    <div class="flex items-center gap-3">
+        <!-- Desktop Table View -->
+        <div class="hidden md:block overflow-x-auto">
+            <table mat-table [dataSource]="users" class="w-full">
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef class="font-semibold">Name</th>
+                    <td mat-cell *matCellDef="let user">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
+                                <span class="text-white font-semibold text-sm">
+                                    {{ user.firstname.charAt(0) }}{{ user.lastname.charAt(0) }}
+                                </span>
+                            </div>
+                            <div>
+                                <div class="font-medium">{{ user.firstname }} {{ user.lastname }}</div>
+                                <div class="text-xs text-gray-500">ID: {{ user.id }}</div>
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <!-- Email Column -->
+                <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef class="font-semibold">Email</th>
+                    <td mat-cell *matCellDef="let user">
+                        <div class="flex items-center gap-2">
+                            <mat-icon class="text-gray-400 text-lg">email</mat-icon>
+                            {{ user.email }}
+                        </div>
+                    </td>
+                </ng-container>
+
+                <!-- Role Column -->
+                <ng-container matColumnDef="role">
+                    <th mat-header-cell *matHeaderCellDef class="font-semibold">Role</th>
+                    <td mat-cell *matCellDef="let user">
+                        <span [class]="getRoleColor(user.role)"
+                            class="px-3 py-1 rounded-full text-xs font-medium inline-flex items-center gap-1">
+                            <mat-icon class="text-sm">
+                                {{ user.role === 'ADMIN' ? 'admin_panel_settings' : 'person' }}
+                            </mat-icon>
+                            {{ getRoleLabel(user.role) }}
+                        </span>
+                    </td>
+                </ng-container>
+
+                <!-- Status Column -->
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef class="font-semibold">Status</th>
+                    <td mat-cell *matCellDef="let user">
+                        <span [class]="user.enabled ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'"
+                            class="px-3 py-1 rounded-full text-xs font-medium inline-flex items-center gap-1">
+                            <span [class]="user.enabled ? 'bg-green-500' : 'bg-gray-500'"
+                                class="w-2 h-2 rounded-full"></span>
+                            {{ user.enabled ? 'Active' : 'Inactive' }}
+                        </span>
+                    </td>
+                </ng-container>
+
+                <!-- Actions Column -->
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef class="font-semibold">Actions</th>
+                    <td mat-cell *matCellDef="let user">
+                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="onEditUser(user)">
+                                <mat-icon>edit</mat-icon>
+                                <span>Edit</span>
+                            </button>
+                            <button mat-menu-item (click)="onToggleStatus(user)">
+                                <mat-icon>{{ user.enabled ? 'block' : 'check_circle' }}</mat-icon>
+                                <span>{{ user.enabled ? 'Disable' : 'Enable' }}</span>
+                            </button>
+                            <mat-divider></mat-divider>
+                            <button mat-menu-item (click)="onDeleteUser(user)" class="text-red-600">
+                                <mat-icon class="text-red-600">delete</mat-icon>
+                                <span>Delete</span>
+                            </button>
+                        </mat-menu>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover:bg-gray-50"></tr>
+            </table>
+        </div>
+
+        <!-- Mobile Card View -->
+        <div class="md:hidden divide-y divide-gray-200">
+            <div *ngFor="let user of users" class="p-4 hover:bg-gray-50">
+                <div class="flex items-start justify-between mb-3">
+                    <div class="flex items-center gap-3 flex-1 min-w-0">
                         <div
-                            class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
+                            class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center flex-shrink-0">
                             <span class="text-white font-semibold text-sm">
                                 {{ user.firstname.charAt(0) }}{{ user.lastname.charAt(0) }}
                             </span>
                         </div>
-                        <div>
-                            <div class="font-medium">{{ user.firstname }} {{ user.lastname }}</div>
-                            <div class="text-xs text-gray-500">ID: {{ user.id }}</div>
+                        <div class="min-w-0 flex-1">
+                            <div class="font-medium truncate">{{ user.firstname }} {{ user.lastname }}</div>
+                            <div class="text-xs text-gray-500 truncate">{{ user.email }}</div>
                         </div>
                     </div>
-                </td>
-            </ng-container>
-
-            <!-- Email Column -->
-            <ng-container matColumnDef="email">
-                <th mat-header-cell *matHeaderCellDef class="font-semibold">Email</th>
-                <td mat-cell *matCellDef="let user">
-                    <div class="flex items-center gap-2">
-                        <mat-icon class="text-gray-400 text-lg">email</mat-icon>
-                        {{ user.email }}
-                    </div>
-                </td>
-            </ng-container>
-
-            <!-- Role Column -->
-            <ng-container matColumnDef="role">
-                <th mat-header-cell *matHeaderCellDef class="font-semibold">Role</th>
-                <td mat-cell *matCellDef="let user">
-                    <span [class]="getRoleColor(user.role)"
-                        class="px-3 py-1 rounded-full text-xs font-medium inline-flex items-center gap-1">
-                        <mat-icon class="text-sm">
-                            {{ user.role === 'ADMIN' ? 'admin_panel_settings' : 'person' }}
-                        </mat-icon>
-                        {{ getRoleLabel(user.role) }}
-                    </span>
-                </td>
-            </ng-container>
-
-            <!-- Status Column -->
-            <ng-container matColumnDef="status">
-                <th mat-header-cell *matHeaderCellDef class="font-semibold">Status</th>
-                <td mat-cell *matCellDef="let user">
-                    <span [class]="user.enabled ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'"
-                        class="px-3 py-1 rounded-full text-xs font-medium inline-flex items-center gap-1">
-                        <span [class]="user.enabled ? 'bg-green-500' : 'bg-gray-500'"
-                            class="w-2 h-2 rounded-full"></span>
-                        {{ user.enabled ? 'Active' : 'Inactive' }}
-                    </span>
-                </td>
-            </ng-container>
-
-            <!-- Actions Column -->
-            <ng-container matColumnDef="actions">
-                <th mat-header-cell *matHeaderCellDef class="font-semibold">Actions</th>
-                <td mat-cell *matCellDef="let user">
-                    <button mat-icon-button [matMenuTriggerFor]="menu">
+                    <button mat-icon-button [matMenuTriggerFor]="mobileMenu" class="flex-shrink-0">
                         <mat-icon>more_vert</mat-icon>
                     </button>
-                    <mat-menu #menu="matMenu">
+                    <mat-menu #mobileMenu="matMenu">
                         <button mat-menu-item (click)="onEditUser(user)">
                             <mat-icon>edit</mat-icon>
                             <span>Edit</span>
@@ -94,19 +139,32 @@
                             <span>Delete</span>
                         </button>
                     </mat-menu>
-                </td>
-            </ng-container>
+                </div>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover:bg-gray-50"></tr>
-        </table>
+                <div class="flex flex-wrap gap-2">
+                    <span [class]="getRoleColor(user.role)"
+                        class="px-2 py-1 rounded-full text-xs font-medium inline-flex items-center gap-1">
+                        <mat-icon class="text-sm">
+                            {{ user.role === 'ADMIN' ? 'admin_panel_settings' : 'person' }}
+                        </mat-icon>
+                        {{ getRoleLabel(user.role) }}
+                    </span>
+                    <span [class]="user.enabled ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'"
+                        class="px-2 py-1 rounded-full text-xs font-medium inline-flex items-center gap-1">
+                        <span [class]="user.enabled ? 'bg-green-500' : 'bg-gray-500'"
+                            class="w-2 h-2 rounded-full"></span>
+                        {{ user.enabled ? 'Active' : 'Inactive' }}
+                    </span>
+                </div>
+            </div>
+        </div>
 
         <!-- Empty State -->
         <div *ngIf="users.length === 0 && !loading" class="p-12 text-center">
             <mat-icon class="text-6xl text-gray-400 mb-4">people_outline</mat-icon>
             <h3 class="text-lg font-semibold text-gray-700 mb-2">No users found</h3>
             <p class="text-sm text-gray-600 mb-4">Add your first user to get started</p>
-            <button mat-raised-button color="primary" (click)="onAddUser()">
+            <button mat-raised-button color="primary" (click)="onAddUser()" class="w-full sm:w-auto">
                 <mat-icon>person_add</mat-icon>
                 Add User
             </button>
