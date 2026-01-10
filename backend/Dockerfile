@@ -16,7 +16,7 @@ COPY pom.xml .
 RUN ./mvnw -q dependency:go-offline
 
 # Copy the source code (Avoiding cache break in each code updates)
-COPY ../src src
+COPY src src
 
 # Build the application (jar file - skip tests)
 RUN ./mvnw clean package -DskipTests
@@ -44,5 +44,5 @@ USER appuser
 # Expose the port the app runs on
 EXPOSE 8080
 
-# Use shell form for entrypoint to allow environment variable expansion
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+# Use shell form to allow environment variable expansion
+ENTRYPOINT sh -c "java -Dserver.port=${PORT:-8080} -jar /app/app.jar"
