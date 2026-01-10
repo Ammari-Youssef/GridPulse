@@ -7,6 +7,10 @@ spring:
     application:
         name: GridPulse
 
+    liquibase:
+        test-rollback-on-update: true
+        show-summary: summary
+
 management:
     server:
         port: 9000   # Port des endpoints Actuator en DEV
