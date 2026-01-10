@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: ${PORT:8080}
 
 spring:
   main:
@@ -7,9 +7,18 @@ spring:
   application:
     name: GridPulse
 
+
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+
+  liquibase:
+    enabled: true
+
 management:
   server:
-    port: 9001        # Port admin
+    port: ${PORT:8080}
 
   endpoints:
     web:
@@ -17,20 +26,22 @@ management:
         include:
           - health
           - info
-          - prometheus
           - gridpulse # Endpoint custom GridPulse
+
+      base-path: /actuator
 
   endpoint:
     health:
-      show-details: never
-    prometheus:
-      access: unrestricted
+      show-details: when-authorized  # Show details only to authenticated users
+      probes:
+        enabled: true
 
 logging:
   level:
     root: INFO
-    org.springframework.security: INFO
+    org.springframework.security: WARN
     org.springframework.web: WARN
-
-
-
+    org.hibernate.SQL: WARN
+    com.youssef.gridpulse: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
