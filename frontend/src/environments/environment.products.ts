@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: '', // to be updated when backend is deployed
+  apiUrl: 'https://gridpulse-production.up.railway.app/graphql',
 };
