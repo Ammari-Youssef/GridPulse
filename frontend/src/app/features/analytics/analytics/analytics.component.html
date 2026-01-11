@@ -1,1 +1,138 @@
-<p>analytics works!</p>
+<div class="min-h-screen bg-gray-50 p-4 sm:p-6">
+    <!-- Header with Device Selector -->
+    <div class="flex flex-col gap-4 mb-6 p-5 bg-white rounded-lg shadow-md">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div class="flex-1">
+                <h1 class="text-2xl sm:text-3xl font-semibold text-gray-900 mb-2">Device Analytics</h1>
+                <p class="text-sm text-gray-600">
+                    Real-time monitoring and performance metrics
+                </p>
+            </div>
+            <div class="flex-shrink-0">
+                <button mat-raised-button color="primary" (click)="refreshData()"
+                    [disabled]="loadingAnalytics || !selectedDeviceId" class="flex items-center gap-2">
+                    <mat-icon>refresh</mat-icon>
+                    <span>Refresh</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Device Selector -->
+        <div class="w-full">
+            <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Select Device</mat-label>
+                <mat-select [(ngModel)]="selectedDeviceId" (selectionChange)="onDeviceChange()"
+                    [disabled]="loadingDevices">
+                    <mat-option *ngFor="let device of devices" [value]="device.id">
+                        <div class="flex items-center justify-between">
+                            <span class="font-medium">{{ device.name }}</span>
+                            <span class="text-xs text-gray-500 ml-2">{{ device.serialNumber }}</span>
+                            <span class="ml-2 px-2 py-0.5 rounded-full text-xs font-semibold" [ngClass]="{
+                  'bg-green-100 text-green-700': device.status === 'ONLINE',
+                  'bg-red-100 text-red-700': device.status === 'OFFLINE',
+                  'bg-yellow-100 text-yellow-700': device.status === 'MAINTENANCE'
+                }">
+                                {{ device.status }}
+                            </span>
+                        </div>
+                    </mat-option>
+                </mat-select>
+                <mat-hint *ngIf="devices.length > 0">{{ devices.length }} device(s) available</mat-hint>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <!-- Loading Devices -->
+    <div *ngIf="loadingDevices" class="flex flex-col items-center justify-center p-12 bg-white rounded-lg shadow-md">
+        <mat-spinner></mat-spinner>
+        <p class="mt-4 text-gray-600">Loading devices...</p>
+    </div>
+
+    <!-- Loading Analytics -->
+    <div *ngIf="!loadingDevices && loadingAnalytics"
+        class="flex flex-col items-center justify-center p-12 bg-white rounded-lg shadow-md">
+        <mat-spinner></mat-spinner>
+        <p class="mt-4 text-gray-600">Loading analytics data...</p>
+    </div>
+
+    <!-- Analytics Content -->
+    <div *ngIf="!loadingDevices && !loadingAnalytics && deviceData" class="space-y-6">
+        <!-- Stats Overview -->
+        <app-stats-overview [deviceData]="deviceData" />
+        <!-- Charts Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Battery Gauge Chart -->
+            <div *ngIf="batteryGaugeData" class="bg-white rounded-lg overflow-hidden shadow-md">
+                <app-battery-chart [chartData]="batteryGaugeData" [title]="'Battery Metrics Overview'" />
+            </div>
+
+            <!-- Energy Comparison Chart -->
+            <div *ngIf="energyComparisonData" class="bg-white rounded-lg overflow-hidden shadow-md">
+                <app-energy-chart [chartData]="energyComparisonData" [title]="'Energy Consumption vs Production'" />
+            </div>
+
+            <!-- Battery Health Chart -->
+            <div *ngIf="batteryHealthData" class="bg-white rounded-lg overflow-hidden shadow-md">
+                <app-energy-chart [chartData]="batteryHealthData" [title]="'Battery Health Status'" />
+            </div>
+
+            <!-- Power Overview Chart -->
+            <div *ngIf="powerOverviewData" class="bg-white rounded-lg overflow-hidden shadow-md">
+                <app-energy-chart [chartData]="powerOverviewData" [title]="'Current Power Dispatch'" />
+            </div>
+        </div>
+
+        <!-- Device Info Card -->
+        <div class="p-6 bg-white rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold text-gray-900 mb-5">Device Information</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+                    <span class="font-medium text-gray-600">Model:</span>
+                    <span class="text-gray-900 font-medium">{{ deviceData.model }}</span>
+                </div>
+                <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+                    <span class="font-medium text-gray-600">Serial Number:</span>
+                    <span class="text-gray-900 font-medium">{{ deviceData.serialNumber }}</span>
+                </div>
+                <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+                    <span class="font-medium text-gray-600">Status:</span>
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold uppercase" [ngClass]="{
+              'bg-green-100 text-green-700': deviceData.status === 'ONLINE',
+              'bg-red-100 text-red-700': deviceData.status === 'OFFLINE',
+              'bg-yellow-100 text-yellow-700': deviceData.status === 'MAINTENANCE'
+            }">
+                        {{ deviceData.status }}
+                    </span>
+                </div>
+                <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+                    <span class="font-medium text-gray-600">Battery Chemistry:</span>
+                    <span class="text-gray-900 font-medium">{{ deviceData.bms.batteryChemistry }}</span>
+                </div>
+                <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+                    <span class="font-medium text-gray-600">Battery Cycles:</span>
+                    <span class="text-gray-900 font-medium">{{ deviceData.bms.cycles }}</span>
+                </div>
+                <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+                    <span class="font-medium text-gray-600">SOH:</span>
+                    <span class="text-gray-900 font-medium">{{ deviceData.bms.soh }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- No Device Selected -->
+    <div *ngIf="!loadingDevices && !loadingAnalytics && !deviceData && devices.length > 0"
+        class="flex flex-col items-center justify-center p-12 bg-white rounded-lg shadow-md">
+        <mat-icon class="text-gray-300 mb-4" style="font-size: 64px; width: 64px; height: 64px">devices</mat-icon>
+        <h2 class="text-xl font-medium text-gray-600 mb-2">Select a Device</h2>
+        <p class="text-gray-500">Choose a device from the dropdown to view analytics</p>
+    </div>
+
+    <!-- No Devices Available -->
+    <div *ngIf="!loadingDevices && devices.length === 0"
+        class="flex flex-col items-center justify-center p-12 bg-white rounded-lg shadow-md">
+        <mat-icon class="text-gray-300 mb-4" style="font-size: 64px; width: 64px; height: 64px">error_outline</mat-icon>
+        <h2 class="text-xl font-medium text-gray-600 mb-2">No Devices Available</h2>
+        <p class="text-gray-500">There are no devices to display analytics for</p>
+    </div>
+</div>

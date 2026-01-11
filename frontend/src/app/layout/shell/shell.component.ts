@@ -6,4 +6,14 @@ import { Component } from '@angular/core';
   styleUrl: './shell.component.scss',
   standalone: false,
 })
-export class ShellComponent {}
+export class ShellComponent {
+  isMobileSidebarOpen = false;
+
+  toggleMobileSidebar(): void {
+    this.isMobileSidebarOpen = !this.isMobileSidebarOpen;
+  }
+
+  closeMobileSidebar(): void {
+    this.isMobileSidebarOpen = false;
+  }
+}

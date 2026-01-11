@@ -1,15 +1,15 @@
 <div class="w-full">
     <div class="bg-white rounded-lg shadow-lg overflow-hidden">
         <!-- Map Header -->
-        <div class="p-4 border-b border-gray-200">
-            <h2 class="text-xl font-bold text-gray-800">Device Locations</h2>
-            <p class="text-sm text-gray-600">Real-time geographic distribution of IoT devices</p>
+        <div class="p-3 sm:p-4 border-b border-gray-200">
+            <h2 class="text-lg sm:text-xl font-bold text-gray-800">Device Locations</h2>
+            <p class="text-xs sm:text-sm text-gray-600">Real-time geographic distribution of IoT devices</p>
         </div>
 
         <!-- Filter Section -->
-        <div class="p-4 bg-gray-50 border-b border-gray-200">
-            <fieldset class="flex items-center gap-4 flex-wrap">
-                <legend class="text-sm font-semibold text-gray-700">
+        <div class="p-3 sm:p-4 bg-gray-50 border-b border-gray-200">
+            <fieldset class="space-y-2">
+                <legend class="text-xs sm:text-sm font-semibold text-gray-700 mb-2">
                     Filter by Status:
                 </legend>
 
@@ -18,7 +18,7 @@
                         [class.bg-blue-600]="selectedStatuses.size === 0"
                         [class.text-white]="selectedStatuses.size === 0" [class.bg-gray-200]="selectedStatuses.size > 0"
                         [class.text-gray-700]="selectedStatuses.size > 0"
-                        class="px-3 py-1 rounded-full text-xs font-medium transition-colors">
+                        class="px-3 py-1.5 sm:py-1 rounded-full text-xs font-medium transition-colors whitespace-nowrap">
                         All Devices
                     </button>
 
@@ -27,89 +27,86 @@
                         [class.ring-offset-2]="selectedStatuses.has(status)"
                         [style.background-color]="selectedStatuses.has(status) ? getStatusBgColor(status) : ''"
                         [style.color]="selectedStatuses.has(status) ? 'white' : ''"
-                        class="px-3 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors">
+                        class="px-3 py-1.5 sm:py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors whitespace-nowrap">
                         {{ status }}
                     </button>
                 </div>
             </fieldset>
         </div>
 
-
         <!-- Error Handling -->
-        <div *ngIf="error" class="p-4 bg-red-50 border-l-4 border-red-500">
-            <p class="text-red-700">{{ error }}</p>
+        <div *ngIf="error" class="p-3 sm:p-4 bg-red-50 border-l-4 border-red-500">
+            <p class="text-sm text-red-700">{{ error }}</p>
         </div>
 
         <!-- Loading -->
         <div *ngIf="loading" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 z-10">
             <div class="text-center">
-                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                <p class="mt-2 text-gray-600">Loading devices...</p>
+                <div class="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-b-2 border-blue-600 mx-auto">
+                </div>
+                <p class="mt-2 text-sm text-gray-600">Loading devices...</p>
             </div>
         </div>
 
-        <!-- Map Container -->
-        <div id="device-map" class="h-[600px] w-full"></div>
+        <!-- Map Container - Responsive Height -->
+        <div id="device-map" class="h-[400px] sm:h-[500px] lg:h-[600px] w-full"></div>
 
         <!-- Legend -->
-        <div class="p-4 bg-gray-50 border-t border-gray-200">
-            <div class="flex flex-wrap gap-x-6 gap-y-3 text-sm">
-
+        <div class="p-3 sm:p-4 bg-gray-50 border-t border-gray-200">
+            <div
+                class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:flex lg:flex-wrap gap-x-4 gap-y-2 sm:gap-y-3 text-xs sm:text-sm">
                 <!-- Operational states -->
                 <div class="flex items-center gap-2">
-                    <span class="w-3 h-3 rounded-full" style="background-color:#2AAD27;"></span>
-                    <span>Online</span>
+                    <span class="w-3 h-3 rounded-full flex-shrink-0" style="background-color:#2AAD27;"></span>
+                    <span class="truncate">Online</span>
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <span class="w-3 h-3 rounded-full" style="background-color:#31882A;"></span>
-                    <span>Standby</span>
+                    <span class="w-3 h-3 rounded-full flex-shrink-0" style="background-color:#31882A;"></span>
+                    <span class="truncate">Standby</span>
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <span class="w-3 h-3 rounded-full" style="background-color:#CB2B3E;"></span>
-                    <span>Offline</span>
+                    <span class="w-3 h-3 rounded-full flex-shrink-0" style="background-color:#CB2B3E;"></span>
+                    <span class="truncate">Offline</span>
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <span class="w-3 h-3 rounded-full" style="background-color:#CB8427;"></span>
-                    <span>Error</span>
+                    <span class="w-3 h-3 rounded-full flex-shrink-0" style="background-color:#CB8427;"></span>
+                    <span class="truncate">Error</span>
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <span class="w-3 h-3 rounded-full" style="background-color:#CAC428;"></span>
-                    <span>Maintenance</span>
+                    <span class="w-3 h-3 rounded-full flex-shrink-0" style="background-color:#CAC428;"></span>
+                    <span class="truncate">Maintenance</span>
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <span class="w-3 h-3 rounded-full" style="background-color:#2A81CB;"></span>
-                    <span>New</span>
+                    <span class="w-3 h-3 rounded-full flex-shrink-0" style="background-color:#2A81CB;"></span>
+                    <span class="truncate">New</span>
                 </div>
 
                 <!-- Lifecycle states -->
                 <div class="flex items-center gap-2">
-                    <span class="w-3 h-3 rounded-full" style="background-color:#9C2BCB;"></span>
-                    <span>Commissioning</span>
+                    <span class="w-3 h-3 rounded-full flex-shrink-0" style="background-color:#9C2BCB;"></span>
+                    <span class="truncate">Commissioning</span>
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <span class="w-3 h-3 rounded-full" style="background-color:#3D3D3D;"></span>
-                    <span>Decommissioned</span>
+                    <span class="w-3 h-3 rounded-full flex-shrink-0" style="background-color:#3D3D3D;"></span>
+                    <span class="truncate">Decommissioned</span>
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <span class="w-3 h-3 rounded-full" style="background-color:#7B7B7B;"></span>
-                    <span>Retired</span>
+                    <span class="w-3 h-3 rounded-full flex-shrink-0" style="background-color:#7B7B7B;"></span>
+                    <span class="truncate">Retired</span>
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <span class="w-3 h-3 rounded-full" style="background-color:#7B7B7B;"></span>
-                    <span>Unknown</span>
+                    <span class="w-3 h-3 rounded-full flex-shrink-0" style="background-color:#7B7B7B;"></span>
+                    <span class="truncate">Unknown</span>
                 </div>
-
             </div>
         </div>
-
-
     </div>
 </div>

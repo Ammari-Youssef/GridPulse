@@ -3,32 +3,31 @@ spring:
     name: GridPulse
 
   profiles:
-    active: dev
+    active: ${SPRING_PROFILES_ACTIVE:dev}
 
   datasource:
     url: ${DB_URL}
     username: ${DB_USER}
     password: ${DB_PASS}
-    driver-class-name: ${DB_DRIVER}
+    driver-class-name: ${DB_DRIVER:org.postgresql.Driver}
 
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: none
     database: POSTGRESQL
-    database-platform: ${DB_DIALECT}
+    database-platform: ${DB_DIALECT:org.hibernate.dialect.PostgreSQLDialect}
     properties:
       hibernate:
-        dialect: ${DB_DIALECT}
+        dialect: ${DB_DIALECT:org.hibernate.dialect.PostgreSQLDialect}
         format_sql: true
 
   liquibase:
+    enabled: true
     change-log: classpath:db/changelog/db.changelog-master.xml
-    test-rollback-on-update: true
-    show-summary: summary
+    url: ${DB_URL}
     user: ${DB_USER}
     password: ${DB_PASS}
-    url: ${DB_URL}
 
   security:
     user:
@@ -39,6 +38,6 @@ application:
   security:
     jwt:
       secret-key: ${JWT_SECRET_KEY}
-      expiration: ${JWT_EXPIRATION_TIME}
+      expiration: ${JWT_EXPIRATION_TIME:86400000}
       refresh-token:
-        expiration: ${REFRESH_EXPIRATION_TIME}
+        expiration: ${REFRESH_EXPIRATION_TIME:604800000}

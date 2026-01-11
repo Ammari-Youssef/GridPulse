@@ -1,4 +1,8 @@
-import { DeviceStatus } from "@models/enums/device-status.enum";
+import { DeviceStatus } from '@models/enums/device-status.enum';
+import { BMS } from './bms.model';
+import { Meter } from './meter.model';
+import { User } from './User.model';
+import { Fleet } from './fleet.model';
 
 export interface Device {
   id: string;
@@ -13,8 +17,14 @@ export interface Device {
   gpsLat: number;
   gpsLong: number;
   swUpdateTime: string | null;
-  fleet: { id: string; name: string };
-  user: { id: string; firstname: string; lastname: string };
+
+  // Relationships
+  fleet: Fleet;
+  user: User;
+  bms: BMS;
+  meter: Meter;
+
+  // Auditing
   createdAt: string;
   updatedAt: string;
   createdBy: string;

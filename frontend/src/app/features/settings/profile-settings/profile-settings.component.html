@@ -1,4 +1,3 @@
-<!-- features/settings/profile-settings/profile-settings.component.html -->
 <div class="max-w-2xl">
     <h2 class="text-xl font-bold text-gray-800 mb-4">Personal Information</h2>
     <p class="text-sm text-gray-600 mb-6">Update your personal details</p>
@@ -7,7 +6,7 @@
 
         <!-- First Name & Last Name -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <mat-form-field appearance="outline" class="w-full">
+            <mat-form-field appearance="fill" class="w-full">
                 <mat-label>First Name</mat-label>
                 <input matInput formControlName="firstname" required>
                 <mat-icon matPrefix>person</mat-icon>
@@ -16,7 +15,7 @@
                 </mat-error>
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="w-full">
+            <mat-form-field appearance="fill" class="w-full">
                 <mat-label>Last Name</mat-label>
                 <input matInput formControlName="lastname" required>
                 <mat-icon matPrefix>person</mat-icon>

@@ -19,8 +19,8 @@
       </div>
     </div>
 
-    <!-- Fleet Table -->
-    <div *ngIf="!loading" class="overflow-x-auto">
+    <!-- Fleet Table (desktop/tablet) -->
+    <div *ngIf="!loading" class="hidden sm:block overflow-x-auto">
       <table class="w-full">
         <thead class="bg-gray-50 border-b border-gray-200">
           <tr>
@@ -48,9 +48,7 @@
                 <span *ngIf="sortBy === 'owner'">{{ sortDesc ? '↓' : '↑' }}</span>
               </div>
             </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Description
-            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
             <th
               class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
               (click)="sort('createdAt')">
@@ -59,9 +57,7 @@
                 <span *ngIf="sortBy === 'createdAt'">{{ sortDesc ? '↓' : '↑' }}</span>
               </div>
             </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Actions
-            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
@@ -85,22 +81,31 @@
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm">
               <button (click)="viewFleet(fleet)"
-                class="text-blue-600 hover:text-blue-800 font-medium mr-3 transition-colors">
-                View
-              </button>
-              <button (click)="confirmDelete(fleet)"
-                class="text-red-600 hover:text-red-800 font-medium transition-colors">
-                Delete
-              </button>
+                class="text-blue-600 hover:text-blue-800 font-medium mr-3">View</button>
+              <button (click)="confirmDelete(fleet)" class="text-red-600 hover:text-red-800 font-medium">Delete</button>
             </td>
           </tr>
           <tr *ngIf="fleets.length === 0">
-            <td colspan="6" class="px-6 py-8 text-center text-gray-500">
-              No fleets found
-            </td>
+            <td colspan="6" class="px-6 py-8 text-center text-gray-500">No fleets found</td>
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <!-- Fleet Cards (mobile) -->
+    <div *ngIf="!loading" class="sm:hidden space-y-4 p-4">
+      <div *ngFor="let fleet of fleets" class="p-4 bg-white rounded shadow">
+        <div class="font-semibold text-gray-900">{{ fleet.name }}</div>
+        <div class="text-sm text-gray-600">{{ fleet.location }}</div>
+        <div class="text-sm text-gray-600">{{ fleet.owner }}</div>
+        <div class="text-sm text-gray-600">{{ fleet.description || 'N/A' }}</div>
+        <div class="text-xs text-gray-500">{{ formatDate(fleet.createdAt) }}</div>
+        <div class="mt-2 flex gap-3">
+          <button (click)="viewFleet(fleet)" class="text-blue-600">View</button>
+          <button (click)="confirmDelete(fleet)" class="text-red-600">Delete</button>
+        </div>
+      </div>
+      <div *ngIf="fleets.length === 0" class="text-center text-gray-500">No fleets found</div>
     </div>
 
     <!-- Pagination -->
@@ -114,26 +119,22 @@
         <div class="flex items-center gap-2">
           <label class="text-sm text-gray-700">Rows per page:</label>
           <select [value]="pageSize" (change)="changePageSize(+$any($event.target).value)"
-            class="border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            class="border border-gray-300 rounded px-2 py-1 text-sm focus:ring-2 focus:ring-blue-500">
             <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
           </select>
         </div>
-        <div class="flex items-center gap-2">
-          <button (click)="previousPage()" [disabled]="currentPage === 0" [class.opacity-50]="currentPage === 0"
-            [class.cursor-not-allowed]="currentPage === 0"
-            class="px-3 py-1 border border-gray-300 rounded text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:hover:bg-white">
+        <div class="flex flex-wrap items-center gap-2">
+          <button (click)="previousPage()" [disabled]="currentPage === 0"
+            class="px-3 py-1 border border-gray-300 rounded text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50">
             Previous
           </button>
           <button *ngFor="let page of getPageNumbers()" (click)="goToPage(page)"
             [class.bg-blue-600]="page === currentPage" [class.text-white]="page === currentPage"
-            [class.text-gray-700]="page !== currentPage"
             class="px-3 py-1 border border-gray-300 rounded text-sm font-medium hover:bg-gray-50">
             {{ page + 1 }}
           </button>
           <button (click)="nextPage()" [disabled]="currentPage >= totalPages - 1"
-            [class.opacity-50]="currentPage >= totalPages - 1"
-            [class.cursor-not-allowed]="currentPage >= totalPages - 1"
-            class="px-3 py-1 border border-gray-300 rounded text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:hover:bg-white">
+            class="px-3 py-1 border border-gray-300 rounded text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50">
             Next
           </button>
         </div>
@@ -142,100 +143,96 @@
   </div>
 </div>
 
-
 <!-- View Fleet Modal -->
 <div *ngIf="showViewModal" class="fixed inset-0 backdrop-blur-sm bg-white/30 flex items-center justify-center z-50"
   role="dialog" aria-modal="true" tabindex="0" (click)="closeViewModal()" (keydown.escape)="closeViewModal()">
   <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto"
     (click)="$event.stopPropagation()">
-    <div class="p-6 border-b border-gray-200">
-      <div class="flex items-center justify-between">
-        <h3 class="text-xl font-bold text-gray-800">Fleet Details</h3>
-        <button (click)="closeViewModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-    </div>
-    <div *ngIf="selectedFleet" class="p-6 space-y-4">
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="text-sm font-semibold text-gray-600">Name</label>
-          <p class="text-gray-900 mt-1">{{ selectedFleet.name }}</p>
-        </div>
-        <div>
-          <label class="text-sm font-semibold text-gray-600">Location</label>
-          <p class="text-gray-900 mt-1">{{ selectedFleet.location }}</p>
-        </div>
-        <div>
-          <label class="text-sm font-semibold text-gray-600">Owner</label>
-          <p class="text-gray-900 mt-1">{{ selectedFleet.owner }}</p>
-        </div>
-        <div>
-          <label class="text-sm font-semibold text-gray-600">Source</label>
-          <p class="text-gray-900 mt-1">{{ selectedFleet.source }}</p>
-        </div>
-        <div class="col-span-2">
-          <label class="text-sm font-semibold text-gray-600">Description</label>
-          <p class="text-gray-900 mt-1">{{ selectedFleet.description || 'N/A' }}</p>
-        </div>
-        <div>
-          <label class="text-sm font-semibold text-gray-600">Created At</label>
-          <p class="text-gray-900 mt-1">{{ formatDate(selectedFleet.createdAt) }}</p>
-        </div>
-        <div>
-          <label class="text-sm font-semibold text-gray-600">Created By User</label>
-          <p class="text-gray-900 mt-1">{{ selectedFleet.createdBy }}</p>
-        </div>
-        <div>
-          <label class="text-sm font-semibold text-gray-600">Updated At</label>
-          <p class="text-gray-900 mt-1">{{ formatDate(selectedFleet.updatedAt) }}</p>
-        </div>
-        <div>
-          <label class="text-sm font-semibold text-gray-600">Updated By</label>
-          <p class="text-gray-900 mt-1">{{ selectedFleet.updatedBy }}</p>
-        </div>
-        <div class="col-span-2">
-          <label class="text-sm font-semibold text-gray-600">Fleet ID</label>
-          <p class="text-gray-600 text-xs mt-1 font-mono">{{ selectedFleet.id }}</p>
-        </div>
-      </div>
-    </div>
-    <div class="p-6 border-t border-gray-200 flex justify-end">
-      <button (click)="closeViewModal()"
-        class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors">
-        Close
+    <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+      <h3 class="text-xl font-bold text-gray-800">Fleet Details</h3>
+      <button (click)="closeViewModal()" class="text-gray-400 hover:text-gray-600">
+        ✕
       </button>
     </div>
-  </div>
-</div>
-
-<!-- Delete Confirmation Modal -->
-<div *ngIf="showDeleteModal" class="fixed inset-0 backdrop-blur-sm bg-white/30 flex items-center justify-center z-50"
-  role="dialog" aria-modal="true" tabindex="0" (click)="cancelDelete()" (keydown.escape)="cancelDelete()">
-  <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4" (click)="$event.stopPropagation()">
-    <div class="p-6 border-b border-gray-200">
-      <h3 class="text-xl font-bold text-gray-800">Delete Fleet</h3>
-    </div>
-    <div class="p-6">
-      <p class="text-gray-700">
-        Are you sure you want to delete the fleet
-        <span class="font-semibold">"{{ fleetToDelete?.name }}"</span>?
-      </p>
-      <p class="text-sm text-red-600 mt-2">This action will cause all related devices to be deleted and it cannot be
-        undone.</p>
-    </div>
-    <div class="p-6 border-t border-gray-200 flex justify-end gap-3">
-      <button (click)="cancelDelete()" [disabled]="deleting"
-        class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors disabled:opacity-50">
-        Cancel
-      </button>
-      <button (click)="deleteFleet()" [disabled]="deleting"
-        class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors disabled:opacity-50 flex items-center gap-2">
-        <span *ngIf="deleting" class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
-        {{ deleting ? 'Deleting...' : 'Delete' }}
-      </button>
-    </div>
-  </div>
-</div>
+        <div *ngIf="selectedFleet" class="p-6 space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="text-sm font-semibold text-gray-600">Name</label>
+              <p class="text-gray-900 mt-1">{{ selectedFleet.name }}</p>
+            </div>
+            <div>
+              <label class="text-sm font-semibold text-gray-600">Location</label>
+              <p class="text-gray-900 mt-1">{{ selectedFleet.location }}</p>
+            </div>
+            <div>
+              <label class="text-sm font-semibold text-gray-600">Owner</label>
+              <p class="text-gray-900 mt-1">{{ selectedFleet.owner }}</p>
+            </div>
+            <div>
+              <label class="text-sm font-semibold text-gray-600">Source</label>
+              <p class="text-gray-900 mt-1">{{ selectedFleet.source }}</p>
+            </div>
+            <div class="sm:col-span-2">
+              <label class="text-sm font-semibold text-gray-600">Description</label>
+              <p class="text-gray-900 mt-1">{{ selectedFleet.description || 'N/A' }}</p>
+            </div>
+            <div>
+              <label class="text-sm font-semibold text-gray-600">Created At</label>
+              <p class="text-gray-900 mt-1">{{ formatDate(selectedFleet.createdAt) }}</p>
+            </div>
+            <div>
+              <label class="text-sm font-semibold text-gray-600">Created By User</label>
+              <p class="text-gray-900 mt-1">{{ selectedFleet.createdBy }}</p>
+            </div>
+            <div>
+              <label class="text-sm font-semibold text-gray-600">Updated At</label>
+              <p class="text-gray-900 mt-1">{{ formatDate(selectedFleet.updatedAt) }}</p>
+            </div>
+            <div>
+              <label class="text-sm font-semibold text-gray-600">Updated By</label>
+              <p class="text-gray-900 mt-1">{{ selectedFleet.updatedBy }}</p>
+            </div>
+            <div class="sm:col-span-2">
+              <label class="text-sm font-semibold text-gray-600">Fleet ID</label>
+              <p class="text-gray-600 text-xs mt-1 font-mono">{{ selectedFleet.id }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="p-6 border-t border-gray-200 flex justify-end">
+          <button (click)="closeViewModal()"
+            class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors">
+            Close
+          </button>
+        </div>
+        </div>
+        </div>
+        
+        <!-- Delete Confirmation Modal -->
+        <div *ngIf="showDeleteModal" class="fixed inset-0 backdrop-blur-sm bg-white/30 flex items-center justify-center z-50"
+          role="dialog" aria-modal="true" tabindex="0" (click)="cancelDelete()" (keydown.escape)="cancelDelete()">
+          <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4" (click)="$event.stopPropagation()">
+            <div class="p-6 border-b border-gray-200">
+              <h3 class="text-xl font-bold text-gray-800">Delete Fleet</h3>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700">
+                Are you sure you want to delete the fleet
+                <span class="font-semibold">"{{ fleetToDelete?.name }}"</span>?
+              </p>
+              <p class="text-sm text-red-600 mt-2">
+                This action will cause all related devices to be deleted and it cannot be undone.
+              </p>
+            </div>
+            <div class="p-6 border-t border-gray-200 flex justify-end gap-3">
+              <button (click)="cancelDelete()" [disabled]="deleting"
+                class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors disabled:opacity-50">
+                Cancel
+              </button>
+              <button (click)="deleteFleet()" [disabled]="deleting"
+                class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors disabled:opacity-50 flex items-center gap-2">
+                <span *ngIf="deleting" class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
+                {{ deleting ? 'Deleting...' : 'Delete' }}
+              </button>
+            </div>
+          </div>
+        </div>
