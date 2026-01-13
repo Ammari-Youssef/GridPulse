@@ -10,8 +10,8 @@ GraphQL provides a flexible query language and a self‑documenting schema.
 - **GraphiQL Interface (interactive docs):**  
   [http://localhost:8080/graphiql](http://localhost:8080/graphiql)
 
-  ![GraphiQL Interface](docs/screenshots/graphiql.jpeg)
-
+  ![GraphiQL Interface](screenshots/graphiql.jpeg)
+   > GraphQL is self‑documenting via introspection.
 
 - **Schema Files:**  
   Located in `src/main/resources/graphql/`  
