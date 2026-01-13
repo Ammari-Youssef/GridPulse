@@ -84,7 +84,7 @@ A full-stack energy grid monitoring and management application built with Angula
 <summary>🚨 Alerts & Notifications</summary>
 
 #### Alerts List
-![Alerts List](docs/screenshots/alerts-lists.jpeg)
+![Alerts List](docs/screenshots/alert-list.jpeg)
 *System alerts and warnings dashboard*
 
 #### Alert Details
@@ -93,7 +93,7 @@ A full-stack energy grid monitoring and management application built with Angula
 *Detailed alert information and resolution tracking*
 
 #### Notifications
-![Notifications](docs/screenshots/notifications-overview.jpeg)
+![Notifications](docs/screenshots/notification-overview.jpeg)
 *Real-time notification center*
 
 </details>
@@ -102,11 +102,11 @@ A full-stack energy grid monitoring and management application built with Angula
 <summary>🏢 Fleet Management</summary>
 
 #### Fleets List
-![Fleets List](docs/screenshots/fleets-list.jpeg)
+![Fleets List](docs/screenshots/fleet-list.jpeg)
 *Organization-level fleet overview*
 
 #### Fleet Pagination
-![Fleet Pagination](docs/screenshots/fleets-list-pagination.jpeg)
+![Fleet Pagination](docs/screenshots/fleet-list-pagination.jpeg)
 *Paginated fleet browsing*
 
 #### Fleet Details
