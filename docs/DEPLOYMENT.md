@@ -304,8 +304,8 @@ GitHub Actions automatically:
 ## Deployment Screenshots
 Below are screenshots showing the production environment setup:
 
-![Railway Deployment](docs/screenshots/railway-deployment.jpeg)
-![Postgres Service](docs/screenshots/postgres-service.jpeg)
+![Railway Deployment](screenshots/railway-deployment.jpeg)
+![Postgres Service](screenshots/postgres-service.jpeg)
 
 
 ---
