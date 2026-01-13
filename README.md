@@ -2,151 +2,279 @@
 
 > Real-time IoT monitoring platform for smart grid infrastructure
 
-[![Backend Deploy](https://img.shields.io/badge/backend-railway-blueviolet)](https://railway.app)
-[![Frontend Deploy](https://img.shields.io/badge/frontend-vercel-black)](https://vercel.com)
-[![CI/CD](https://img.shields.io/badge/build-success-green.svg)](https://github.com/Ammari-Youssef/GridPulse/actions)
+[![CI/CD](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/Ammari-Youssef/GridPulse/actions)
+[![Java](https://img.shields.io/badge/Java-17-orange.svg)](https://www.oracle.com/java/)
+[![Angular](https://img.shields.io/badge/Angular-19-red.svg)](https://angular.io/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4-green.svg)](https://spring.io/projects/spring-boot)
 
-A full-stack energy grid monitoring and management application built with Angular and Spring Boot. This project demonstrates modern enterprise development practices including containerization, cloud deployment, CI/CD pipelines, and comprehensive testing strategies.
+A full-stack energy grid monitoring and management application built with Angular and Spring Boot. This project demonstrates modern enterprise development practices including containerization, database migrations, CI/CD pipelines, and comprehensive testing strategies.
 
-## 🚀 Tech Stack
+---
 
-### Frontend
-- **Angular 19.2.13** - Modern web framework
-- **Angular Material** - UI component library
-- **Tailwind CSS** - Utility-first CSS framework
-- **TypeScript** - Type-safe JavaScript
-- **GraphQL** - Efficient data querying
+## 🎥 Demo
 
-### Backend
-- **Spring Boot 3.4.5** - Java backend framework
-- **PostgreSQL** - Relational database
-- **Liquibase** - Database migration management
-- **Spring Security + JWT** - Authentication & authorization
-- **GraphQL** - API query language
-- **Maven** - Build automation
+> **Note:** This project includes full deployment configuration for Railway (backend) and Vercel (frontend). Live deployment paused for cost optimization. See screenshots below or run locally with Docker.
 
-### DevOps & Infrastructure
-- **Docker & Docker Compose** - Containerization
-- **Railway** - Backend & database hosting
-- **Vercel** - Frontend hosting
-- **GitHub Actions** - CI/CD pipeline
-- **JUnit & Mockito** - Unit testing
-- **Testcontainers** - Integration testing
-- **JaCoCo** - Code coverage
-- **SonarQube** - Code quality analysis
+### Screenshots
 
-## 📋 Prerequisites
+<details>
+<summary>🔐 Authentication</summary>
 
-Before running this project, ensure you have:
+#### Login with Demo Credentials
+![Login](docs/screenshots/auth-login.jpeg)
+*Secure authentication with demo account access*
 
-- **Node.js** 18+ and npm
-- **Java** 17+
-- **Maven** 3.8+
-- **Docker** and Docker Compose
-- **Git**
+</details>
 
-## 🛠️ Quick Start
+<details>
+<summary>📊 Dashboard & Monitoring</summary>
 
-### Local Development (Docker)
+#### Dashboard Overview
+![Dashboard Overview](docs/screenshots/dashboard-overview.jpeg)
+*Real-time device monitoring with key metrics*
 
-The easiest way to run the entire stack locally:
+#### Interactive Map View
+![Map View 1](docs/screenshots/dashboard-map-1.jpeg)
+*Geolocation tracking of all devices*
+
+![Map View 2](docs/screenshots/dashboard-map-2.jpeg)
+*Device clustering and selection*
+
+#### Map Filtering
+![Map Filtering](docs/screenshots/dashboard-map-filtering-1.jpeg)
+*Advanced filtering capabilities*
+
+</details>
+
+<details>
+<summary>🔋 Device Management</summary>
+
+#### Device List
+![Device List](docs/screenshots/device-list.jpeg)
+*Paginated device inventory with search and filters*
+
+#### Device Details
+![Device Details](docs/screenshots/device-details.jpeg)
+*Comprehensive device information including BMS, Meter, and Inverter data*
+
+</details>
+
+<details>
+<summary>📈 Analytics</summary>
+
+#### Analytics Overview
+![Analytics Overview](docs/screenshots/analytics-overview.jpeg)
+*Device performance metrics and trends*
+
+#### Device Selector
+![Device Selector](docs/screenshots/analytics-device-selector.jpeg)
+*Multi-device comparison interface*
+
+#### Battery Health Monitoring
+![Battery Analytics](docs/screenshots/analytics-battery-healthy-power-dispatched.jpeg)
+*State of Health (SOH) and power dispatch metrics*
+
+#### Consumption Metrics
+![Consumption Stats](docs/screenshots/analytics-stats-consumption-metrics.jpeg)
+*Energy consumption and production analysis*
+
+</details>
+
+<details>
+<summary>🚨 Alerts & Notifications</summary>
+
+#### Alerts List
+![Alerts List](docs/screenshots/alerts-lists.jpeg)
+*System alerts and warnings dashboard*
+
+#### Alert Details
+![Alert Details Top](docs/screenshots/alert-details-top.jpeg)
+![Alert Details Bottom](docs/screenshots/alert-details-bottom.jpeg)
+*Detailed alert information and resolution tracking*
+
+#### Notifications
+![Notifications](docs/screenshots/notifications-overview.jpeg)
+*Real-time notification center*
+
+</details>
+
+<details>
+<summary>🏢 Fleet Management</summary>
+
+#### Fleets List
+![Fleets List](docs/screenshots/fleets-list.jpeg)
+*Organization-level fleet overview*
+
+#### Fleet Pagination
+![Fleet Pagination](docs/screenshots/fleets-list-pagination.jpeg)
+*Paginated fleet browsing*
+
+#### Fleet Details
+![Fleet Details](docs/screenshots/fleet-details.jpeg)
+*Individual fleet management and device assignment*
+
+</details>
+
+<details>
+<summary>👥 User Management & Settings</summary>
+
+#### User Management
+![User Management](docs/screenshots/user-managment.jpeg)
+*Role-based user administration*
+
+#### Profile Settings
+![Profile Settings](docs/screenshots/settings-profile.jpeg)
+*User profile configuration*
+
+#### Security Settings
+![Security Settings](docs/screenshots/settings-security.jpeg)
+*Password and authentication management*
+
+#### Profile Menu
+![Profile Menu](docs/screenshots/profile-menu.jpeg)
+*Quick access navigation*
+
+</details>
+
+---
+
+### 💻 Run Locally
 ```bash
 # Clone repository
 git clone https://github.com/Ammari-Youssef/GridPulse.git
 cd GridPulse
 
-# Start all services
+# Start all services with Docker
 docker-compose up --build
+
+# Access the application
+# Frontend: http://localhost:4200
+# Backend API: http://localhost:8080
+# PostgreSQL: localhost:5432
 ```
 
-**Access points:**
-- 🌐 **Frontend:** http://localhost:4200
-- ⚙️ **Backend API:** http://localhost:8080
-- 🗄️ **PostgreSQL:** localhost:5432
-
-### Local Development (Native)
-
-#### Backend
-```bash
-cd backend
-
-# Install dependencies and run tests
-mvn clean install
-
-# Run the application
-mvn spring-boot:run
+**Demo Credentials:**
+```
+Email: youssef@gridpulse.io
+Password: ysf@1234
+Role: Admin (full access to all features)
 ```
 
-Backend API: `http://localhost:8080`
+---
 
-#### Frontend
-```bash
-cd frontend
+## 🚀 Tech Stack
 
-# Install dependencies
-npm install
+### Frontend
+- **Angular 19** - Modern web framework with standalone components
+- **Angular Material** - Material Design UI components
+- **TailwindCSS 4** - Utility-first styling
+- **Apollo GraphQL** - Efficient API data fetching
+- **Leaflet** - Interactive map visualization
+- **TypeScript** - Type-safe development
 
-# Start development server
-ng serve
-```
+### Backend
+- **Spring Boot 3.4.5** - Production-grade Java framework
+- **PostgreSQL** - Relational database
+- **Liquibase** - Version-controlled database migrations
+- **Spring Security + JWT** - Secure authentication & authorization
+- **GraphQL** - Flexible API query language
+- **Maven** - Dependency management & build automation
 
-Frontend: `http://localhost:4200`
+### DevOps & Quality
+- **Docker & Docker Compose** - Containerization
+- **GitHub Actions** - CI/CD automation
+- **JUnit & Mockito** - Unit testing
+- **Testcontainers** - Integration testing with real databases
+- **JaCoCo** - Code coverage reporting
+- **SonarQube** - Static code analysis
 
-## 🌐 Production Deployment
-
-GridPulse is deployed using modern cloud platforms:
-
-- **Backend + Database:** Railway (auto-deploys from `master`)
-- **Frontend:** Vercel (auto-deploys from `master`)
-
-**📘 Full deployment guide:** [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
-
-### Quick Deploy Overview
-
-**Backend (Railway):**
-1. Create Railway project
-2. Add PostgreSQL service
-3. Connect GitHub repo (`backend/` root directory)
-4. Configure environment variables
-5. Auto-deploys on push to `master`
-
-**Frontend (Vercel):**
-1. Import GitHub repo
-2. Set root directory to `frontend/`
-3. Configure `API_URL` environment variable
-4. Auto-deploys on push to `master`
+---
 
 ## 🏗️ Project Structure
 ```
 GridPulse/
-├── backend/              # Spring Boot API (Java 17, Maven)
+├── backend/              # Spring Boot API (Java 17)
 │   ├── src/
 │   │   ├── main/
-│   │   │   ├── java/    # Application code
+│   │   │   ├── java/           # Application code
 │   │   │   └── resources/
 │   │   │       ├── db/changelog/  # Liquibase migrations
-│   │   │       └── application.yml
-│   │   └── test/        # Unit & integration tests
+│   │   │       ├── application.yml
+│   │   │       └── application-prod.yml
+│   │   │       └── application-dev.yml
+│   │   │       └── application-seed.yml
+│   │   │       └── application-docker.yml
+│   │   └── test/               # Unit & integration tests
 │   ├── Dockerfile
 │   └── pom.xml
-├── frontend/             # Angular 19 web application
+├── frontend/             # Angular 19 SPA
 │   ├── src/
 │   │   ├── app/
-│   │   │   ├── components/
-│   │   │   ├── services/
-│   │   │   └── models/
+│   │   │   ├── core/           # Services, guards, interceptors
+│   │   │   ├── features/       # Feature modules
+│   │   │   ├── shared/         # Shared components
+│   │   │   └── layout/         # Layout components
+│   │   ├── environments/       # Environment configs
 │   │   └── assets/
+│   ├── Dockerfile
 │   ├── package.json
 │   └── angular.json
-├── docs/                 # Documentation
-│   ├── DEPLOYMENT.md     # Deployment guide
-│   └── message-payloads/ # API message schemas
-├── .github/
-│   └── workflows/        # GitHub Actions CI/CD
-├── docker-compose.yml    # Local development stack
-├── Makefile              # Build automation
+├── docs/
+│   ├── screenshots/      # Application screenshots
+│   ├── DEPLOYMENT.md     # Deployment guide (Railway/Vercel)
+│   ├── ARCHITECTURE.md   # Application system design
+│   ├── API.md   # GraphQL API documentation
+│   └── message-payloads/ # Alert message examples
+├── .github/workflows/    # CI/CD pipelines
+├── docker-compose.yml
 └── README.md
 ```
+
+---
+
+## ⚡ Quick Start
+
+### Prerequisites
+- Node.js 18+
+- Java 17+
+- Maven 3.8+
+- Docker & Docker Compose
+
+### Development Setup
+
+**1. Clone the repository:**
+```bash
+git clone https://github.com/Ammari-Youssef/GridPulse.git
+cd GridPulse
+```
+
+**2. Start with Docker (Recommended):**
+```bash
+docker-compose up --build
+```
+
+**3. Or run services separately:**
+
+**Backend:**
+```bash
+cd backend
+mvn clean install
+mvn spring-boot:run
+```
+
+**Frontend:**
+```bash
+cd frontend
+npm install
+ng serve
+```
+
+**Access:**
+- Frontend: http://localhost:4200
+- Backend API: http://localhost:8080/graphql
+- GraphiQL: http://localhost:8080/graphiql
+
+---
 
 ## 🧪 Testing
 
@@ -157,17 +285,12 @@ cd backend
 # Run all tests
 mvn test
 
-# Run with coverage report
+# Run with coverage
 mvn clean verify
 
-# View coverage (opens in browser)
+# View coverage report
 open target/site/jacoco/index.html
 ```
-
-**Test types:**
-- Unit tests (JUnit, Mockito)
-- Integration tests (Testcontainers)
-- Database migration tests (Liquibase)
 
 ### Frontend Tests
 ```bash
@@ -178,23 +301,18 @@ ng test
 
 # Run with coverage
 ng test --code-coverage
-
-# E2E tests (if configured)
-ng e2e
 ```
+
+---
 
 ## 🔨 Building for Production
 
 ### Docker Build
 ```bash
-# Build all services
 docker-compose up --build
-
-# Production build (optimized)
-docker-compose -f docker-compose.prod.yml up --build
 ```
 
-### Separate Builds
+### Manual Build
 
 **Backend:**
 ```bash
@@ -207,172 +325,111 @@ mvn clean package -DskipTests
 ```bash
 cd frontend
 ng build --configuration production
-# Output: dist/gridpulse/
+# Output: dist/gridpulse/browser/
 ```
 
-## 📦 Useful Commands
+---
 
-### Docker
-```bash
-# Start services
-docker-compose up -d
+## 🚀 Deployment
 
-# Stop services
-docker-compose down
+This project includes full deployment configuration for:
+- **Backend + Database:** Railway
+- **Frontend:** Vercel
 
-# View logs
-docker-compose logs -f backend
+**See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for complete setup instructions.**
 
-# Rebuild specific service
-docker-compose up --build frontend
+---
 
-# Reset database
-docker-compose down -v && docker-compose up --build
-```
+## ✨ Key Features
 
-### Make Commands
-```bash
-# Available targets (see Makefile)
-make build        # Build all services
-make test         # Run all tests
-make clean        # Clean build artifacts
-```
+- ✅ **Real-time Monitoring** - Live device status and metrics
+- ✅ **Interactive Maps** - Geolocation tracking with clustering
+- ✅ **Advanced Analytics** - Historical data visualization
+- ✅ **Alert Management** - Configurable alerts and notifications
+- ✅ **Fleet Management** - Organize devices into fleets
+- ✅ **User Management** - Role-based access control (Admin/User)
+- ✅ **Responsive Design** - Mobile-friendly interface
+- ✅ **GraphQL API** - Efficient data fetching
+- ✅ **Database Migrations** - Version-controlled schema changes
+- ✅ **Secure Authentication** - JWT-based auth with refresh tokens
 
-## 🔍 Code Quality & CI/CD
+---
 
-### Continuous Integration
+## 🔐 Environment Configuration
 
-GitHub Actions automatically on every push:
-- ✅ Runs unit tests
-- ✅ Runs integration tests
-- ✅ Generates coverage reports
-- ✅ Performs SonarQube analysis
-- ✅ Builds Docker images (with caching)
-- ✅ Validates code quality gates
+### Local Development
+Uses `environment.development.ts` (localhost)
 
-### SonarQube Analysis
-```bash
-# Run locally (requires SonarQube server)
-cd backend
-mvn sonar:sonar \
-  -Dsonar.projectKey=GridPulse \
-  -Dsonar.host.url=http://localhost:9000
-```
+### Production
+Uses `environment.production.ts` (deployed URLs)
 
-## 🚦 Development Workflow
+See individual service READMEs for detailed configuration:
+- [Backend Configuration](backend/README.md)
+- [Frontend Configuration](frontend/README.md)
 
-1. **Branch from `development`**
-```bash
-   git checkout development
-   git pull
-   git checkout -b feature/your-feature
-```
-
-2. **Make changes & test locally**
-```bash
-   docker-compose up
-   # Verify changes work
-```
-
-3. **Run tests**
-```bash
-   cd backend && mvn test
-   cd frontend && ng test
-```
-
-4. **Create Pull Request**
-   - Target: `development` branch
-   - CI/CD runs automatically
-   - Request review
-
-5. **Merge to master for production**
-   - After approval, merge `development` → `master`
-   - Railway & Vercel auto-deploy
-
-## 🔐 Environment Variables
-
-### Backend (Railway)
-```bash
-SPRING_PROFILES_ACTIVE=prod
-DB_URL=jdbc:postgresql://...
-JWT_SECRET_KEY=<base64-secret>
-# See docs/DEPLOYMENT.md for full list
-```
-
-### Frontend (Vercel)
-```bash
-API_URL=https://your-backend.railway.app
-PRODUCTION=true
-```
-
-**🔒 Never commit secrets to Git!** Use `.env` locally, Railway/Vercel UI for production.
+---
 
 ## 🐛 Troubleshooting
 
 ### Port Conflicts
 ```bash
 docker-compose down
-# Change ports in docker-compose.yml if needed
+# Edit docker-compose.yml to change ports
 docker-compose up
 ```
 
-### Database Issues
+### Database Reset
 ```bash
-# Reset database (WARNING: deletes data)
 docker-compose down -v
 docker-compose up --build
 ```
 
-### Build Failures
+### Build Issues
 ```bash
-# Clear Maven cache
-cd backend
-mvn clean
+# Backend
+cd backend && mvn clean
 
-# Clear npm cache
-cd frontend
-rm -rf node_modules package-lock.json
-npm install
+# Frontend
+cd frontend && rm -rf node_modules && npm install
 ```
 
-### Railway Deployment Fails
-
-Check:
-1. `DB_URL` has `jdbc:` prefix
-2. PostgreSQL service is named `Postgres`
-3. Root directory set to `backend/`
-4. All environment variables configured
-
-See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for detailed troubleshooting.
-
-## 🤝 Contributing
-
-This is a portfolio project, but feedback and suggestions are welcome!
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open Pull Request
+---
 
 ## 📚 Documentation
 
-- **[Deployment Guide](docs/DEPLOYMENT.md)** - Railway & Vercel setup
-- **[API Documentation](docs/API.md)** *(planned)*
-- **[Architecture Overview](docs/ARCHITECTURE.md)** *(planned)*
+- [Deployment Guide](docs/DEPLOYMENT.md) - Railway & Vercel deployment
+- [API Documentation](docs/API.md) - GraphQL schema & queries
+- [Architecture Overview](docs/ARCHITECTURE.md) - System design & tech stack
+
+---
+
+## 🤝 Contributing
+
+This is a portfolio project demonstrating full-stack development capabilities. Feedback and suggestions are welcome!
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Open a Pull Request
+
+---
 
 ## 📄 License
 
 This project is part of my portfolio and is available for educational purposes.
 
+---
+
 ## 👤 Author
 
 **Youssef Ammari**
+
 - GitHub: [@Ammari-Youssef](https://github.com/Ammari-Youssef)
 - Email: youssef.ammari.795@gmail.com
+- LinkedIn: [Youssef Ammari](https://linkedin.com/in/youssef-ammari)
 
 ---
 
-**Built with ❤️ as a demonstration of modern full-stack development practices.**
+**Built with ❤️ to demonstrate modern full-stack development practices**
 
 *Last Updated: January 2026*
