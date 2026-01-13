@@ -2,9 +2,14 @@
 
 This guide covers deploying GridPulse to production using Railway (backend) and Vercel (frontend).
 
+[![Backend Deploy](https://img.shields.io/badge/backend-railway-blueviolet)](https://railway.app)
+[![Frontend Deploy](https://img.shields.io/badge/frontend-vercel-black)](https://vercel.com)
+[![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://www.docker.com/)
+[![CI/CD](https://img.shields.io/badge/ci/cd-success-green.svg)](https://github.com/Ammari-Youssef/GridPulse/actions)
+
 ## Table of Contents
 
-<!-- - [Frontend Deployment (Vercel)](#frontend-deployment-vercel) -->
+- [Frontend Deployment (Vercel)](#frontend-deployment-vercel)
 - [Prerequisites](#prerequisites)
 - [Backend Deployment (Railway)](#backend-deployment-railway)
 - [Environment Variables](#environment-variables)
@@ -17,7 +22,7 @@ This guide covers deploying GridPulse to production using Railway (backend) and 
 - GitHub account
 - Railway account ([railway.app](https://railway.app))
 - Domain (optional)
-<!-- - Vercel account ([vercel.com](https://vercel.com)) -->
+- Vercel account ([vercel.com](https://vercel.com))
 
 ---
 
@@ -84,12 +89,12 @@ Started GridPulseApplication in 8.234 seconds
 
 Railway generates a public URL:
 ```
-https://api.gridpulse.io
+https://gridpulse-production.up.railway.app/graphql
 ```
 
 Test health endpoint:
 ```bash
-curl https://api.gridpulse.io/actuator/health
+curl https://gridpulse-production.up.railway.app/graphql/actuator/health
 ```
 
 Expected response:
@@ -99,7 +104,7 @@ Expected response:
 
 ---
 
-<!-- ## Frontend Deployment (Vercel)
+## Frontend Deployment (Vercel)
 
 ### Step 1: Import Repository
 
@@ -127,7 +132,7 @@ dist/gridpulse/browser
 
 Add in Vercel project settings:
 ```bash
-API_URL=https://api.gridpulse.io
+API_URL=https://gridpulse-production.up.railway.app/graphql
 PRODUCTION=true
 ```
 
@@ -135,10 +140,10 @@ PRODUCTION=true
 
 Vercel auto-deploys. Your app will be live at:
 ```
-https://gridpulse.vercel.app
+https://gridpulse-green.vercel.app
 ```
 
---- -->
+---
 
 ## Environment Variables Reference
 
@@ -153,14 +158,14 @@ https://gridpulse.vercel.app
 | `JWT_SECRET_KEY` | JWT signing key (Base64) | Generate with OpenSSL |
 | `JWT_EXPIRATION_TIME` | JWT expiry (milliseconds) | `86400000` (24h) |
 
-<!-- ### Frontend (Vercel)
+### Frontend (Vercel)
 
 | Variable | Description | Example |
 |----------|-------------|---------|
 | `API_URL` | Backend API endpoint | Railway backend URL |
 | `PRODUCTION` | Production mode flag | `true` |
 
---- -->
+--- 
 
 ## Database Migrations
 
@@ -205,7 +210,7 @@ Liquibase runs automatically on backend startup:
 
 ---
 
-<!-- ### Frontend Deployment Failed
+### Frontend Deployment Failed
 
 **Error:** `Module not found`
 
@@ -223,7 +228,7 @@ Liquibase runs automatically on backend startup:
 2. Verify CORS is enabled in Spring Boot backend
 3. Test backend URL directly with curl
 
---- -->
+---
 
 ## Monitoring & Logs
 
@@ -235,9 +240,9 @@ Liquibase runs automatically on backend startup:
 - Railway → Postgres Service → **Data** tab (GUI)
 - Or use **Connect** → Copy psql command
 
-<!-- ### Frontend Logs
+### Frontend Logs
 - Vercel → Project → **Deployments** → Function Logs
-- Browser DevTools → Console (client-side errors) -->
+- Browser DevTools → Console (client-side errors) 
 
 ---
 
@@ -248,12 +253,12 @@ Liquibase runs automatically on backend startup:
 2. **Custom Domain** → Add your domain
 3. Update DNS with Railway's CNAME
 
-<!-- ### Frontend (Vercel)
+### Frontend (Vercel)
 1. Vercel Project → **Settings** → **Domains**
 2. Add custom domain
 3. Update DNS records as shown
 
---- -->
+--- 
 
 ## CI/CD Pipeline
 
@@ -273,12 +278,12 @@ GitHub Actions automatically:
 2. Find previous successful deployment
 3. Click **⋮** → **Redeploy**
 
-<!-- ### Frontend
+### Frontend
 1. Vercel → Project → **Deployments**
 2. Find previous deployment
 3. Click **⋮** → **Promote to Production**
 
---- -->
+---
 
 ## Production Checklist
 
@@ -296,12 +301,20 @@ GitHub Actions automatically:
 - [ ] Monitoring/logging verified
 
 ---
+## Deployment Screenshots
+Below are screenshots showing the production environment setup:
+
+![Railway Deployment](screenshots/railway-deployment.jpeg)
+![Postgres Service](screenshots/postgres-service.jpeg)
+
+
+---
 
 ## Support
 
 For deployment issues:
 - Check [Troubleshooting](#troubleshooting) section
-- Review Railway<!-- /Vercel--> logs
+- Review Railway/Vercel logs
 - Open issue on [GitHub](https://github.com/Ammari-Youssef/GridPulse/issues)
 
 **Last Updated:** January 2026
